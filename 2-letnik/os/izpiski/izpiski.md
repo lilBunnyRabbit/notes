@@ -27,8 +27,9 @@
     - [Nadzor dostopa](#nadzor-dostopa)
   - [Procesi](#procesi)
     - [Zivljenje procesa](#zivljenje-procesa)
-
----
+    - [Stanje procesa](#stanje-procesa)
+    - [Podatkovne strukture](#podatkovne-strukture)
+  - [Vecopravilnost](#vecopravilnost)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -460,3 +461,54 @@
 - **Naslovni prostor procesa** je pomnilnik, ki ga proces lahko naslavlja
 
 ### Zivljenje procesa
+- **Stvaritev procesa**
+  - **Razlogi**
+    - **prevzem novega posla v paketnih OS**
+    - **zagon programa preko lupine**
+    - **prijava uporabnika v sistem**
+    - **zagon servisa OS**
+    - **programsko izkoriscanje socasnosti**
+    - **vzporedno procesiranje**
+  - **Hierarhija procesov**
+    - **stars:** proces, ki je podal zahtevo po stvaritvi novega procesa - otroka
+    - **otrok:** proces, ki je bil ustvarjen na zahtevo drugega procesa - starsa
+    - OS vodi evidenco procesov
+    - **PID (process identification)** je stevilka procesa
+    - **PPID (parent PID)** je stevilka starsa (stars ne ve PID otroka)
+  - **Storitev OS**
+    - **priprava procesnega deskriptorja:** init PID, PPID in stanje, podajanje argumentov in vstavitev v vrsto za razvrscanje
+    - **priprava pomnilniskega prostora:** navidezni pomnilnik in preslikovalna tabela naslovov
+    - **razno:** preverjanje pravic in zascite in priprava odprtih datotek
+  - **nalaganje iz izvrsne datoteke:** program se nalozi in zacne izvajati(**eager** - nalaganje celotnega programa pred izvajanjem, **lazy** - nalaganje po potrebi)
+  - **stvaritev iz obstojecega procesa:** stars in otrok si delita vire (niti) lahko pa tudi **kloniram** kar pomeni da je otrok kopija starsa (`fork()`)
+- **Koncanje procesa**
+  - **Razlogi**
+    - **normalen zakljucek:** preko sistemskega klica (npr `exit()`)
+    - **napaka pri izvajanju:** npr aritmetika, napaka zascite, priviligiran ukaz
+    - **na zunanjo zahtevo:** s strani drugega procesa, prekoracitev virov
+  - **Storitev OS**
+    - **sprostitev zasedenih virov**
+    - **sprostitev deskriptorja procesa:** pogosto zakasnjena
+
+### Stanje procesa
+- glede na to ali se proces izvaja, caka na rezultat IO, ...  
+![](images/stanje_procesa.png)  
+- **nov:** ko se ustvari, inicializacija deskriptorja procesa, alokacija potrebnih virov
+- **koncan:** ko se ukinja, sprostitev zasedenih virov
+- **pripravljen:** pripravljen in caka na dodelitev procesorja
+- **izvajan:** dejansko izvajanje na procesorju
+- **cakajoc:** caka na nek dogodek, da nadaljuje
+- **aktiven:** *izvajan* ali *pripravljen*
+- **ni aktiven:** cka na nek dogodek
+
+### Podatkovne strukture
+- **Podatkovne strukture za opravljanje procesov**
+  - **seznami:** vrsta pripravljenih/cakajocih procesov
+  - **informacije o procesu:** deskriptior procesa
+- **Deskriptior procesa**
+  - jedrna podatkovna struktura
+  - hrani nadzorne podatke procesa (id, stanje, ...)
+  - omogoca preklapljanje procesov  
+  ![](images/deskriptior_procesa.png)
+
+## Vecopravilnost
