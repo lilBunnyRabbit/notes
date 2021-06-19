@@ -1,4 +1,4 @@
-# OS Zapiski
+# OS Izpiski
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
   - fizicna racunalniska oprema
@@ -160,4 +160,39 @@
 - vsak klic ima svojo stevilko, prejme lahko tudi argumente
 - stevilke in argumenti se prenasajo preko registrov in sklada
 - **Tabela rokovalnikov sistemskih klicev**:
-  - i-ti
+  - i-ti element tabele je naslov rokovnika
+  - npr. 1 → exit, 2 → fork, 3 → read, ...
+- **Preklop nivoja zascite procesorja:**
+  - direkten klic podprograma v jedru sprozi izjemo zato s pomocjo strojne opreme izvedemo preklop v priviligiran nacin in klicemo podprogram
+- **Sistemski vmesnik - preklop v jedro:**
+  - **Namenski strojni ukaz:** procesor naredi prekop in poklice namesceni rokovalnik sistemskih klicev v jedru
+  - **Programska prekinitev:** procesor naredi preklop in poklice namesceni rokovalnik prekinitve v jedru
+  - Call gate: zahteva oddaljen klic v drug segment in initializacijo segmentov
+  - Pomnilniska vrsta: sistemske klice postavimo v vrsto
+- **Izvedba sistemskega klica:**
+  1. priprava: podajanje st. sistemskega klica in arg
+  2. vstop v jedro: preko sistemskega vmesnika, preklopimo v priviligiran nacin in sprozimo rokovoalnik
+  3. izvedba rokovalnika sistemskega vmesnika: preverimo st klica in klic specificnega rokovalnika
+  4. izvedba rokovalnika sistemskega klica: navaden klic rutine znotraj jedra
+  5. iztop iz jedra: preklop nazaj v uporabniski nacin
+- **sistemski klic vs klic funkcije:** 
+  - sistemski klic je pocasnejsi (preklop nivoja zascite)
+  - izvedba rokovalnika klica je zahtevnejsa
+  - podpora procesorja: funckijski (strojni ukaz), sistemski (poseben mehanizem)
+  - za funkcijske je OS kot programska knjiznica
+  - funkcijski klici so manj varni
+  - lunkja v sistemskem klicu lahko sesuje celoten os
+  - luknja v funkcijskem klicu sesuje lahko le program
+  - sistemski klic je tudi mehanizem zascite
+
+## Ovojne funkcije sistemskih klicev
+- neposredna izvedba je zahtevna (assembly) saj je potrebno rokovanje z registri in vstop v jedro
+- Ovojna funkcija je namenjena izvedbi sistemskega klica
+- je v standardni kljiznici
+- npr fork (`unistd.h`)
+- **Izvedba sistemskega klica:**
+  - **neposredno:** nastavitev registrov in vstop v jedro v zbirniku
+  - **specificne ovojne funkcije:** predpripravljena ovojna funkcija iz knjiznice
+  - **splosne ovojne funkcije:** `syscall()`
+  - **posredno preko ostalih funkcij:** npr `printf()`
+- 
