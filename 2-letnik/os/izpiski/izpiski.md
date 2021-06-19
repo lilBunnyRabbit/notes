@@ -286,6 +286,7 @@
 
 ### Datoteke
 - **Abstrakcija datoteke:**   
+
   |oznaka|opis|primer|
   |:-|:-|:-|
   |`-`|regular file|`/etc/passwd`|
@@ -295,6 +296,7 @@
   |`c`|character special device|`/dev/tty`|
   |`p`|named pipe||
   |`s`|socket||
+
 - **Navadna datoteka:**
   - vsebina je poljubna (binarna ali tekstovna)
   - OS omogoca notranje operacije
@@ -371,11 +373,13 @@
   - **stolpci:** objekti nadzora dostopa
   - **vrstice:** subjekti, ki dostopajo
   - **elementi:** nabor dovoljenj  
+
     |  | Datoteka 1 | Datoteka 2 | Datoteka 3 | Datoteka 4 |
     |-|-|-|-|-|
     | Uporabnik A | lastnik, R, W | R, X | lastnik, R ||
     | Uporabnik B |  | lastnik, R, W, X | R ||
     | Uporabnik C | W |  |  | lastnik, R |
+
 - **Nadzorni seznam dostopa (access control list)**
   - dekompozicija matrike dostopa po stolpcih
   - stolpci matrike predstavljajo seznam dostopa  
@@ -397,6 +401,7 @@
   - vrste dovoljenj: **r** - **r**ead, **w** - **w**rite, **x** - e**x**ecute, **-** - prazno
   - sklopi uporabnikov: **u** - **u**ser (lastnik), **g** - **g**roup (skupina), **o** - **o**ther, **a** - **a**ll (vsi)
   - `[user][group][other]` → `rwxrwxrwx` → `rw-r-xr--`  
+  
     |znak| datoteka |imenik|
     |-|-|-|
     |`r`| branje datoteke | izpis vsebine datoteke|
