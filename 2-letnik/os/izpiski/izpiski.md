@@ -210,3 +210,51 @@
   - **ostali ne-certificirani**
 
 ## Upravljanje z uporabniki
+### Varnost in zascita
+- **Zascita:**
+  - mehanizem za nadzor dostopa do virov (sciti pred nodovoljeno uporabo virov)
+  - pravila uporabe, politika (policy)
+  - naloga OS: os je odgovoren za vzpostavljanje zascite virov, ki jih upravlja
+- **Varnost:**
+  - mera zaupanja v ohranjanje integritete sistema
+  - vkljucuje tudi okolje
+  - zascita virov pred *omreznim dostopom (firewall)*, *fizicnim dostopom* in *uporabniska ozavescenost*
+- **Nacela nacrtovanja varnosti:**
+  - mehanizem zascite mora biti **javen**
+  - privzeto dovoljenje = **ni dostopa**
+  - **sprotno preverjanje dovoljnenj**
+  - procesi naj imajo **najmanjse mozne privilegije**
+  - mehanizem naj bo **preprost, celovit in vgrajen**
+  - shema varnosti naj bo **uporabnisko prijazna**
+
+### Uporabniski racun
+- **Uporabnik:** oseba, ki uporablja racunalniski sistem (zabava, programiranje, vzdrzevanje, etc.)
+- uporabniki si lahko podatke delijo ali ne
+- **Vrste:** *navaden*, *admin/root*, *superuser* in *gost*
+- **Stevilo uporabnikov OS:** *brezuporabniski (enouporabniski)* in *vecuporabniski*
+- **Uporabniski racun:**
+  - mehanizem za **razlikovanje med uporabniki**, **prijavo v sistem** in **locevanje virov med uporabniki**
+  - **Podatki o uporabniku:**
+    - **Osebni:** stevilka, ime, priimek, ...
+    - **za prijavo:** ime in geslo, imenik, ...
+    - **za mehanizem zascite:** skupine
+
+### Prijava v sistem
+- **Identifikacija:** kdo je dani uporabnik
+- **Avtentikacija:** potrjevanje identitete
+- Nacini avtentikacije:
+  - **pomnenje podatkov:** gesla, pin, podpis, ...
+  - **fizicne lastnosti:** prstni odtis, ...
+  - **fizicne naprave:** RFID, ...
+- Nacini dostopa: **lokalna prijava** in **oddaljena prijava** (npr ssh)
+
+### Uporabniki v Linuxu
+- **Administrator:** `root`, imenik `/root`, ima vsa dovoljenja in odgovornosti
+- **Ostali uporabniki:** `<username>`, imenik `/home/<username>`
+- **Uporabniski racuni:**
+  - `/etc/passwd`: vse razen podatki o geslu (`ime:x:uid:gid:polno ime: domaci imenik:prijavna lupina`)
+  - `/etc/shadow`: hrani zgoscene vrednosti (hash) gesel za uporabnike in skupine (`ime:$metoda$sol$koda:ostalo (rok trajanja gesel itd.)`)
+  - **Sol:** nakljucni niz dodan geslu pred zgoscanjem. Namenjen temu da imata 2 enaki gesli z razlicno soljo razlicna hasha. onemogoci napad z mavricno tabelo (rainbow table)
+  - `etc/group`: hrani seznam uporabnikov, ki se pripadajo skupini poleg skupine zapisane v `etc/passwd` (`ime skupine:x:gid:seznam uporabnikov`)
+
+## Uporavljanje z datotekami
