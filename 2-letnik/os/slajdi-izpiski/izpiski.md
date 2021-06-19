@@ -7,7 +7,7 @@
   - brez fizicne oblike
   - podatki in programi
   - **Sistemska programska oprema**: OS, goniilniki, lupina in sistemski upazi, upravljanje diska in datotek, ...
-  - 
+
 ### Lupina
 - Uporabniski program, ki nudi osnovni uporabniski vmesnik za upravljanje racunalniskega sistema
 - **Storitve**:
@@ -86,7 +86,6 @@
   - programska oprema za razvoj programske opreme
   - vrste: programerski, prevajalniki, povezovalniki, etc.
 
-
 ## Operacijski sistem
 - **Lastnosti:**
   - nabor programske opreme
@@ -102,4 +101,34 @@
 - **Storitve:** upravljanje z uporabniki, procesi, pomnilnikom, datotecnimi sistemi in datotekami, I/O napravami, medprocesna komunikacija, ...
 - **Cilji**: ease of use, security, reliability, performance and flexibility
 
-### Koncepri operacijskih sistemov
+### Koncepti operacijskih sistemov
+- **Abstrakcija:** 
+  - posplositev in skrivanje podrobnosti
+  - poenotenje in zdruzevanje podobnih entitet v eno krovno (primer `datoteka`)
+- **Virtualizacija:**
+  - mehanizem, ki nekaj ustvari navidezno (navidezna naprava, pomnilnik, procesor)
+  - preslikava navideznega v realno
+- **Abstrakcija in virtualizacija**: komplementarna koncepta. Primer: navidezni datotecni sistem `VFS` nudi enovit dostop do datotek, zdruzuje razlicne naprave in vkljucuje razlicne datotecne sisteme
+- **Varnost:**
+  - zaupanje v dobro delovanje sistema in jo dosezemo prek mehanizmov zascite sistema
+- **Socasnost:**
+  - obstoj vec procesov hkrati
+  - obcutek hkratnega izvajanja vec procesov
+- **Persistenca:**
+  - dolgorocni obstoj podatkov in informacij
+  - ucinkovitost hrambe
+  - omogoca medprocesno komunikacijo (npr datoteka)
+  
+### Jedro
+- programska koda, ki vsebuje bistveni del OS (npr upravljanje s procesi in pomnilnikom)
+- izvaja se v priviligiranem nacinu delovanja procesorja (obvladuje celoten sistem)
+- **Procesorki nivoji zascite:**
+  - **Uporabniski prostor (zasciten nacin)**: omejena uporaba procesorja, napacna uporaba povzroci izjemo
+  - **Jedrni prostor (priviligiran nacin)**: neomejen dostop do pomnilnika in naprav, nekateri ukazi se lahko izvajajo samo v tem nacinu
+- **Komunikacija med jedrom in strojno opremo:**
+  - **naprava**: dejanska naprava (npr tipkovnica)
+  - **kontrolnik naprav**: elektronska vezja, ki razumejo ukaze podane na vmesniku in jih posredujejo napravi (npr USB kontrolnik)
+  - **vmesnik strojne opreme**: mehanizem programskega podajanja ukazov napravam (npr pomnilnisko preslikan I/O)
+  - **gonilniki naprav**: programska koda, ki zna upravljati z napravo preko vmesnikov strojne opreme (niso del jedra)
+
+### Arhitektura jedra
