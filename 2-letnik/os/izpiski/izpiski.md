@@ -185,7 +185,7 @@
   - luknja v funkcijskem klicu sesuje lahko le program
   - sistemski klic je tudi mehanizem zascite
 
-## Ovojne funkcije sistemskih klicev
+### Ovojne funkcije sistemskih klicev
 - neposredna izvedba je zahtevna (assembly) saj je potrebno rokovanje z registri in vstop v jedro
 - Ovojna funkcija je namenjena izvedbi sistemskega klica
 - je v standardni kljiznici
@@ -195,4 +195,18 @@
   - **specificne ovojne funkcije:** predpripravljena ovojna funkcija iz knjiznice
   - **splosne ovojne funkcije:** `syscall()`
   - **posredno preko ostalih funkcij:** npr `printf()`
-- 
+
+### Standardi
+- **API:** application programming interface. Vmesnik za uporabo programskih knjiznic. Temelji na simbolicni predstavitivi
+- **ABI:** application binary interface. Temelji na stevilski predstavitvi.
+- POSIX - standard `IEEE 1003`:
+  - prenosljiv vmesnik operacijskega sistema
+  - programski vmesnik med aplikacijami in OS
+  - predpisuje funkcije, ukazno lupino, ...
+  - standard omogoca prenosljivost programov
+- Skladnos s SUS standardom:
+  - **certificirani Unix**
+  - **ne-certificirani Unix**
+  - **ostali ne-certificirani**
+
+## Upravljanje z uporabniki
