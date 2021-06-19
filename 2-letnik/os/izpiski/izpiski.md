@@ -1,4 +1,35 @@
 # OS Izpiski
+- [OS Izpiski](#os-izpiski)
+  - [Racunalniski sistem](#racunalniski-sistem)
+    - [Lupina](#lupina)
+    - [Graficna lupina](#graficna-lupina)
+    - [Upravljanje oken](#upravljanje-oken)
+    - [Ukazna lupina](#ukazna-lupina)
+    - [Lupina bash](#lupina-bash)
+    - [Sistemska orodja](#sistemska-orodja)
+  - [Operacijski sistem](#operacijski-sistem)
+    - [Koncepti operacijskih sistemov](#koncepti-operacijskih-sistemov)
+    - [Jedro](#jedro)
+    - [Arhitektura jedra](#arhitektura-jedra)
+  - [Sistemski klici](#sistemski-klici)
+    - [Ovojne funkcije sistemskih klicev](#ovojne-funkcije-sistemskih-klicev)
+    - [Standardi](#standardi)
+  - [Upravljanje z uporabniki](#upravljanje-z-uporabniki)
+    - [Varnost in zascita](#varnost-in-zascita)
+    - [Uporabniski racun](#uporabniski-racun)
+    - [Prijava v sistem](#prijava-v-sistem)
+    - [Uporabniki v Linuxu](#uporabniki-v-linuxu)
+  - [Upravljanje z datotekami](#upravljanje-z-datotekami)
+    - [Datotecni sistem](#datotecni-sistem)
+    - [Datoteke](#datoteke)
+    - [Kodiranje datotek](#kodiranje-datotek)
+    - [Pripenjanje naprav](#pripenjanje-naprav)
+    - [Nadzor dostopa](#nadzor-dostopa)
+  - [Procesi](#procesi)
+    - [Zivljenje procesa](#zivljenje-procesa)
+
+---
+
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
   - fizicna racunalniska oprema
@@ -401,7 +432,7 @@
   - vrste dovoljenj: **r** - **r**ead, **w** - **w**rite, **x** - e**x**ecute, **-** - prazno
   - sklopi uporabnikov: **u** - **u**ser (lastnik), **g** - **g**roup (skupina), **o** - **o**ther, **a** - **a**ll (vsi)
   - `[user][group][other]` → `rwxrwxrwx` → `rw-r-xr--`  
-  
+
     |znak| datoteka |imenik|
     |-|-|-|
     |`r`| branje datoteke | izpis vsebine datoteke|
@@ -409,3 +440,23 @@
     |`x`| izvajanje oz. datoteke je izvršljiva| vstop v imenik (sistemski klic chdir oz. ukaz cd) |
 
 ## Procesi
+- **Program** je **pasivna** entiteta, ki je shranjen v izvrsljivi datoteki
+- **Proces** je **aktivna** entiteta, ki je program v izvajanju
+- Stanje programa dolocajo podatki, sklad, kopica, datoteke in IO naprave
+- Proces tekmuje z drugimi procesi za vire
+- **Glavni nalogi**
+  - **lastnistvo** oz zascita virov
+  - **izvajanje kode** sledi neki poti preko vec programov
+  - nalogi sta neodvisni storitvi:
+    - **procesi** so povezani z lastnistvom virov
+    - **niti** so povezane z izvajanjem kode
+- **Storitve OS** so *ustvarjanje procesa*, *koncanje procesa*, *odlozitev izvajanja processa*, *komunikacija med procesi*, *resevanje sporov pri virih*, ...
+- **Sestava procesa**
+  - **programska koda** je strojna koda, ki se lahko izvaja na procesu
+  - **sklad** so podatki, pomembni za izvajanje
+  - **kopica** so dinamicno alocirani podatki
+  - **podatki** so ostali podatki, ki jih proces obdeluje
+  - **deskriptor procesa** so dodatni nadzorni podatki, ki jih os potrebuje za upravljanje procesa
+- **Naslovni prostor procesa** je pomnilnik, ki ga proces lahko naslavlja
+
+### Zivljenje procesa
