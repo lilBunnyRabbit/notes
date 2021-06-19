@@ -132,3 +132,32 @@
   - **gonilniki naprav**: programska koda, ki zna upravljati z napravo preko vmesnikov strojne opreme (niso del jedra)
 
 ### Arhitektura jedra
+- struktura in nacin povezovanja med posameznimi deli jedra
+- **Vrste:**
+  - **Monolitno jedro:**
+    - velik kos strojne kode (vsebuje cel OS)
+    - deli OS lahko hitro komunicirajo preko klicev funkcij
+    - napaka v enem delu OS sesuje cel OS
+    - tezja obvladljivost programske kode
+    - sprememba izvorne kode -> ponovno prevajanje jedra
+    - **DOS, FreeDOS, Windows 9x**
+  - **Monolitno modularno jedro:**
+    - modularna zasnova jedra (modul vsebuje gonilnik naprave)
+    - module je moc vloziti in izlociti iz jedra tekom izvajanja
+  - **Mikro jedro:**
+    - vsebuje samo osnovne funkcionalnosti, ostale funkcionalnosti so izvedene preko procesov
+    - medprocesna komunikacija (odjemalec-streznik)
+    - medsebojni klici so casovno zahtevnejsi
+    - prilagodljivost, varnost, porazdeljenost in enostavnejsa implementacija
+  - **Hibridno jedro:**
+    - zasnova je mikro jedro, izvedba pa monolitna (npr Windows NT)
+  - **Nano jedro:** manjse mikro jedro
+  - **Exokernel:** manjse mikro jedro, omogoca le zascito in souporabo virov
+  - **Unikernel:** specificno namensko jedro za izbrano aplikacijo
+
+## Sistemski klici
+- mehanizem preko katerega uporabniski program zahteva jedrno storitev
+- vsak klic ima svojo stevilko, prejme lahko tudi argumente
+- stevilke in argumenti se prenasajo preko registrov in sklada
+- **Tabela rokovalnikov sistemskih klicev**:
+  - i-ti
