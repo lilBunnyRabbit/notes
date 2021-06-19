@@ -257,4 +257,150 @@
   - **Sol:** nakljucni niz dodan geslu pred zgoscanjem. Namenjen temu da imata 2 enaki gesli z razlicno soljo razlicna hasha. onemogoci napad z mavricno tabelo (rainbow table)
   - `etc/group`: hrani seznam uporabnikov, ki se pripadajo skupini poleg skupine zapisane v `etc/passwd` (`ime skupine:x:gid:seznam uporabnikov`)
 
-## Uporavljanje z datotekami
+## Upravljanje z datotekami
+### Datotecni sistem
+- pomnilni medij oz pomnilna naprava, ki omogoca dolgotrajno hranjenje podatkov
+- OS premosca vrzel med medijem in uporabnikom
+- **Logicna organizacija podatkov:**
+  - Visoko nivojski pogled: uporabnikov pogled na podatke
+  - OS nudi enotno abstrakcijo podatkov
+  - osnovni koncep med OS je datoteka
+- **Fizicna organizacija podatkov:**
+  - nizko nivojski pogled: za uporabnika je skrit
+  - nacin in oblika zapisa podatkov in metapodatkov
+  - nacin se prilagodi pomnilnem mediju
+  - **gonilnik datotecnega sistema** je program, ki skrbi za specificen datotecni sistem
+- **Datoteka:**
+  - osnovna zakljucena zbirka podatkov
+  - hrani neko vsebino
+  - **meta podatki:** npr ime datoteke, velikost, lastnik, etc.
+- **Imenik:**
+  - omogoca zdruzevanje datotek
+  - vsebuje datoteke in druge imenike
+  - hierarhicna struktura
+- **Hierarhicna struktura imenikov:**
+  - gnezdenje imenikov in datotek
+  - odnosi: **podimenik** in **nadimenik**
+  - **korenski imenik (root directory)**: imenik, ki nima nadimenika
+- **Naslavljanje datotek:** *absolutna pot* je pot od korenskega imenika, *relativna pot* je pot ki se pricne v delovnem imeniku
+
+### Datoteke
+- **Abstrakcija datoteke:**   
+  |oznaka|opis|primer|
+  |:-|:-|:-|
+  |`-`|regular file|`/etc/passwd`|
+  |`d`|directory|`/bin`|
+  |`s`|symbolic link|`/usr/src/linux`|
+  |`b`|block special device|`/dev/sda`|
+  |`c`|character special device|`/dev/tty`|
+  |`p`|named pipe||
+  |`s`|socket||
+- **Navadna datoteka:**
+  - vsebina je poljubna (binarna ali tekstovna)
+  - OS omogoca notranje operacije
+  - vrsto datoteke doloca koncnica `<name>.*`
+- **Imenik:**
+  - posebna datoteka, ki vsebuje seznam imeniskih vnosov (**imeniski vnos (directory entry)** vsebuje ime in kazalce na ostale podatke)
+- **Simbolicna (mehka) povezava:**
+  - posebna datoteka, ki vsebuje simbolicne povezave (pot do ciljne datoteke)
+  - ukazi na datoteko operirajo na ciljni datoteki
+  - ukaz `ln -s`
+- **Simbolicna (trda) povezava:**
+  - dodaten imeniski vnos za isto datoteko
+  - razlicni imeniski vnosi lahko predstavljajo isto datoteko
+  - ukaz `ln original trda`
+  - veckratne trde povezave
+- **Blocna in znakovna naprava:**
+  - dva posebna tipa
+  - branje in pisanje se neposredno nanasa na napravo
+  - **blocne naprave:** dostop po blokih
+  - **znakovne naprave:** dostop po znakih
+- **Cev (pipe) in vticnica (socket):**
+  - mehanizem za medprocesno komunikacijo
+  - naslavljajo preko imen datotek
+  - **imenovana cev (named pipe):** FIFO, ustvarimo z `mkfifo`
+  - **lokalna vticnica (local socket):** Unix domain socket, poseben vmesnik
+
+### Kodiranje datotek
+- **Kodiranje znakov:**
+  - preslikava **zaporedja bytov v znake** (moresejeva koda, braillova pisava)
+  - pomembno za tekstovne datoteke
+- **Kodiranje ASCII**
+  - 7b kodiranje
+- **Izzivi internacionalizacije**
+  - manjkajo znaki ne-angleskih jezikov
+  - razsiritev ASCII na 8b
+- **Unicode**
+  - nabor UCS (universal character set)
+  - 21b kodni prostor
+  - *kodirani znaki 143.859 znakov in 154 pisav*
+- **Razlicna kodiranja**
+  - UTF: unicode transformation format
+  - UTF-32: 4B zacetni biti so 0, **prostorsko neucinkovit**
+  - UTF-16: 1B ali 2B besedi
+  - **UTF-8**
+    - razsirjen ASCII, se ujema na prvih 128 znakov
+    - 1 do 4B/znak
+    - samo-sinhronizacija
+- **Skok v novo vrstico**
+  - **LF:** naslednja vrstica
+  - **CR:** skok na zacetek vrstice
+  - WP:Newline
+
+### Pripenjanje naprav
+- pripenjanje vec pomnilnih naprav omogoci dostop vseh naprav
+- vsaka naprava ima svojo imenisko strukturo
+- v **windows** sistemih je vec locenih imeniskih struktur (C:, D:, ...) v **unix** sistemih pa je ena enotna (root)
+- **Vec imeniskih struktur:** vsaka naprava ima svoj znak (C:, D:, ...)
+- **Enotna imeniska struktura:** naprave so dostopne prek nekaterih imenikov (podstruktura na podan imenik)
+- **Korenski datotecni sistem:**
+  - vsebuje datoteke, pomembne za zagon OS
+  - se priklopi in pripne ob zagonu OS na korenski imenik enotne imeniske strukture
+- **Pripenjanje (mount)**
+  - pripenjanje dodatnega datotecnega sistema v obstojeco imenisko strukturo
+  - **tocka pripenjanja (mount point)** je ciljni imenik v obstojeci imeniski strukturi kamor zelimo pripeti dodatni datotecni sistem (`/mnt/...`)
+  - tocka pripenjanja se prekrije s korenskim imenikom
+  - ukaza `mount` in `unmount`
+
+### Nadzor dostopa
+- doloca **kdo** lahko **kaj** pocne **s cim**
+- *kdo?* **subjekt** je uporabnik, skupina, proces ali obmocje zascite
+- *kaj?* **dovoljenje** za operacije nad datoteko (npr branje)
+- *s cim?* **objekt** zascite je navadna datoteka lahko pa tudi naprava, pomnilnik, ...
+- **Matrika dostopa**
+  - **stolpci:** objekti nadzora dostopa
+  - **vrstice:** subjekti, ki dostopajo
+  - **elementi:** nabor dovoljenj  
+    |  | Datoteka 1 | Datoteka 2 | Datoteka 3 | Datoteka 4 |
+    |-|-|-|-|-|
+    | Uporabnik A | lastnik, R, W | R, X | lastnik, R ||
+    | Uporabnik B |  | lastnik, R, W, X | R ||
+    | Uporabnik C | W |  |  | lastnik, R |
+- **Nadzorni seznam dostopa (access control list)**
+  - dekompozicija matrike dostopa po stolpcih
+  - stolpci matrike predstavljajo seznam dostopa  
+    ```
+    Datoteka 1: (A, lastnik, R, W), (C, W)
+    Datoteka 2: (A, R, X), (B, lastnik, R, W, X)
+    Datoteka 3: (A, lastnik, R), (B, R)
+    Datoteka 4: (C, lastnik, R)
+    ```
+- **Seznam zmoznosti (capabillities list)**
+  - dekompozicija matrike dostopa po vrsticah
+  - vrstice matrike predstavljajo zmoznosti  
+    ```
+    Uporabnik A: (1, lastnik, R, W), (2, R, X), (3, lastnik, R)
+    Uporabnik B: (2, lastnik, R, W, X), (3, R)
+    Uporabnik C: (1, W), (4, lastnik, R)
+    ```
+- **Zascita datotek v Unix/Linux sistemih**
+  - vrste dovoljenj: **r** - **r**ead, **w** - **w**rite, **x** - e**x**ecute, **-** - prazno
+  - sklopi uporabnikov: **u** - **u**ser (lastnik), **g** - **g**roup (skupina), **o** - **o**ther, **a** - **a**ll (vsi)
+  - `[user][group][other]` → `rwxrwxrwx` → `rw-r-xr--`  
+    |znak| datoteka |imenik|
+    |-|-|-|
+    |`r`| branje datoteke | izpis vsebine datoteke|
+    |`w`| pisanje oz. spreminjanje datoteke | spreminajanje imenika (ustvarjanje in brisanje datotek v imeniku) |
+    |`x`| izvajanje oz. datoteke je izvršljiva| vstop v imenik (sistemski klic chdir oz. ukaz cd) |
+
+## Procesi
