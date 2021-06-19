@@ -30,6 +30,10 @@
     - [Stanje procesa](#stanje-procesa)
     - [Podatkovne strukture](#podatkovne-strukture)
   - [Vecopravilnost](#vecopravilnost)
+    - [Virtualizacija procesorja](#virtualizacija-procesorja)
+    - [Neposredno izvajanje](#neposredno-izvajanje)
+    - [Preklop procesa](#preklop-procesa)
+  - [Razvrscanje](#razvrscanje)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -512,3 +516,69 @@
   ![](images/deskriptior_procesa.png)
 
 ## Vecopravilnost
+### Virtualizacija procesorja
+- izziv je socasno izvajati poljubno stevilo procesov
+- **Stevilo procesorjev**
+  - **vecprogramiranje / multiprgoramiranje:** socasno izvajanje vec programov oz procesov na enem procesorju
+  - **vecprocesiranje / multiprocesiranje:** vzporedno izvajanje vec programov na vec procesorjih (procesor je **vecjedrni** ali **vecnitni**)
+- **Deljenje vira med vec entitetami**
+  - **casovno dodeljevanje (time sharing)**
+    - vsaka entiteta uporablja vir nekaj casa (**casovna rezina** je cas uporabe vira)
+    - delijo si procesor in omrezno povezavo
+  - **prostorsko dodeljevanje (space sharing)**
+    - vsaka entiteta uporablja del vira
+    - delijo si pomnilnik in diskovni prostor
+- **Vecopravilnost (multitasking)**
+  - vrsta programiranja
+  - izvajanje vec procesov hkrati
+  - preko **casovnega dodeljevanja**
+  - vrsti: **sodelovalna / brez odvzemanja** in **prekinjevalna / z odvzemanjem**
+- **Sodelovalna vecopravilnost**
+  - temelji na sodelovanju procesov
+  - odvzem procesorja je mozen znotraj sistemskih klicov
+  - eksplicitno prepuscanje procesorja (`yield`)
+  - predpostavi se razumno obnasanje procesov
+  - racunsko intenzivni procesi lahko "ugrabijo" procesor
+- **Prekinjevalna vecopravilnost**
+  -  temelji na odvzemanju procesorja oz prekinjanju procesa (npr timer). Nadzor ima OS
+  -  **casovna rezina:** 
+     -  cas, ki ga ima proces na voljo
+     -  po izteku se dodeli procesor drugemu procesu
+     -  prekinjen proces se postavi v vrsto
+
+### Neposredno izvajanje
+- **Neomejeno neposredno izvajanje**
+  - samo pozene program
+  - **hitro:** program se direktno izvede
+  - **izvajanje v celoti**
+  - **neizkoriscenost virov:** proces caka npr IO
+  - **tezak nadzor:** nemogoce nadzorovati
+  - **TEZAVA:** OS ne tece vedno → izgubi nadzor nad sistemom
+  - **RESITEV:** strojna podpora (uporabniski in jedrni nacin, preklopi, prekinitve, syscall)
+- OS dobi nadzor ob
+  - strojni prekinitvi
+  - izjemi
+  - sistemskem klicu
+  - **prozenju ustreznega rokovalnika**
+    - **PSP:** prekinitveno servisni program
+    - **vstop v jedrni rokovalnik:** statusni register in PC na sklad, prekinitve se onemogocijo, izvedba rokovalnika in nivo zascite se preklopi na jedrni
+    - **vrnitev iz rokovalnika:** statusni register in PC iz sklada, nivo zascite se proklopi na uporabniski
+    - za ostale registre poskrbi rokovalnik
+- **Omejeno neposredno izvajanje**
+  - init rokovalnike prekinitev in pasti, rokovalnik syscall in casovnik
+  - pozene program in pocakaj da OS dobi nadzor
+
+### Preklop procesa
+- vec procesov socasno v sistemu → casovno dodeljevanje → potrebno je **razvrscanje procesov** → mehanizem zamanjave procesa
+- **Preklop procesa** se izvede na koncu rokovalnika, tik pred menjavo nacina
+- preklop ni vedno potreben lahko se vrnemo v isti proces
+- **Izvedba**
+  - izbira drugega procesa (**razvrscevalnik**)
+  - sprememba stanj procesov
+  - preklop konteksta (PS, sklad, statusni in ostali registni) → v deskriptor procesa shranimo kontekst in obnovimo kotekst izbranega procesa
+- **Ucinkovitost** je odvisna od
+  - **strojne opreme:** hitrost pomnilnika, procesorja in stanje procesorja, ...
+  - **operacijskega sistema:** zapletenost komponent, razvrscevalni algoritem, ...
+  - v modernih sistemih traja preklop procesa pod `1 qs`
+
+## Razvrscanje
