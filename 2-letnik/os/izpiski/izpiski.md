@@ -643,6 +643,7 @@
   - **MLFQ:** vecnivojska odzivna vrsta
   - razvrscevalnik Linux
   - **CFS:** ppoplnoma posteno razvrscanje
+
 ### Osnovni algoritmi
 - **FCFS** - first come, first served oz **FIFO** - first in, first out
   - **proces, ki je prej pripravljen, prej dobi procesor**
@@ -707,7 +708,6 @@
   - ob stvaritvi dolocimo dolzino koraka
   - visja prioriteta → krajsi korak
   - procesu, ki je prehodil najmanj se dodeli procesor
-
 
 ### Prakticni algoritmi
 - **MLQ** - multilevel queue
