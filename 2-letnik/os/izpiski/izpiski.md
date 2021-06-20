@@ -40,6 +40,8 @@
     - [Prednostni algoritmi](#prednostni-algoritmi)
     - [Prakticni algoritmi](#prakticni-algoritmi)
   - [Upravljanje s pomnilnikom](#upravljanje-s-pomnilnikom)
+    - [Naslovni prostor](#naslovni-prostor)
+    - [Pomnilniski API - libc](#pomnilniski-api---libc)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -733,3 +735,34 @@
     - nizja prioriteta cas tece hitreje
 
 ## Upravljanje s pomnilnikom
+### Naslovni prostor
+- **Pomnilnik** se deli se na **fizicni** in **naslovni** (kot ga vidi procesor, abstrakcija fizicnega)
+- Vcasih je bil **logicni naslov = fizicni naslov**, pomnilnik se je delil na `[OS | ostalo]` in OS je bil kot knjiznica
+- **Vecprogramiranje**
+  - vec procesov v pomnilniku → deljenje pomnilnika → preklaplanje procesov → zascita procesov
+  - Izgled `[OS | Proces A | Proces B | Proces C]`
+- **Naslovni prostor**
+  - pomnilnik kot ga vidi procesor → vidi samo svoj kos
+  - sestaljen je iz **kode**, **kopice**, **sklada**, ...
+  - navidezni naslov se preslika v fizicni naslov
+  - Izgled `[koda | kopica | prosto | sklad]`
+- **Dolocanje naslovov**
+  - **cas prevajanja (compile time):** zbirnik ali prevajalnik doloci naslove simbolov oz spremenljivk
+  - **cas povezovanja (link time):** zlaganje vec predvidenih modulov skupaj
+  - **cas nalaganja (load time):** prenosljiva koda, poljubna lokacija
+  - **cas izvajanja (run time):** premikanje in izmenjava procesov
+- **Zascita procesa:**
+  - naslovni prostor procesa je izoliran (za to skrbi OS)
+  - preverja se naslove (preslikava na prosto ni dovoljena) in dovoljenja
+
+### Pomnilniski API - libc
+- **Aloacija pomnilnika**
+  - **sklad** se implicitno alocira in dealokacija preko prevajalnika. Hrani lokalne spremenljivkem argumente funkcij in izvajalne podatke
+  - **kopica** se eksplicitno alocira in delocira
+- **Standardna knjiznica v C**
+  - **alokacija pomnilnika**  
+    ```c
+    void* malloc(size_t size)
+    // ali calloc(...), realloc(...)
+    ```
+  - 
