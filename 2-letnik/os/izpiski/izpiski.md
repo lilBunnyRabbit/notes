@@ -74,6 +74,10 @@
     - [Monitor](#monitor)
     - [Ostali mehanizmi](#ostali-mehanizmi)
   - [Navidezni datotecni sistemi](#navidezni-datotecni-sistemi)
+    - [Datotecni sistem](#datotecni-sistem-1)
+    - [Navidezni datotecni sistem](#navidezni-datotecni-sistem)
+    - [Datotecni deskriptorji](#datotecni-deskriptorji)
+  - [Virtualizacija](#virtualizacija)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1591,3 +1595,64 @@
 - **wait-free sync** → read-copy-update kljucavnica
 
 ## Navidezni datotecni sistemi
+### Datotecni sistem
+- **Fizicna organizacija**
+  - nizko nivojski pogled → za uporabnika skrit
+  - nacin in oblika zapisa podatkov in metapodatkov → dejanski fizicen zapis
+  - razlicni nacini fizicne organizacije → prilagoditev mediju
+  - gonilniki datotecnega sistema
+- **Gonilniki**
+  - gonilniki za pomnlino napravo → naprava kot zaporedje blokov
+  - gonilniki za datotecni sistem → organizira bloke med seboj
+- **Vrste**
+  - diskovni → ext4, ntfs, ...
+  - mrezni → nfs, Coda, ...
+  - posebni → `/proc/`, `/dev/`, ...
+
+### Navidezni datotecni sistem
+- **VFS**
+  - razlicni datotecni sistemi → podobni koncepti
+  - enostaven vmesnik za uporabnika
+  - abstrakcija datotek
+  - standardna hierarhija imenikov
+- **Struktura VFS**   
+  ![](images/struktura_vfs.png)
+- **Objektna orientiranost** → npr `struct` v C
+- **VFS objekti** →  organizacija datotek v superblock, inode, dentry →  datotecni deskriptor je file
+- **Supeblock** je predstavitev prikljupljenega datotecnega sistema
+  - lastnosti so naprava, tip, velikost bloka, zastavice, ...
+- **inode (index node)** je datoteka poljubnega tipa in predstavlja vse razen imena datoteke
+  - lastnosti so st inode, st trdih povezav, velikost datoteke, lastnik, datum/cas dostopa, kazalci na bloke
+  - operacije `create(), link(), ..., mkdir(), ... read(), write(), ...`
+- **dentry (directory entry)** je imeniski vnos v imeniku
+  - preslikava med imeni in inodei
+  - lastnosti so ime datoteke, kazalci inode, kazalec na starsevski imenik in stevci uporabe
+
+### Datotecni deskriptorji
+- **Dupliciranje deskriptorja**
+  - `dup(fd)`
+    - **uporaba** → `new = dup(orig)`
+    - ustvari nov deskriptor, ki predstavlja isto odprto datoteko kot original
+    - uporabi se prva prosta stevilka deskriptorja
+    - stevilka desriptorja == stevilka file
+    - duplikati si delijo pozicijo v datoteki   
+    ```c
+    int fd = open(...);
+    close(0);
+    dup(fd);
+    ```
+  - `dup2(orig, new)`
+    - preusmeritev orig v new
+    - ce je new ze v uporabi se prej zapre   
+    ```c
+    // odpremo datoteko
+    fd = open("vhod.txt", O_RDONLY);
+
+    // izvedemo preusmeritev
+    dup2(fd, 0);
+
+    // zazenemo program
+    execv("/bin/cat", NULL);
+    ```
+
+## Virtualizacija
