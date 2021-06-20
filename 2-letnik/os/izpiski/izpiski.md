@@ -50,6 +50,10 @@
     - [Prenasanje sporocil](#prenasanje-sporocil)
     - [Deljen pomnilnik](#deljen-pomnilnik)
   - [Niti](#niti)
+    - [Zakaj niti?](#zakaj-niti)
+    - [Izvedba niti](#izvedba-niti)
+    - [Nitni izzivi](#nitni-izzivi)
+  - [Socasnost](#socasnost)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1021,3 +1025,62 @@
     - enkratna vzpostavitev, veckratna uporaba
 
 ## Niti    
+- glavni nalogi procesov sta **lastnistvo** in **izvajanje kode**
+- **procesi** skrbijo za lastnistvo, **niti** pa skrbijo za izvajanje kode
+- **Vrste**
+  - en proces in ena nit na proces
+  - vec procesov in ena nit na proces
+  - en proces in vec niti na procesu
+  - vec procesov in vec niti na procesih
+- **Nit**
+  - skrbi za izvajanje kode
+  - ima svoj kontekst (staranje, registre in sklad)
+  - pripada procesu
+  - vse niti si delijo isti naslovni prostor
+
+### Zakaj niti?
+- **Prednosti vecnitnosti**
+  - ustvarjanje in koncanje niti je hitro (ni potrebno init naslovnega prostora)
+  - ucinkovit preklop niti, bolj ucinkovito kot med procesi, pni portrebno preklopiti naslovnega prostora in prazniti TLB
+  - ucinkovita medprocesna komunikacija, saj si delijo pomnilnik
+  - boljsi izkoristek procesorjev
+  - bolj izkorisceni viri (manj prostora)
+  - specializacija in modularnost (asinhrono)
+- **Primeri uporabe:** brskalnik, text editor, streznik, vecnitnost v jedru OS
+
+### Izvedba niti
+- niti ki se izvedejo na **jedernem nivoju**
+  - za njih skrbi OS
+  - podpora preko syscall
+  - tako kot procese **razvrscevalnik** razvrsca niti
+  - OS poskrbi za synch
+- niti ki se izvedejo na **uporabniskem nivoju**
+  - upravljanje je izvedeno v uporabniskem programu (knjiznice)
+  - OS se teh niti ne zaveda
+  - **preslikava uporabniskih v jedrne:** *vec-v-eno*, *vec-v-vec*, *ena-v-eno* in *ena-v-vec*
+- Zgled `[koda | kopica | prosto | sklad]` → `[koda | kopica | prosto | sklad 2 | prosto | sklad 1]`
+- **Mehanizem za izvedbo niti**
+  - **deskriptor niti (kontrolni blok niti)** - podatkovna struktura (v jedru), ki hrani podatke o niti (registri, stanje, sklad, PC)
+  - **deljen pomnilnik** → navidezni pomnilnik: enaka preslikava iz navideznega prostora v fizicni pomnilnik
+  - vzajemno izkljucevanje
+  - cakanje druge niti
+- **Preklop niti**
+  - podobno kot preklop procesa
+  - ni zamenjave naslovnega prostora
+  - ni praznjenja preslikovalnega pomniklnika (**TLB**)
+
+### Nitni izzivi
+- `fork()` klonira vse niti procesa ali samo klicoce niti
+- `exec()` nadomesti celoten proces → vse niti
+- **Pokoncanje niti**
+  - preden se zakljuci opravilo
+  - **asinhrono** → se konca takoj (ex `Thread.stop()`)
+  - **odlozeno koncanje** → se konca ko zakljuci trenutno opravilo, vsebuje preverjanje ali se mora koncati
+  - sprostitev zasedenih virov
+- signal **rokuje** nit, ki je vzrok za posiljanje signala
+- **Stevilo niti in bazeni niti (thread pool)**
+  - veliko zahtev → veliko niti
+  - to preobremeni sistem
+  - resitev je **bazen niti** (koncno stevilo, po koncanju se ponovno uporabi, vnaprej pripravljene, ni ustvarjanja in sproscanja)
+
+## Socasnost
