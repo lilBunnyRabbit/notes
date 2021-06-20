@@ -54,6 +54,11 @@
     - [Izvedba niti](#izvedba-niti)
     - [Nitni izzivi](#nitni-izzivi)
   - [Socasnost](#socasnost)
+    - [Socasno izvajanje ukazov](#socasno-izvajanje-ukazov)
+    - [Souporaba vira](#souporaba-vira)
+    - [Tvegano stanja](#tvegano-stanja)
+    - [Kriticni odsek](#kriticni-odsek)
+  - [Vzajemno izkjucevanje](#vzajemno-izkjucevanje)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1084,3 +1089,56 @@
   - resitev je **bazen niti** (koncno stevilo, po koncanju se ponovno uporabi, vnaprej pripravljene, ni ustvarjanja in sproscanja)
 
 ## Socasnost
+- **socasnost** je prekrivanje obstoja vec procesov (obcutek hkratnega izvajanja)
+- **vzporednost** je dejansko hkratno izvajanje
+- **porazdeljenost** je izvajanje vec procesov v vec vozliscih omrezja
+- **Socasnost in vzporednost**
+  - **socasnost brez vzporednosti** - vecopravilnost, izvajanje ukazov se prepleta
+  - **socasnost z vzporednostjo** - vec procesorski sistem, ukazi se prekrivajo
+  - **vzporednost brez socasnosti** - vzporednost na nivoju ukazov
+  - **Enake tezave in resitve:** deljenje globalnih virov, deadlock, tezavno odkrivanje napak
+- Pojavlja se pri **izvajanju vec razlicnih aplikacij** in **izvajanju ene aplikacije** (mnozica vzporednih procesov)
+- Odnosi med procesi
+  - **tekmujejo za vire** in se ne zavedajo drug drugega
+  - z **medprocesno kounikacijo** se **neposredno** zavedajo drug drugega in **sodelujejo**
+  - **posredno** zavedanje z **souporabo virov**
+
+### Socasno izvajanje ukazov
+- izvedba posameznih ukazov razlicnih procesov se **poljubno prepleta** (`vec procesov, en procesor`)
+- izvedba posameznih ukazov razlicnih procesov se **poljubno prekriva** (`vec procesov, vec procesorjev`)  
+  ![](images/prepletanje_izvajanja.png)
+
+
+### Souporaba vira
+- **shared data** - vir, ki ga lahko uporabljata dva ali vec procesov
+- **souporaba skupnega vira** - socasna uporaba vira s strani vec procesov
+- **TEZAVA**  
+  ![](images/souporaba_vira.png)
+
+### Tvegano stanja
+- **tvegano stanje (race condition)** je rezultat souporabe skupnega vira, odvisen od prepletanja/prekrivanja ukazov
+- tveganemu stanju se zelimo izogniti saj je nepravilno
+
+### Kriticni odsek
+- s **kriticnim odsekom (critical section)** scitimo socasno uporabo skupnega vira, ki vodi v tvegano stanje
+- **ideja**
+  - en proces naj bo socasno v KO, ostalim ne dovolimo vstopa, dokler prvi ne iztopi
+  - princip **vzajemnega izkljucevanja**
+- **Uporaba**
+  - **vstop** v kriticni odsek je mozen le, ce noben drug proces ni v KO
+  - po vstopu drugi procesi ne morejo v KO
+  - **iztop** iz kriticnega odseka je vedno moze
+  - po iztopu je KO prost
+- **Vzajemno izkjucevanje** je mehanizem za preprecevanje tveganega stanja
+  - zagotavlja, da se v KO nahaja le en proces
+  - pojavita se novi tezavi: 
+    - **stradanje** - proces, ki zeli vstopiti v KO in ne pride na vrsto
+    - **smrtni objem** - dva ali vec procesov ne more nadaljevati, ker cakajo drgu drugega
+- **izzivi**
+  - enakopravnost
+  - omejeno cakanje
+  - ucinkovitost
+  - poljubna hitrost izvajanja procesov
+  - splosne resitve
+
+## Vzajemno izkjucevanje
