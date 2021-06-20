@@ -34,6 +34,12 @@
     - [Neposredno izvajanje](#neposredno-izvajanje)
     - [Preklop procesa](#preklop-procesa)
   - [Razvrscanje](#razvrscanje)
+    - [Mere zmogljivosti](#mere-zmogljivosti)
+    - [Razvrscevalni algoritmi](#razvrscevalni-algoritmi)
+    - [Osnovni algoritmi](#osnovni-algoritmi)
+    - [Prednostni algoritmi](#prednostni-algoritmi)
+    - [Prakticni algoritmi](#prakticni-algoritmi)
+  - [Upravljanje s pomnilnikom](#upravljanje-s-pomnilnikom)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -582,4 +588,148 @@
   - v modernih sistemih traja preklop procesa pod `1 qs`
 
 ## Razvrscanje
-$$\sum^{n}_{1}{n^2}$$
+- odlocanje o tem, kateri proces se razvrsti na viru → kljucno za zagotavljanje vecopravilnosti
+- pogledi: **dolgorocno (job scheduling)**, **srednjerocno (swapping)** in **kratkorocno (CPU scheduling)**
+- **Razvrscanje poslov (dolgorocno)**
+  - paketna obdelava → enota obdelave je **posel**
+  - posli cakajo in ko so izbrani se nalozijo in zacnejo izvajati
+  - **job scheduler** je del OS, ki skrbi za razvrscanje poslov
+  - navadno ni podprto na modernih OS
+- **Menjava procesov (srednjerocno)**
+  - disk se uporabi za umikanje procesov, npr ce primankuje pomnilnika proces umaknemo na disk sprostimo vire in ga potem lahko nalozimo nazaj
+  - menjalnik (**swapper**) izbira procese za umik in vracanje (enakomerna obremenitev virov)
+- **Razvrscanje na procesorju (kratkorocno)**
+  - odloca o tem, kateri proces dobi moznost izvajanja na procesorju
+  - kljucno za zagotavljanje vecopravilnosti
+  - **Razvrscevalnik (scheduler)** je del upravitelja procesov in izbira enega izmed pripravljenih procesov
+  - **Dodeljevalnik (dispatcher)** preklip procesa iz trenutnega na izbranege
+- Razvrscevalnik se aktivira ko
+  - proces konca
+  - proces onemogoci
+  - konec casovne rezine
+  - konec cakanja
+  - nov proces
+- **Casovna rezina**
+  - **racunsko intenzivna opravila:** rajsi daljse casovne rezine, omejijo stroske preklopa, vecja izkoriscenost procesorja
+  - **interaktivna opravila:** krajse casovne rezine, procesi prej pridejo na vrsto, boljsa uporabniska izkusnja
+
+### Mere zmogljivosti
+- **Paketni sistemi**  
+  [](images/paketni_sistemi.png)  
+  - **cakalni cas:** $T_{cakalni} = T_{zacetni} - T_{prihodni}$
+  - **odzivni cas:** $T_{odzivni} = T_{v/i} - T_{prihodni}$
+  - **cas obdelave:** $T_{obdelave} = T_{koncni} - T_{prihodni}$
+- **Interaktivni sistemi**  
+  [](images/interaktivni_sistemi.png)
+  - **cakalni cas:** celoten cas v stanju pripravljen
+  - **odzivni cas:** $T_{odzivni} = T_{zacetni} - T_{prihodni}$ (predpostavimo $T_{zacetni} = T_{v/i}$)
+  - **cas obdelave:** $T_{obdelave} = T_{koncni} - T_{prihodni}$
+- **Ostale mere**
+  - **izkoriscenost procesorja (processor utilization):** delez zaposlenosti procesorja
+  - **prepustnost sistema (system troughput):** stevilo obdelanih procesov v danem casovnem obdobju
+  - **postenost (fairness):** enakomernost delitve procesorja procesom
+
+### Razvrscevalni algoritmi
+- **Osnovni**
+  - **FCFS:** prvi pride prvi melje
+  - **SJF:** najkrajsi posel naprej
+  - **PSFJ:** prekinjevalni najkrajsi posel naprej
+  - **RR:** krozno razvrscanje
+- **Prednostni**
+  - **HPF:** najvisja prioriteta naprej
+  - razvrscanje s prepustnicami
+  - koracno razvrscanje
+- **Prakticni**
+  - **MLFQ:** vecnivojska odzivna vrsta
+  - razvrscevalnik Linux
+  - **CFS:** ppoplnoma posteno razvrscanje
+### Osnovni algoritmi
+- **FCFS** - first come, first served oz **FIFO** - first in, first out
+  - **proces, ki je prej pripravljen, prej dobi procesor**
+  - procesi na konec vrste, vzame se iz zacetka vrste
+  - lastnosti:
+    - razvrscanje **brez odvzemanja**
+    - slab odzivni cas
+    - dober cas obdelave
+- **SJF** - shortest job first
+  - **najkrajsi pripravljen posel dobi procesor**
+  - potrebno je vnaprejsnje poznavanje dolzine poslov
+  - lastnosti:
+    - razvrscanje **brez odvzemanja**
+    - algoritem je optimalen
+    - slab odzivni cas
+    - odlicen cas obdelave
+- **PSJF** - preemptive shortest job first
+  - **pripravljen posel z najkrajsim preostankom casa prej dobi procesor**
+  - vnaprejsne poznavanje dolzin poslov
+  - lastnosti:
+    - razvrscanje **z odvzemanjem**
+    - slab odzivni cas
+    - odlicen obracalni cas
+- **RR** - round robin
+  - **pripravljene posle krozno razvrscamo zaporedoma, vsakega za nekaj casa**
+  - procesi na konec vrste, vzame se iz zacetka vrste
+  - izvajanje za dolocen cas (**casovna rezina**)
+  - **casovna rezina** mora biti dovoj kratka za odzivnost in dovolj dolga za opravicitev casa preklopa
+  - lastnosti:
+    - razvrscanje **z odvzemanjem**
+    - odlicen odzivni cas
+    - slab cas obdelave
+- **Ocena casa izvajanja**
+  - **t** ... trajanje zadnjega teka procesa
+  - **t'** ... ocena trajanja teka
+  - **α** ... faktor pozabljanja (`α = 1` preteklost se ne uposteva, `α = 0` trajanje zadnjega teka nima vpliva)
+  - $t' := \alpha \cdot t + (1 - \alpha) \cdot t'$
+- **Vkljucevanje I/O operacij:** tekom i/o operacij je proces blokiran zato je bolje da prekrivamo izvajanja
+
+### Prednostni algoritmi
+- **prednostno razvrscanje:** algoritmi dajejo prednost glede na neko lastnost
+- uposteva se prioriteta procesov (**notranja** - odvisna od lastnosti (npr trajanje) in **zunanja** - dolocena s strani uporabnika)
+- **HPF** - highest priority first
+  - **pripravljen posel z najvisjo prioriteto dobi procesor**
+  - **z odvzemanjem:** ce ima prispeli proces visjo prioriteto zamenjamo
+  - **brez odvzemanja:** pocakamo da trenutni proces prepusti procesor
+- **Upostevanje prioritete procesov**
+  - tezava se pojavi pri **stradanju:** procesi z visjo prioriteto nenehno prehitevajo
+  - resitev je **staranje:** procesom, ki ne dobijo procesa vsake toliko povecamo prioriteto
+- **SIRO** - service in random order
+  - **razvrscanje po neki shemi nakljucnosti**
+  - z ali brez odvzemanja
+- **Lottery scheduling**
+  - **dolocanje procesa z loterijo**
+  - proces $i$ ima $p_i$ prepustnic
+  - proces z visjo prioriteto dobi vec prepustnic
+  - razvrscevalnik nakjucno izbere eno prepustnico in lastniku prepustnice dodeli procesor
+  - lahko prepuscajo prepustnice drugim
+  - verjetnost izbire k-tega procesa $\frac{p_k}{\sum^{n}_{i=1}{p_i}}$
+- **Stride scheduling**
+  - **proces, ki je najmanj prehodil, naprej**
+  - ob stvaritvi dolocimo dolzino koraka
+  - visja prioriteta → krajsi korak
+  - procesu, ki je prehodil najmanj se dodeli procesor
+
+
+### Prakticni algoritmi
+- **MLQ** - multilevel queue
+  - interaktivna in paketna opravila
+  - vecnivojska vrsta: padajoce po prioriteti in narascajoce po casovni rezini
+  - znotraj vrste se uporablja RR
+- **MLFQ** - multi-level feedback queue
+  - prehajanje med vrstami
+    - ob prihodu najvisja prioriteta
+    - ce posel porabi celo casovno rezino dekriemntiramo prioriteto
+    - po dolocenem casu imajo vsi posli najvisjo prioriteto
+  - ce posel vracas procesor tik pred iztekom rezine se mu prioriteta zmanjsa
+- **Razvrscevalnik Linux O(1)**
+  - izvira in dodajanje opravil v konstantnem casu
+  - z odvzemanjem in proiriteto
+  - aktivna in pretecena tabela
+- **CFS** - popolnoma posteno razvrscanje
+  - postenost: v danem casovnem intervalu naj posli dobijo delez, ki je enakovreden prioriteti
+  - LINUX CFS razvrscevalnik
+    - izbira posle z najmanjsim porabljenim caosm izvajanja
+    - izvaja toliko casa, da ujamemo naslednji posel z najmanjsim porabljenim casom
+    - po izvedbi se posel vstavi v drevo z novim skupno porabljenim casom izvajanja
+    - nizja prioriteta cas tece hitreje
+
+## Upravljanje s pomnilnikom
