@@ -64,6 +64,16 @@
     - [Programska izvedba](#programska-izvedba)
     - [Ucinkovitost kljucavnic](#ucinkovitost-kljucavnic)
   - [Sinhronizacija procesov](#sinhronizacija-procesov)
+    - [Kljucavnica](#kljucavnica)
+    - [Problem proizvajalci-uporabniki](#problem-proizvajalci-uporabniki)
+    - [Pogojna spremenljivka](#pogojna-spremenljivka)
+    - [Problem proizvajalci-porabniki](#problem-proizvajalci-porabniki)
+    - [Problem bralci-pisalci](#problem-bralci-pisalci)
+    - [Bralno-pisalna kljucavnica](#bralno-pisalna-kljucavnica)
+    - [Semafor](#semafor)
+    - [Monitor](#monitor)
+    - [Ostali mehanizmi](#ostali-mehanizmi)
+  - [Navidezni datotecni sistemi](#navidezni-datotecni-sistemi)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1358,3 +1368,226 @@
   ```
 
 ## Sinhronizacija procesov
+### Kljucavnica
+- **Kljucavnica (lock, mutex)** je mehanizem zaklepanja
+  - **odklenjeno** ali **zaklenjeno**
+  - nit, ki zaklene kljucavnico, si jo **lasti** (le ena)
+  - nit, ki jo zaklene jo tudi odklene
+  - **uporaba** pri **vzajemnem izkljucevanju** na **kriticnih odsekih**
+- **Uporaba**
+  - **zakleni (lock, acquire):** ce je odklenjena jo zaklene, sicer caka da je odklenjena
+  - **odkleni (unlock, release):** odklene sakljenjeno kljucavnico   
+  ```c
+  pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+  pthread_mutex_lock(&m);
+  // kritični odsek
+  pthread_mutex_unlock(&m);
+  ```
+
+### Problem proizvajalci-uporabniki
+- dva ali vec socasnih procesov
+- dve vrsti procesov: **proizvajalec** `P` in **porabnik** `Q`
+- komunikacija poteka preko souporabe vrste
+  - pojav **ttveganega stanja** pri socasnem dostopu do vrste
+  - omejena ali neomejena kapaciteta vrste
+- **Resitev z zaklepanjem**   
+  ```c
+  pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+  queue_t q = ...;
+  ```
+  - proizvajalec  
+  ```c
+  data = produce_data()
+  pthread_mutex_lock(&m)
+  q.enqueue(data)
+  pthread_mutex_unlock(&m)
+  ```
+  - porabnik  
+  ```c
+  while true do
+    if not queue.empty then
+      pthread_mutex_lock(&m)
+      q.dequeue(data)
+      pthread_mutex_unlock(&m)
+      consume_data(data)
+    else nothing
+  done
+  ```
+  - moti nas neprestano preverjanje ce je vrsta neprazna
+
+### Pogojna spremenljivka
+- **conditional variable** je mehanizem **obvescanja**
+  - opazovalni pogoj → eksplicitno preverjamo
+  - mnozica cakajocih niti
+  - nit, ki obvesti cakajoce niti o izpolnjenosti pogoja
+  - se uporablja skupaj s kljucavnico
+  - **uporaba:** optimizacija uporabe procesorja
+- **Uporaba**
+  - **cakaj (wait)**
+    - sprosti pripadajoco kjucavnico
+    - nit se postavi v cakalno mnozico
+    - blokira trenutno nit
+    - ko se nit zbudi ponovno dobi kljucavnico
+  - **obvesti (signal, notify)**
+    - zbudi eno od niti iz cakalne mnozice
+    - namen je obvestilo o izpolnjenem pogoju
+  - **obvestiVse (broadcast, notifyAll)**
+    - zbudi vse niti iz cakalne mnozice
+    - kadar je izpolnjenih vec pogojev  
+  ```c
+  pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+  pthread_cond_t c = PTHREAD_COND_INITIALIZER;
+  // ...
+  // POGOJ ... globalna spremenljivka za opis pogoja
+  ```  
+  ```c
+  void* make(void *arg) {
+    // izpolni pogoj
+    // ...
+    pthread_mutex_lock(&m);
+    // set POGOJ to true
+    if (POGOJ) pthread_cond_signal(&c);
+    pthread_mutex_unlock(&m);
+  }
+  ```   
+  ```c
+  void* watch(void *arg) {
+    pthread_mutex_lock(&m);
+    while (not POGOJ) pthread_cond_wait(&c, &m)
+    pthread_mutex_unlock(&m);
+    // obdelava po izpolnitvi pogoja
+    // ...
+  }
+  ```
+
+### Problem proizvajalci-porabniki
+- **Resitev** z **zaklepanjem in pogojno spremenljivko**  
+  ```c
+  pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+  pthread_cond_t c = PTHREAD_COND_INITIALIZER;
+  queue_t q = ...;
+  ```
+  ```c
+  data = produce_data()
+  pthread_mutex_lock(&m)
+  q.enqueue(data)
+  signal(c)
+  pthread_mutex_unlock(&m)
+  ```
+  ```c
+  while true do
+    pthread_mutex_lock(&m)
+    while q.empty() do
+      wait(m, c);
+    q.dequeue(data)
+    pthread_mutex_unlock(&m)
+    consume_data(data)
+  done
+  ```
+- omejena kapaciteta vrste
+
+### Problem bralci-pisalci
+- **Bralci-pisalci**
+  - vec procesov socasno dostopa do podatkov
+  - bralci le berejo, pisalci berejo in spreminjajo
+- **resitev** z osnovnim zaklepanjem
+  - branje in pisanje obdamo s kljucavnico
+- **slabost** onemogocimo socasno branje vec bralcev
+- // koda
+
+### Bralno-pisalna kljucavnica
+- **izkljucujoce zaklepanje** (exclusive, write lock)
+  - le ena nit lahko socasno zaklene
+  - onemogoci souporabo vira drugim nitim
+  - **pisanje, ne da bi komu pokvarili branje**
+- **deljeno zklepanje** (shared, read lock)
+  -  vec niti lahko socasno "deljeno" zaklene
+  -  onemogoca souporabo izkljucujoce kljucavnice
+  -  **enovito/celovito branje**
+- **vrste zaklepanja**
+  - **svetovalna kljucavnica** → neodvisnost operacije od kljucavnice
+  - **obvezna kljucavnica** → odvisnost operacije od kljucavnice
+
+### Semafor
+- zdruzuje **stevec**, **kljucavnico** in **pogojno spremenljivko**
+- **pozitiven stevec (vkljucno z 0)** → odprt semafor, prost prehod procesa v KO
+- **negativen stevec** → zaprt semafor, prehod v KO ni mozen, proces caka na odprtje semaforja
+- **Uporaba**
+  - **wait (tudi test, down, proberen, P)** → dekrementira stevec, ce je semafor zaprt, potem gre proces v cakalno vrsto semaforja
+  - **signal (tudi increment, up, verhogen, V)** → inkrementira stevec, ce je semafor odprt, potem zbudi morebitni cakajoci proces iz semaforjeve vrste
+  - **atonomicnost operacij** zagotovimo s kratkim vrtecim cakanjem in onemogocanjem prekinitev
+- **Izvedba**    
+  ```
+  // priprava
+  sem: Semaphore
+  init(sem, 1)
+  …
+  // zaklepanje
+  wait(sem)
+  // kritični odsek
+  signal(sem)
+  …
+  ```   
+  ```
+  struct Semaphore is
+    count: Int
+    queue: Queue
+
+  fun init(sem, value) is
+    sem.value = value
+    sem.queue = []
+
+  atomic fun wait(sem) is
+    sem.count -= 1
+    if sem.count < 0 then
+      queue.enqueue(this process)
+      make_waiting(this process)
+
+  atomic fun signal(sem) is
+    sem.count += 1
+    if sem.count <= 0 then
+      process = queue.dequeue()
+      make_ready(this process)
+  ```
+- **POSIX API**   
+  ```c
+  // tip semafor
+  sem_t sem;
+  // inicializacija semaforja
+  sem_init(sem_t *sem, int pshared, int count)
+  // operacija wait
+  sem_wait(sem_t *sem);
+  // opearcija signal
+  sem_post(sem_t *sem);
+  ```
+
+### Monitor
+- visjenivojski konstrukt
+- vstop in iztop v kriticni odsek generira prevajalnik
+- **vsebnik**
+  - eksplicitno specificira souporabljen vir
+  - vsebuje lokalne spr in fun
+  - naenkart se lahko izvaja le ena funkcija
+  - medsebojno izkljucevanje izvajanja funkcij  
+- **primer**
+  ```
+  monitor BancniRacun is
+    stanje: Int
+
+  sync fun poloziDenar(polog) is
+    stanje += polog
+
+  sync fun dvigniDenar(dvig) is 
+    stanje -= dvig
+
+  sync fun obresti(p) is
+    stanje *= (1 + p / 100)
+  ```
+
+### Ostali mehanizmi
+- **pregrada** je obratno od semaforjev (za vstop zahteva N procesov)
+- **serializers** → definicija prioritet
+- **path expressions** → regularni izrazi za definicijo usklajenega obnasanja
+- **wait-fre sync** → read-copy-update kljucavnica
+
+## Navidezni datotecni sistemi
