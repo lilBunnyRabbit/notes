@@ -42,6 +42,8 @@
   - [Upravljanje s pomnilnikom](#upravljanje-s-pomnilnikom)
     - [Naslovni prostor](#naslovni-prostor)
     - [Pomnilniski API - libc](#pomnilniski-api---libc)
+  - [Pomnilniske storitve OS](#pomnilniske-storitve-os)
+  - [Virtualizacija pomnilnika](#virtualizacija-pomnilnika)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -764,5 +766,54 @@
     ```c
     void* malloc(size_t size)
     // ali calloc(...), realloc(...)
-    ```
+    ```  
+  - **dealokacija pomnilnika**  
+    ```c
+    free(void* ptr)
+    ```  
+    
+## Pomnilniske storitve OS
+- **Klasicne napake**
+  - alokacija premalo pomnilnika → `malloc(strlen(s) + 1)`
+  - pomnilnik ni inicializiran
+  - prezgodnja sprostitev pomnilnika
+  - veckratna sprostitev pomnilnika
+  - napacna sprostitev pomnilnika
+  - memory leak (pozabimo sprostiti)
+- **Kaj naredi** `exit()`
+  - sprosti naslovni prostor procesa
+  - pomnilnik pusca le znotraj procesa
+- **Velikost podatkovnega segmenta (kopice)**
+  - sistemski klic `brk(...)`
+  - **nastavljanje velikosti:** `void* brk(void* addr)`
+  - **spreminjanje velikosti:** `void* sbrk(int incr)`
+  - **trenutna velikost:** `brk(0)`
+-  **Alokacija in preslikava pomnilnika**
+   -  **alokacija in preslikava**  
+    ```c
+    void* mmap(void* addr, size_t len, int prot, int flags, int fd, off_t offset)
+    ```   
+  - **sproscanje pridobljenega pomnilnika**  
+    ```c
+     void* munmap(void* addr, size_t length)
+    ```    
+- **Randomizacija naslovnega prostora**
+  - **ASLR** - address space layout randomization
+  - **KASLR** - kernel ASLR
+  - to se pojavi zaradi moznega **napada** (skok v okvarjeno kodo na nek znan fiksen naslov)
+  - **resitev** je nakljucna razporeditev kljucnih delov naslovnega prostora (tezje se najde naslov)
+
+## Virtualizacija pomnilnika
+- **Cilji**
+  - proces vidi **sklenjen kos pomnilnika**
+  - **izolirani procesi** (mehanizem zascite)
+  - **transparentnos** (proces se ne zaveda)
+  - **ucinkovitost** (hitra preslikava)
+- **Preslikava naslovov**
+  - **navidezni naslov** → **fizicni naslov** ($PA = f(VA)$)
+  - **OS skrbi za konfiguracijo**
+  - **MMO** izvaja preslikavo
+  - **TLB** skrbi za ucinkovitost preslikovanja
+- **Izvedba preslikovanja**
   - 
+
