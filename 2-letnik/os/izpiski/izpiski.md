@@ -582,4 +582,4 @@
   - v modernih sistemih traja preklop procesa pod `1 qs`
 
 ## Razvrscanje
-$\sum^{n}_{1}{n^2}$
+$$\sum^{n}_{1}{n^2}$$
