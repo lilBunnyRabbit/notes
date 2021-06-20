@@ -78,6 +78,11 @@
     - [Navidezni datotecni sistem](#navidezni-datotecni-sistem)
     - [Datotecni deskriptorji](#datotecni-deskriptorji)
   - [Virtualizacija](#virtualizacija)
+    - [Lastnosti virtualizacije](#lastnosti-virtualizacije)
+    - [Sistemska virtualizacija](#sistemska-virtualizacija)
+    - [Izvedba virtualizacije](#izvedba-virtualizacije)
+    - [Izvedba: virtualizacija procesorja](#izvedba-virtualizacija-procesorja)
+    - [Izvedba: virtualizacija naprav](#izvedba-virtualizacija-naprav)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1656,3 +1661,67 @@
     ```
 
 ## Virtualizacija
+- mehanizem, ki nekaj ustvari navidezno → **navidezna naprava** (procesor ali pomnilnik) ali **navidezni stroj** (celoten sistem, strojna oprema)
+- **preslikava navideznega v realni sistem** → vmesnik in viri navidezne naprave se preslikajo na vmesnik in vire realne naprave, ki implementira navidezno
+- **Primer** *navidezni disk* → uporabniku enako dostopen, v ozadju se prelika na dejanski sistem
+- **Abstrakcija in virtualizacija**
+  - podobna koncepta → oba nek vmesnik navideznega
+  - abstrakcija skrije podrobnosti
+  - virtualizacija podrobnosti pusti odprte
+- **Virtualizacijska programska oprema** → Virtual machine
+- **Vrste**
+  - procesni navidezni stroj
+  - sistemski navidezni stroj
+  - vsebniki
+
+### Lastnosti virtualizacije
+- **replikacija virov** → videz da je vec virov, kot jih je
+- **varnost in neodvisnost** → stroji med seboj neodvisni in izolirani, dva nivoja zascite in zascita nadzornika pred gostitelji
+- **prilagodljivost in enostavno upravljanje** → vecja razpolozljivost in zanesljivost, zmanjsanje stroskov, lazje upravljanje navideznih strojev
+- **Slabosti**
+  - manjsa ucinkovitost
+  - upravljanje dejanskega stroja je bolj zahtevno
+  - ni popolna
+  
+### Sistemska virtualizacija
+- virtualizira cel sistem
+- stara ideja → preslabi racunalniki in dragi
+- **Virtualizacija tipa 1**
+  - nadzornik navideznih naprav (**VM monitor**) → **hipervizor** → tece neposredno na strojni opremi
+  - servisni navidezni stroj → omogoca config in upravljanje sistema → priviligirane operacije → poganja gonilnike  
+  ![](images/virtualizacija_tipa_1.png)
+- **Virtualizacija tipa 2**
+  - temelji na gostiteljskem OS   
+  ![](images/virtualizacija_tipa_2.png)
+- **Polna virtualizacija**
+  - preslikava vseh pomembnih funkcij dejanskega stroja v funkcije navideznih strojev
+  - OS se ne zaveda virtualizacije
+- **Paravirtualizacija**
+  - ucinkovitost za ceno spremembe gostujocega OS
+  - gostujoc OS ve da je virtualen
+  - OS ne izjava privilegiranih ukazov → eksplicitno klice nadzornika
+
+### Izvedba virtualizacije
+- **osnovna pristopa** sta **souporaba/deljenje casa** in **souporaba/deljenje prostora**
+
+### Izvedba: virtualizacija procesorja
+- strojni ukazi se izvedejo neposredno na procesorju
+- priviligirane ukaze emulira nadzornik
+- **Prevajanje**
+  - v kodi nadomesti problematicne ukaze
+- **Polna virtualizacija**
+  - `navidezni naslov → navidezni fizicni naslov → dejanski fizicni naslov`
+  - **1. moznost** → dvojno preslikovanje
+  - **2. moznost** → sencna preslikovalna tabela
+- **Paravirtualizacija**
+  - s preslikovalnimi tabelami upravlja nadzornik
+  - gostujoc OS se zaveda virtualizacije
+
+### Izvedba: virtualizacija naprav
+- **Izzivi**
+  - veliko razlicnih naprav
+  - manj standarizacije obnasanja naprav
+- **Pristopi**
+  - **passthrough model** → ekskluzivni in neposredni dostop do naprave
+  - **Hypervisor-direct model** → nadzornik prestreze vse dostope in emulira odziv naprave
+  - **Split-device driver model** → dostop do naprave je razdeljen med front-end in back-end gonilniki
