@@ -1,4 +1,7 @@
 # OS Izpiski
+<details>
+  <summary><b>Table of Contents</b></summary>
+  
 - [OS Izpiski](#os-izpiski)
   - [Racunalniski sistem](#racunalniski-sistem)
     - [Lupina](#lupina)
@@ -75,6 +78,8 @@
     - [Ostali mehanizmi](#ostali-mehanizmi)
   - [Navidezni datotecni sistemi](#navidezni-datotecni-sistemi)
 
+</details>   
+   
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
   - fizicna racunalniska oprema
@@ -1585,9 +1590,9 @@
   ```
 
 ### Ostali mehanizmi
-- **pregrada** je obratno od semaforjev (za vstop zahteva N procesov)
+- **pregrada** → obratno od semaforjev (za vstop zahteva N procesov)
 - **serializers** → definicija prioritet
 - **path expressions** → regularni izrazi za definicijo usklajenega obnasanja
-- **wait-fre sync** → read-copy-update kljucavnica
+- **wait-free sync** → read-copy-update kljucavnica
 
 ## Navidezni datotecni sistemi
