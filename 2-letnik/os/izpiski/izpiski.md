@@ -47,6 +47,9 @@
     - [Ostrjevanje](#ostrjevanje)
     - [Uporaba zunanjega pomnilnika](#uporaba-zunanjega-pomnilnika)
   - [Medprocesna komunikacija](#medprocesna-komunikacija)
+    - [Prenasanje sporocil](#prenasanje-sporocil)
+    - [Deljen pomnilnik](#deljen-pomnilnik)
+  - [Niti](#niti)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -919,3 +922,102 @@
   - **access/reference:** ali je bila stran dostopana
 
 ## Medprocesna komunikacija
+- **Medprocesna komunikacija** je
+  - komunikacija med procesi (naceloma socasni)
+  - nadzorovan mehanizem OS, ki omogoca komunikacijo brez krsenja zascite procesov
+- **namenjena je** izmenjavi podatkov, sinhronizaciji akcij, pohitritvi in modularnosti
+- **Osnovna nacina**
+  - **prenasanje sporocil** preko vticnice, cevi, ... (zgled `A → jedro → B`)
+  - **deljen pomnilnik**
+- **Ostali nacini**
+  - **args**
+  - **env**
+  - izhodni status
+  - stdin, stdout, stderr
+  - datoteke
+  - klic oddaljene procedure
+  - sinhronizacija
+- **Sporocilo** za OS nima pomena, za proces pa ima
+- **Kanal** je medij za komunikacijo, ki ga ustvari in vzdrzuje OS (npr medpomnilnik) na katerega se preko **vrat** povezejo procesi
+
+### Prenasanje sporocil
+- **Prenos sporocila**
+  - OS vzpostavi in sprosti kanal
+  - OS opravlja kanal
+  - OS poskrbi za uspesen prenos
+  - kanal je v jedru
+- **Osnovne operacije oz programski vmesniki**
+  - **posiljanje** - `send` in `write`
+  - **prejem** - `receive` in `read`
+  - **odgovor** - `reply`
+- **Sinhronost komunikacije**
+  - **sinhrona operacija:** operacije blokirajo, **zmenek** kadar sta obe sinhroni
+  - **asinhrona operacija:** operacije ne blokirajo, potrebujemo medpomnenje sporocil
+- **Medpomnenje**
+  - podatkovna struktuaa za hranjenje poslanih in se ne prejetih sporocil
+  - **neomejena kapaciteta** → posiljatelj nikoli ne blokira
+  - **omejena kapaciteta** → poiljatelj pri polni vrsti blokira
+  - **nicelna kapaciteta** → posiljatelj blokira dokler prejemnik ne prejme
+- **Naslavljanje procesov**
+  - **neposredna komunikacija:** procesi se **eksplicitno poznajo**, naslavlja se preko **PID**  
+    ```c
+    send(pid, msg)
+    receive(pid, msg)
+    ```
+  - **posredna komunikacija:** procesi komunicirajo preko **vmesnega objekta** → komunicira lahko vec procesov → v naprej vzpostavljen kanal  
+    ```c
+    send(addr, msg)
+    receive(addr, msg)
+    ```
+- **Posredna komunikacija**
+  - **nabiralnik** je vmesni objekt
+  - nabiralnik v **naslovnem prostoru** zivi dokler zivi proces
+  - nabiralnik v **sistemskem prostoru** prezivi proces, OS skrbi za ciscenje
+  - **vec pisalcev** - vec procesov v isti nabiralnik
+  - **vec bralcev** - vec procesov bere isti nabiralnik
+- **Ucinkovitost**
+  - zahteva sistemske klice
+  - **request-reply** → 4x prehod med nacinom in 4x kopiranje podatkov
+  - **Leno kopiranje**
+    - kopiramo le naslov sporocila
+    - kopiranje sporocila izvedemo kasneje
+    - **request-reply** → 4x prehod in 2x kopiranje
+- **Enostavnost uporabe**
+  - OS skrbi za stvaritev in upravljanje kanala
+  - OS skrbi za medpomnenje in sinh
+- **Problem producer-consumer**
+  - `>= 2` socasnih procesov
+  - ni znano kdo ima procesor, kdaj se proizvede podatek in kdaj se lahko uporabi
+- **Prakticne izvedbe prenasanja sporocil**
+  - **signali**
+  - **anonimne in imenovane cevi**
+  - **sporocilne vrste**
+  - **vticnice**
+
+### Deljen pomnilnik
+- je pomnilnik, ki je skupen dvema ali vec procesom
+- je del fizicnega pomnilnika, preslikan v naslovni prostor procesov
+- **Uporaba**
+  - OS **vzpostavi**, doda v naslovni prostor in skonfigurira
+  - **komunikacija** je neposredno branje in pisanje v deljen pomnilnik
+  - po koncu uporabe deljen pomnilnik **sprostimo**
+  - **hiter**
+  - **podatki so takoj na voljo**
+  - **potrebna eksplicitna sinhronizacija** - programer odgovoren
+- Kako sinhronizirati dostop?
+  - z mehanizmi iz knjiznice **pthreads**
+  - z mehanizmi iz OS
+  - sinhrono prenasanje sporocil
+- **Ostrjevanje** → del navideznega prostora vec procesov je preslikan v iste okvirje strani
+- **Nacini prenasanja podatkov**
+  - **prenasanje sporocil**
+    - **kopiranje** podatkov
+    - hitra vzpostavite
+    - pocasna komunikacija
+  - **deljen pomnilnik**
+    - **preslikava** vsebine pomnilnika med naslovnimi prostori
+    - pocasna vzpostavitev
+    - hitra komunikacija
+    - enkratna vzpostavitev, veckratna uporaba
+
+## Niti    
