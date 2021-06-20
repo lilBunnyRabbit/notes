@@ -44,6 +44,9 @@
     - [Pomnilniski API - libc](#pomnilniski-api---libc)
   - [Pomnilniske storitve OS](#pomnilniske-storitve-os)
   - [Virtualizacija pomnilnika](#virtualizacija-pomnilnika)
+    - [Ostrjevanje](#ostrjevanje)
+    - [Uporaba zunanjega pomnilnika](#uporaba-zunanjega-pomnilnika)
+  - [Medprocesna komunikacija](#medprocesna-komunikacija)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -771,7 +774,7 @@
     ```c
     free(void* ptr)
     ```  
-    
+
 ## Pomnilniske storitve OS
 - **Klasicne napake**
   - alokacija premalo pomnilnika → `malloc(strlen(s) + 1)`
@@ -815,5 +818,104 @@
   - **MMO** izvaja preslikavo
   - **TLB** skrbi za ucinkovitost preslikovanja
 - **Izvedba preslikovanja**
-  - 
+  - izvedba za **vse navidezne naslove je nemogoca**
+  - naslovni prostor premestimo na **poljubno mesto v fizicnem pomnilniku** (**realocation**)
+  - **segmentacija** razdeli pomnilnik na bloke razlicnih velikosti. Segmenti so razdeljeni na strani
+  - **ostrjevanje (paging)** razddeli pomnilnik na bloke enake velikosti
+- **Staticno premescanje**
+  - program se prevede na naslov 0
+  - program se nalozi na izbrani **ciljni fizicni naslov**
+  - **tezava** se pojavi pri dinamicnih naslovih (**ponovno premescanje programov**)
+  - uporabimo le ce ni podpore za virtualizacijo
+- **Dinamicno premescanje**
+  - program se nalozi na izbrani **ciljni fizicni naslov**
+  - **bazni register** hrani nalagalni naslov
+  - **mejni register** hrani velikost naslovnega prostora
+  - **enostavno** preslikovanje, zascita in premescanje
+  - **MMU** je bazni in mejni register za izvedbo preslikovanja in preverjanja zascite
+  - **pasti**
+    - **prekoracitev baznega registra** → OS ukine proces
+    - **izvedba priviligeranih ukazov** → OS ukine proces
+    - posebne strojne ukaze za manipuliranje baznega in mejnega registra uporablja le OS 
+- **Segmentacija in ostrjevanje**
+  - pomnilnik razdeljen na bloke velikosti $2^P$  
+    ![](images/preslikovanje.png)  
+  - iz **M**b navideznega v **N**b fizicni    
 
+    |Segmentacija|Ostrjevanje|
+    |-|-|
+    |blok: segment| blok: stran in okvir|
+    |segmenti razlicnih velikosti| enake velikosti strani|
+    |segmenti imajo pomen (npr koda)|strani nimajo pomena|
+    |tezavno upravljanje pomnilnika|lahko upravljanje pomnilnika|
+    |zunanja fregmentacija|notranja fregmentacija|
+
+  - v sodobnih OS se uporablja le ostrjevanje
+
+### Ostrjevanje
+- **stran** je blok v navideznem naslovnem prostoru
+- **okvir strani** je blok v fizicnem naslovnem prostoru (hrani poljubno stran, enake velikosti kot stran)
+- **Preslikovanje:** **navidezni naslov** (`naslov strani + odmik`) → **fizicni naslov** (`naslov okvirja + odmik`)  
+  ![](images/ostrjevanje.png)
+- **Preslikovanje s tabelo strani**  
+  ![](images/preslikovanje_s_tabelo_strani.png)
+- **velikost tabele strani** je $2^{M - P}$ deskriptorjev v tabeli
+- **resitvi:** vecnivojska tabela strani in invertirana tabela strani
+- **Ucinkovitost preslikovanja**
+  - **ena preslikava:** `st. dostopov do pomnilnika = st. dostopov do tabel in podtabel strani + 1`
+  - **resitev:**
+    - **TLB** - translation lookaside buffer
+    - preslikovalnik predpomnilnik
+    - prostorska lokalnost
+    - casovna lokalnost
+- **Naloge OS**
+  - evidenca prostih okvirjev strani
+  - upravljanje preslikovalnih tabel (stvarite in koncanje procesa in preslikava pomnilnika)
+  - poznavanje TLB ob preklopu procesa
+
+### Uporaba zunanjega pomnilnika
+- **pomnilniska hierarhija:** **notranji (fizicni)** je `RAM` in **zunanji** je `HDD/SSD`
+- **izziv** je zagotoviti vec navideznega naslovnega prostora kot je velikost fizicnega
+- **Pomnilniski prekrivki (memory overlays)**
+  - star pristop
+  - program je razdeljen na vec kosov ki so shranjeni v datotekah
+  - programer sam poskrbi za sproscanje pomnilnika in nalaganje nove kode, ki prekrije staro
+- **Vecprogramiranje**
+  - vec procesov hkrati nalozenih v premajhnem pomnilniku → resitev je **odlagalni prostor**
+- **Odlagalni prostor (swap space)** je del zunanjega pomnilnikga
+  - **swap out** - shranjevanje strani iz pomnilnika na disk
+  - **swap in** - nalaganje strani iz diska v pomnilnik  
+    ![](images/swap_space.png)  
+  ![](images/zunanji_pomnilnik.png)  
+- **Postopek naslavljanja podatka**
+  1. **zadetek v TLB:** ce **VPN** obstaja potem naslovi ustrezen del fizicnega pomnilnika
+  2. **zgresitev v TBL, iskanje v tabeli strani:** ce **VPN** obstaja v preslikovalni tabeli strani in ce je veljaven in stran obstaja ga naslovi na ustrezen del fizicnega pomnilnika
+  3. **zgresitev strani:** nalozi stran iz zunanjega pomnilnika, osvezi vnos v preslikovalni tabeli strani in ponovi strojni ukaz
+- **Kaj ce je pomnilnik v celoti zaseden?**
+  - pride do zamenjave strani (**swap in** in **swap out**)
+  - **page replacement policy** minimizira stevilo zgresitev strani
+  - **page (out) deamon**
+- **Algoritmi izbire strani za izlocitev**
+  - **FIF** - furthest in the future
+    - optimalen algoritem
+    - izloci stran, ki bo dostopana najdlje v prihodnosti
+    - zgresitev strani prestavimo kar se da v prihodnost
+    - moram poznati prihodnost
+  - **FIFO** - first in, first out
+    - izloci stran, ki je najdlje v pomnilniku
+    - stare strani se lahko pogosto uporabljajo
+  - **Nakljucna zamenjava**
+  - **LFU** - least-fequently used
+    - izloci najmanj uporabno stran
+    - potrebno evidentirati frekvenco uporabe
+  - **LRU** - least-recently used
+    - izloci najdlje neuporabljeno stran
+    - z **casovnim zaznamkom:** zaznamek se osvezi ob vsakem dostopu strani
+    - z **vrsto strani:** ob vsakem dostopu do strani, stran pomaknemo na zacetek vrste
+- **Strojna pomoc**
+  - **dodatni bit v vnosu tabele strani**
+  - **dirty bit:** ce je bila stran spremenjena od zadnega nalaganja
+  - **fiksen bit:** preslikava je fiksna
+  - **access/reference:** ali je bila stran dostopana
+
+## Medprocesna komunikacija
