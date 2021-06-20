@@ -1,7 +1,4 @@
 # OS Izpiski
-<details>
-  <summary><b>Table of Contents</b></summary>
-  
 - [OS Izpiski](#os-izpiski)
   - [Racunalniski sistem](#racunalniski-sistem)
     - [Lupina](#lupina)
@@ -78,8 +75,6 @@
     - [Ostali mehanizmi](#ostali-mehanizmi)
   - [Navidezni datotecni sistemi](#navidezni-datotecni-sistemi)
 
-</details>   
-   
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
   - fizicna racunalniska oprema
