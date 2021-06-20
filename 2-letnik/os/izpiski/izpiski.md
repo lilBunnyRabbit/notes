@@ -59,6 +59,11 @@
     - [Tvegano stanja](#tvegano-stanja)
     - [Kriticni odsek](#kriticni-odsek)
   - [Vzajemno izkjucevanje](#vzajemno-izkjucevanje)
+    - [Kjucavnica](#kjucavnica)
+    - [Strojna izvedba](#strojna-izvedba)
+    - [Programska izvedba](#programska-izvedba)
+    - [Ucinkovitost kljucavnic](#ucinkovitost-kljucavnic)
+  - [Sinhronizacija procesov](#sinhronizacija-procesov)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1142,3 +1147,214 @@
   - splosne resitve
 
 ## Vzajemno izkjucevanje
+### Kjucavnica
+- je osnovni mehanizem zagotavljanja **vzajemnega izkjucevanja**
+- **vzajemno izkjucevanje** je da se v kriticnem odseku socasno nahaja le en proces
+- **kljucavnica** sciti odsek  
+  ```
+  fun lock_init(lock) is
+    lock = 0
+
+  fun lock_enter(lock) is
+    spin:
+      if lock == 1 then goto spin 
+      else lock = 1
+
+  fun lock_exit(lock) is
+    lock = 0
+  ```
+- **Tezave**
+  - socasnost preverjanja stanja kljucavnice
+  - locenost nastavljanja stana od preverjanja
+    ```
+    fun lock_enter(lock) is
+      while lock == 1 do nothing
+      lock = 1
+    ```
+  - **resitev** → atomarnost celotne operacije
+- **Atomarna operacija**
+  - zaporedje enega ali vec ukazov (se izvede kot celota)
+  - izolacija od drugih socasnih procesov
+  - vzajemno izkjucevanje
+  - obvoz predpomnilnika (vec procesorjev)
+    ```
+    atomic fun lock_enter(lock) is
+      while lock == 1 do nothing
+      lock = 1
+    ```
+  - strojni ukazi navadno niso atomicni
+
+### Strojna izvedba
+- **Onemogocanje prekinitev**
+  - **vstop v KO** → onemogocimo prekinitve
+  - **iztop iz KO** → omogocimo prekinitve
+  - **slabosti:** uporaba privilegiranih ukazov, onemogoci vecopravilnost in ne deluje na vecprocesorski arhitekturi
+- **Namenski strojni ukazi**
+  - atomicni
+  - nacelo kjucavnice
+  - **vstop** → cakaj dokler je zaklenjeno `enter()`
+  - **iztop** → enostavno prirejanje `leave()`
+- **Ukaz** `TEST & SET`
+  - ce je zaklenjeno vrni `true`
+  - sicer zakleni in vrni `false`   
+    ```
+    atomic instruction test_and_set(ref val) is
+      if val then return true
+      val = true
+      return false
+
+    fun enter() is
+      while test_and_set(&flag) do nothing
+    ```
+- **Ukaz** `COMPARE & SWAP`
+  - posplositev `TEST & SET`
+  - ce je trenutna vrednost enaka testni vrednosti → zamenjaj z novo vrednostjo
+  - vedno vrne staro vrednost  
+    ```
+    atomic instruction compare_and_swap(ref val, testval, newval) is
+      oldval = val
+      if val == testval then val = newval
+      return oldval
+
+    fun enter() is
+      while compare_and_swap(&flag, false, true) do nothing
+    ```
+- **Ukaz** `EXCHANGE`
+  - zamenjava dveh vrednosti  
+    ```
+    atomic instruction exchange(ref a, ref b) is
+      t = a
+      a = b
+      b = a
+      
+    fun enter() is
+      key = true
+      do exchange(&flag, key) while key
+    ```
+- **Ukaz** `FETCH & ADD`
+  - poveca vrednost in vrne staro vrednost  
+    ```
+    atomic instruction fetch_and_add(ref val) is
+      oldval = val
+      val += 1
+      return oldval
+
+    fun init() is
+      ticket = turn = 0
+
+    fun enter() is
+      myturn = fetch_and_add(&lock.ticket)
+      while lock.turn != myturn do nothing
+
+    fun exit() is
+      fetch_and_add(lock.turn)
+    ```
+- **Prednosti namenskih strojnih ukazov**
+  - deluje na vecprocesorskih sistemih
+  - enostavna izvedba
+  - podpora vec kriticnim odsekom
+- **Slabosti namenskih strojnih ukazov**
+  - vrtece cakanje zapravlja procesorski cas
+  - mozno stradanje
+  - mozen smrtni objem
+
+### Programska izvedba
+- **Dekkerjev algoritem**
+  - prvi alg za resevanje KO
+  - dva procesa si predajata prednost
+  - vrtece cakanje  
+    ```
+    me = 0
+    you = 1 – me
+    shared entering = [false, false]
+    shared turn = you
+
+    fun enter() is
+      entering[me] = true
+      while entering[you] do
+        if turn == you then
+          entering[me] = false
+          while turn == you do nothing
+          entering[me] = true
+        endif
+      endwhile
+
+    fun leave() is
+      turn = you
+      entering[me] = false
+    ```
+- **Petersonov algoritem**  
+  ```
+  me = 0 oz. 1                        ... P0: me = 0, P1: me = 1
+  you = 1 – me                        ... P0: you = 1, P1: you = 0
+  shared entering = [false, false]    ... deljena spr., začetek: nobeden ne želi vstopiti
+  shared turn = you                   ... deljena spr., na potezi je drugi proces
+
+  fun enter() is
+    entering[me] = true               ... želim vstopiti
+    turn = you                        ... dam ti prednost
+    while entering[you] and           ... dokler želiš ti vstopti in
+      turn == you do nothing          ... je tvoja poteza, jaz čakam
+
+  fun leave() is
+    entering[me] = false              ... ne želim več vstopiti
+  ```
+  - vzajemno izkjucevanje z vidika procesa `P-me`
+    - ce je `P-me` v KO, potem je `entering[me] = true`
+    - za `P-you` velja ena od moznosti:
+      - ne zeli vstopiti
+      - zeli vstopiti in je predal prednost zato caka
+      - zeli vstopiti in se ni predal prednosti zato je prisel do while zanke
+- **Lamportov pekarski algoritem**
+  - za **N** procesov, princip ostevilcenih listkov
+  
+### Ucinkovitost kljucavnic
+- **Mere zmogljivosti**
+  - **zakasnitveni cas (latency)** je cas za pridobitev proste kljucavnice (optimalno takoj izvedemo atomicno operacijo)
+  - **cakalni cas (delay)** je cas za pridobitev ravnokar sporoscene kljucavnice (optimalno takoj)
+  - **tekmovanje (contention)** je promet na vodilu zaradi atomicne operacije in zagotavljanja koherentnosti predpomnilnika
+- **Izvedbe**  
+  ```
+  flag          ... testiranje v predpomnilniku, vrtenje
+  test_and_set  ... atomicna operacija, dostop do GP
+  ```
+  - **osnovna**  
+    ```
+    fun lock_enter(lock) is
+      while test_and_set(&flag) do nothing
+    ```
+  - **test + test and set**  
+    ```
+    fun enter() is
+      while flag or test_and_set(&flag) do nothing
+    ```
+  - **+ zakasnitev**  
+    ```
+    fun enter() is
+      while flag or test_and_set(&flag) do
+        while flag do nothing
+        delay()
+      end
+    ```
+- **vrteca kljucavnica (spinlock)** je porabljeni procesorski cas za cakanje  
+  ```
+  fun enter() is
+    while test_and_set(&flag) do nothing
+  ```
+- uporabimo `yield()`  
+  ```
+  fun enter() is
+    while test_and_set(&flag) do yield()
+  ```
+- **Namesto vrtecega cakanja naj nit raje blokira**  
+  ```
+  fun enter() is
+    while test_and_set(&flag) do
+      wait_for_flag_to_be_changed()
+
+  fun exit(ref lock) is
+    lock = 0
+    wake_up_some_waiting_thread()
+  ```
+
+## Sinhronizacija procesov
