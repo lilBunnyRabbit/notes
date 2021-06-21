@@ -66,6 +66,11 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Kopiranje deskriptorjev](#kopiranje-deskriptorjev)
   - [Preusmeritev v terminalu](#preusmeritev-v-terminalu)
 - [Razvrscanje](#razvrscanje)
+  - [FCFS](#fcfs)
+  - [SJF](#sjf)
+  - [PSJF](#psjf)
+  - [Round robin](#round-robin)
+- [Cevovodi](#cevovodi)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -766,3 +771,35 @@ cat /etc/passwd | cut -d -f7 | sort - u
 - `ukaz &> datoteka`
 
 ## Razvrscanje
+### FCFS
+**FCFS**
+: first come, first served
+: Ce pridejo ob istem casu, optimiziramo
+
+![](images/fcfs_1.png)
+![](images/fcfs_2.png)
+![](images/fcfs_3.png)
+
+### SJF
+**SJF**
+: shortest job first
+: obdelujemo prispelega in ne prekinjamo trenutnega procesa
+
+![](images/sjf.png)
+
+### PSJF
+**PSJF**
+: preemtive shrotest job first
+: obdelujemo prispelega in prekinjamo
+: problem je da dolg proces lahko nikoli ne pride na vrsto
+
+![](images/psfj_1.png)
+
+### Round robin
+**Round robin**
+: obdelujemo vse po vrsti (v krogu) → `slice = 10`
+
+![](images/round_robin_1.png)
+![](images/round_robin_2.png)
+
+## Cevovodi
