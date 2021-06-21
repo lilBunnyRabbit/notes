@@ -1,7 +1,6 @@
 ---
 layout: note
 title: Operacijski Sistemi - Izpiski predavanj
-toc: true
 ---
 
 
