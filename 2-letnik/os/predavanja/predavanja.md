@@ -87,6 +87,17 @@
     - [Windows](#windows)
     - [Unix - podobni sistemi](#unix---podobni-sistemi)
   - [Medprocesna komunikacija API](#medprocesna-komunikacija-api)
+    - [Aninimne cevi](#aninimne-cevi)
+    - [Imenovane cevi](#imenovane-cevi)
+    - [POSIX in System V](#posix-in-system-v)
+    - [Sporocilne vrste](#sporocilne-vrste)
+    - [Sporocilne vrste - System V](#sporocilne-vrste---system-v)
+    - [Deljen pomnilnik](#deljen-pomnilnik-1)
+    - [Deljen pomnilnik - System V](#deljen-pomnilnik---system-v)
+    - [Deljen pomnilnik - POSIX](#deljen-pomnilnik---posix)
+    - [Sporocila - QNX](#sporocila---qnx)
+    - [Vticnice](#vticnice)
+  - [Niti - API](#niti---api)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1852,3 +1863,123 @@
     - pomnilniski prostor kopiramo sele ko pride do prvega pisanja
 
 ## Medprocesna komunikacija API
+### Aninimne cevi
+- **cev (pipe)** omogoca enosmerno komunikacijo po principu **FIFO**
+  - posredni sinhron nacin
+  - podatki se medpomnijo (poskrbi OS)
+- **Ustvarjanje cevi** → `int pipe(int fd[2])`
+  - ustvari in odpre cev
+  - `fd[0]` → datoteka, ki bere
+  - `fd[1]` → datoteka, ki pise
+  - `fd[1] → cev → fd[0]`
+- **Uporaba cevi**
+  - **branje** → `read(fd[0], ...)`
+  - **pisanje** → `write(fd[1], ...)`
+  - oba klica lahko blokirata
+- **Dedovanje cevi**
+  - otroci dedujejo odprte datoteke → tudi cevi
+  - kombinacija klicov `pipe() & fork()`  
+    ![](images/dedovanje_cevi.png)
+  - komunikacija je omejena samo na procese s **skupnim prednikom**
+  - **starsi in potomci**
+  - tipicno **starsi in otroci** in **otroci med seboj**
+  - **Primer (stars pise, otrok bere)**  
+    ```c
+    // ustvarjanje cevi
+    int fd[2];
+    pipe(fd);
+
+    // razvejevitev starsa
+    fork();
+
+    // priprava
+    close(fd[0]); // stars
+    close(fd[1]); // otrok
+
+    // branje in pisanje
+    write(fd[1]); // stars
+    write(fd[0]); // otrok
+
+    // sprostitev cevi
+    close(fd[1]); // stars
+    close(fd[0]); // otrok
+    ```
+- **Cevovod (pipeline)** je zaporedje otrok istega starsa
+  - vhode in izhode otrok povezemo s cevmi
+  - `P0 → cev 0 → P1 → cev 1 → P2`
+- **Cevovod v lupini** je zaporedje ukazov loceni z `|`
+  - lupina cevovode pripravi sama
+    - `pipe()` - ustvari cevi
+    - `fork()` - ustvari otroke
+    - `dup2()` - naredi preusmeritve
+    - `exec()` - zazene ukaze
+    - `waitpid()` - pocaka da se vsi otroci koncajo
+    - **Primer:** `cat /etc/passwd | cut –d: -f7 | sort -u`  
+      ![](images/primer_cevovoda.png)
+
+### Imenovane cevi
+- **imenovane cevi (named pipe, fifo)** so podobne anonimnim cevem
+  - poseben tip datoteke (pipe)
+  - neomejena komunikacija (vsak proces jo lahko uporabi)
+- **Ustvarjanje** → `mkfifo()` in `mknod()` in ukaza `mkfifo cev` in `mknod cev p`
+- **Uporaba** → `open()`, `close()`, `read()` in `write()`
+
+### POSIX in System V
+- **POSIX** medprocesna komunikacija uporablja datoteke za identifikacijo kanala
+- **System V** medprocesna komunikacija uporablja kljuce za identifikacijo kanala
+  - `ftok(pathname, ...)` ustvari kljuc
+  - preko kljuca ustvarimo kanal
+
+### Sporocilne vrste
+- **Sporocilna vrsta (message queue)** je hramba sporocil v vrsti
+  - posredna in asinhrona   
+  ![](images/sporocilna_vrsta.png)
+
+### Sporocilne vrste - System V
+- `int msgget(key, ...)` odpre/ustvari sporocilno vrsto z oznako **key** in vrne deskriptor vrste **qid**
+- `int msgctl(qid, IPC_RMID, ...)` zapre vrsto
+- `int msgsnd(qid, msg, size, ...)` poslje sporocila v vrsto
+- `int msgrcv(qid, msg, size, ...)` prejme sporocilo
+
+### Deljen pomnilnik
+- **segmenti** → deljeni kosi pomnilnika
+- je sistemsko pogojen → OS omejuje stevilo in velikost
+- potek komunikacije: ustvarjanje in sprostitev segmenta → priklop in odklop segmenta
+
+### Deljen pomnilnik - System V
+- `int shmget(key, ...)` - odpre/ustvari deljen pomnilnik
+- `int shmctl(shmid, IPC_RMID, ...)` - sprosti deljen pomnilnik
+- `int shmat(shmid, ...)` - priklop segmenta z deskriptorjem `shmid`
+- `int shmdt(addr, ...)` - odklop segmenta
+
+### Deljen pomnilnik - POSIX
+- `int shm_open(fname, ...)` - povezava do segmenta, vrne datotecni deskriptor
+- `close() ali shm_close()` - sprosti povezave do segmenta
+- `int shm_unlink(fname)` - sprostitev deljenega pomnilnika
+- `void* mmap(...)` - priklop segmenta
+- `int munmap(addr, ...)` - odklop segmenta
+
+### Sporocila - QNX
+- neposredna sinhrona oblika komunikacije
+  - **neposredna** → naslavljanje preko **PID**
+  - **sinhrona** → operacije blokirajo
+- vsako sporocilo zahteva odgovor (`poslji-prejmi-odgovori`)
+- sporocila se hranijo v procesovem pomnilniskem prostoru
+- **Ukazi**
+  - `Send(pid, msg, reply, ...)` - poslje sporocilo procesu **pid** in blokira dokler ne dobi **reply**
+  - `Receive(0, msg, ...)` - prejme sporocilo **msg**, caka ce sporocilo ni na voljo in vrne **pid**
+  - `Reply(pid, reply, ...)` - odgovori procesu **pid** z odgovorom **reply**
+  
+### Vticnice
+- omogocajo **medprocesno** in **mrezno** komunikacijo
+- dvosmerna komunikacija
+- **odjemalec / streznik**
+- **Potek**  
+  ![](images/vticnice.png)
+- **Vrste**
+  - **AF_LOCAL** - lokalna vticnica (preko datotek)
+  - **AF_INET** - IPV4
+  - **AF_INET6** - IPV6
+  - ...
+
+## Niti - API
