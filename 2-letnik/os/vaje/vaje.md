@@ -791,16 +791,16 @@ cat /etc/passwd | cut -d -f7 | sort - u
 : first come, first served
 : Ce pridejo ob istem casu, optimiziramo
 
-![](images/fcfs_1.png)
-![](images/fcfs_2.png)
-![](images/fcfs_3.png)
+![](images/fcfs_1.png)  
+![](images/fcfs_2.png)  
+![](images/fcfs_3.png)  
 
 ### SJF
 **SJF**
 : shortest job first
 : obdelujemo prispelega in ne prekinjamo trenutnega procesa
 
-![](images/sjf.png)
+![](images/sjf.png)  
 
 ### PSJF
 **PSJF**
@@ -808,14 +808,14 @@ cat /etc/passwd | cut -d -f7 | sort - u
 : obdelujemo prispelega in prekinjamo
 : problem je da dolg proces lahko nikoli ne pride na vrsto
 
-![](images/psfj_1.png)
-
+![](images/psfj_1.png)  
+ 
 ### Round robin
 **Round robin**
 : obdelujemo vse po vrsti (v krogu) → `slice = 10`
 
-![](images/round_robin_1.png)
-![](images/round_robin_2.png)
+![](images/round_robin_1.png)  
+![](images/round_robin_2.png)  
 
 ## Cevovodi
 ### Procesi v C
@@ -834,7 +834,7 @@ int main(int argc, char * argv[]) {
 }
 ```
 
-![](images/procesi_c_vejitev.png)
+![](images/procesi_c_vejitev.png)  
 
 #### Zagon procesa oz programa
 ```c
@@ -865,7 +865,7 @@ int main(int argc, char * argv[]) {
 }
 ```
 
-![](images/procesi_c_zagon.png)
+![](images/procesi_c_zagon.png)  
 
 ### Procesi v lupini
 #### Cevovod
@@ -873,7 +873,7 @@ int main(int argc, char * argv[]) {
 cat /etc/passd | cut -d: -f7 | sort -u
 ```
 
-![](images/procesi_lupina_cevovod.png)
+![](images/procesi_lupina_cevovod.png)  
 
 ### Tezji primeri
 #### ls |grep xyz > bla.txt
@@ -1088,9 +1088,9 @@ void main() {
   - `STORE A, x`
 
 ### Primeri tveganega stanja
-![](images/primer_tvegano_stanje_1.png)
-![](images/primer_tvegano_stanje_2.png)
-![](images/primer_tvegano_stanje_3.png)
-![](images/primer_tvegano_stanje_4.png)
-![](images/primer_tvegano_stanje_5.png)
-![](images/primer_tvegano_stanje_6.png)
+![](images/primer_tvegano_stanje_1.png)  
+![](images/primer_tvegano_stanje_2.png)  
+![](images/primer_tvegano_stanje_3.png)  
+![](images/primer_tvegano_stanje_4.png)  
+![](images/primer_tvegano_stanje_5.png)  
+![](images/primer_tvegano_stanje_6.png)  
