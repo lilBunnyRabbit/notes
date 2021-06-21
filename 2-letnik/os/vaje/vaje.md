@@ -84,6 +84,8 @@ title: Operacijski Sistemi - Izpiski vaj
     - [cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt](#cat-ftxt-2-ferr--wc--l--btxt-cat-btxt)
     - [cat tocke | izracun.sh 2>log || mkdir FAIL &](#cat-tocke--izracunsh-2log--mkdir-fail-)
 - [Procesi in tvegano stanje](#procesi-in-tvegano-stanje)
+  - [Atomarne operacije](#atomarne-operacije)
+  - [Primeri tveganega stanja](#primeri-tveganega-stanja)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -1003,7 +1005,7 @@ void main() {
 ```
 
 #### cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt
-```
+```c
 void main() {
     int fd[2];
     pipe(fd);
@@ -1078,3 +1080,11 @@ void main() {
 ```
 
 ## Procesi in tvegano stanje
+### Atomarne operacije
+- `x = x + y`
+  - `LOAD A, x`
+  - `LOAD B, y`
+  - `ADD A, A, B`
+  - `STORE A, x`
+
+### Primeri tveganega stanja
