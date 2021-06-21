@@ -98,6 +98,9 @@
     - [Sporocila - QNX](#sporocila---qnx)
     - [Vticnice](#vticnice)
   - [Niti - API](#niti---api)
+    - [Java](#java)
+    - [Pthreads](#pthreads)
+    - [Windows](#windows-1)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1983,3 +1986,23 @@
   - ...
 
 ## Niti - API
+### Java
+- **Izvedba**
+  - vmesnik `Runnable`
+  - metoda `run()`
+- **Ustvarjanje**
+  - razred `Thread`
+  - `getName() / setName()` - za ime niti
+  - `getPriority() / setPriority()` - za prioriteto niti
+- itd. read java docs
+
+### Pthreads
+- knjiznica `pthread.h`
+- `pthread_exit()` - konca nit
+- `pthread_t pthread_self()` - identiteta niti
+- implementiramo z `void* nit(void* arg)`
+
+### Windows
+- knjiznica `windows.h`
+- `pthread_exit()` - konca nit
+- `pthread_t pthread_self()` - identiteta niti
