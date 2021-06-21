@@ -3,5 +3,5 @@ layout: navigation
 title: Operacijski Sistemi
 ---
 
-- [Predavanja](os/predavanja/predavanja.md)
-- [Vaje](os/vaje/vaje.md)
+- [Predavanja](predavanja/predavanja.md)
+- [Vaje](vaje/vaje.md)
