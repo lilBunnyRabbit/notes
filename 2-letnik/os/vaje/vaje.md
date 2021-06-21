@@ -59,6 +59,9 @@ title: Operacijski Sistemi - Izpiski vaj
     - [Lupina in sistemski klici](#lupina-in-sistemski-klici)
 - [Socasnost: Signali in preusmeritve](#socasnost-signali-in-preusmeritve)
   - [Signali](#signali)
+  - [Sistemski klici](#sistemski-klici-2)
+  - [Signali](#signali-1)
+  - [Lovlenje signalov](#lovlenje-signalov)
 - [Preusmeritve](#preusmeritve)
 <!-- #endregion -->
 
@@ -719,14 +722,20 @@ cat /etc/passwd | cut -d -f7 | sort - u
   - `exec()` ustvari novo sliko procesa iz podanega ukaza, s tem se stari rokovalniki izgubijo
 - **nastavljanje uporabniskega rokovalnika**
   - `signal(signum, sighandler)` ob prejetnju signala se sprozi rokovalnik oz sighandler
+
+### Sistemski klici
 - **posiljanje signala samemu sebi**
   - `raise(signum)`
 - **nastavljanje rokovalnika**
   - `signal(signum, action)`
   - `action` je funkcija oblike `void rokovalnik(int signum) {}`
+
+### Signali
 - **blokiranje signalov**
   - v casu med generiranjem signala in rokovanjem
   - med rokovanjem je signal blokiran
+
+### Lovlenje signalov
 - `trap` - izpis obstojecih rokovalnikov
   - nastavljanje pasti
   - ignoriranje signala
