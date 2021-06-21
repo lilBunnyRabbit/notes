@@ -1672,6 +1672,7 @@ title: Operacijski Sistemi - Izpiski predavanj
   - `dup2(orig, new)`
     - preusmeritev orig v new
     - ce je new ze v uporabi se prej zapre   
+    
     ```c
     // odpremo datoteko
     fd = open("vhod.txt", O_RDONLY);
