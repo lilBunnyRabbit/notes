@@ -3,3 +3,4 @@ author: lilBunnyRabbit
 classes: wide
 layout: single
 markdown: kramdown 
+theme: jekyll-theme-primer
