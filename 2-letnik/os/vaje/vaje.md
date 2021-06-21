@@ -2,6 +2,7 @@
 layout: note
 title: Operacijski Sistemi - Izpiski vaj
 ---
+
 <!-- #region -->
 - [Ukazna lupina](#ukazna-lupina)
   - [Ukazna vrstica](#ukazna-vrstica)
@@ -41,6 +42,22 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Procesi](#procesi-1)
   - [Posli](#posli)
 - [Vzporednost poslov](#vzporednost-poslov)
+  - [Sistemski klici](#sistemski-klici-1)
+  - [Stvaritev procesa](#stvaritev-procesa)
+  - [Zagon progama](#zagon-progama)
+  - [Koncanje procesa](#koncanje-procesa)
+  - [Cakanje otroka](#cakanje-otroka)
+  - [Procesi v C](#procesi-v-c)
+    - [Vejitev](#vejitev)
+    - [Sirota](#sirota)
+    - [Zombi](#zombi)
+    - [Zagon procesa oz programa](#zagon-procesa-oz-programa)
+  - [Procesi v lupini](#procesi-v-lupini)
+    - [Zagon programa v ospredju](#zagon-programa-v-ospredju)
+    - [Zagon programa v ozadju](#zagon-programa-v-ozadju)
+    - [Cevovod](#cevovod)
+    - [Lupina in sistemski klici](#lupina-in-sistemski-klici)
+- [Socasnost: Signali in preusmeritve](#socasnost-signali-in-preusmeritve)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -331,7 +348,7 @@ title: Operacijski Sistemi - Izpiski vaj
 - **vzorci**
   - `*` - poljuben niz
   - `?` - poljuben znak
-  - `[znaki]` = poljuben znak iz danega nabora znakov (**interval** `[g-o]` ali `[:alnum:], [:alpha:], [:digit:], ...`)
+  - `[znaki]` = poljuben znak iz danega nabora znakov (**interval** `[g-o]` ali **nabor znakov** `[:alnum:], [:alpha:], [:digit:], ...`)
 - **napredni vzorci**
   - `? (vzorci)` - 0 ali 1 ponovitev
   - `* (vzorci)` - 0 ali vec ponovitev
@@ -469,3 +486,183 @@ chmod u=rwx,g=rw,o=r d.txt
 - `screen` - virtualna lupina
 
 ## Vzporednost poslov
+- **Linux stanja**
+  - `TASK_RUNNING`
+  - `TASK_STOPPED`
+  - `TASK_INTERRUPTIBLE`
+  - `TABSK_UNINTERRUPTIBLE`
+
+### Sistemski klici
+- `int getpid()`
+- `int getppid()`
+- `int sleep(unsigned int seconds)` - spanje za `seconds` sekund
+
+### Stvaritev procesa
+- `int fork()`
+  - ustvari nov proces (otrok), katerega stars je tekoc proces
+  - Otrok je **kopija** oz klon starsa
+    - kopira se koda, podatki, sklad, ..., deskriptorji odprtih datotek
+    - ne kopirajo se kljucavnice
+    - `Copy-on-write` - podatki se ne kopirajo, dokler jih stars ali otrok ne spreminja
+  ```c
+  int pid = fork();
+  if (pid < 0)
+    // NAPAKA
+  else if (pid == 0)
+    // OTROK
+  else
+    // STARŠ
+  ```
+
+### Zagon progama
+- druzina funkcij `int exec(...)`
+  - argumenti: path, args, env
+  - PID in PPID se ne spremenita
+  - **podeduje:** odprte datoteke, trenutni in korenski imenik
+  - **nova** koda, podatki, kopica in sklad  
+  ```
+  execl(...), execlp(...), execle(...),
+  execv(...), execvp(...), execve(...)
+  ```
+  - `l` - argumenti ukaza so argumenti funkcije
+  - `v` - argumenti so v tabeli
+  - `p` - iskanje ukaza preko path
+  - `e` - podajanje env
+
+### Koncanje procesa
+- `exit(int status)`
+  - iz funkcije se nikoli ne vrnemo
+  - konca proces → sprosti vire, zapre datoteke, starsu poslje `SIGCHLD`
+  - otrokom poslje `SIGUP` in `SIGCONT` → ukinitev procesa
+  - morebitne otroke posvoji proces `init` → **sirote**
+  - izhodni status se shrani v jedru z deskriptorjem procesa
+  - stars prevzame status z `wait()`
+  - dokler stars ne prevzame statusa je proces **zombi**
+  - proces **init** je sirotisnica
+
+### Cakanje otroka
+- druzina funkcij `int wait(...)`
+  - cakanje otroka da se konca in prevzame njegov izhodni status
+  - `int waitpid(pid, &status, opcije)`
+  - `int wait(&status)` enako kot `waitpid(-1, &status, 0)`
+
+### Procesi v C
+#### Vejitev
+![](images/vejitev.png)  
+
+```c
+#include <stdio.h>
+int main(int argc, char* argv[]) {
+  int pid = fork();
+  if (pid < 0)
+    perror(argv[0]);
+  else if (pid == 0)
+    printf("Sem otrok %i s staršem %i.\n", getpid(), getppid());
+  else
+    printf("Sem starš %i z otrokom %i,\n", getpid(), pid);
+}
+```  
+
+#### Sirota
+![](images/sirota.png)
+
+```c
+#include <stdio.h>
+int main(int argc, char* argv[]) {
+  int pid = fork();
+  if (pid < 0)
+    perror(argv[0]);
+  else if (pid == 0)
+    sleep(60); // otrok zaspi za 60 sekund
+}
+```
+
+#### Zombi
+![](images/zombi.png)
+
+```c
+#include <stdio.h>
+int main(int argc, char* argv[]) {
+  int pid = fork();
+  if (pid < 0)
+    perror(argv[0]);
+  else if (pid > 0)
+    // starš zaspi za 60 sekund
+    sleep(60);
+}
+```
+
+#### Zagon procesa oz programa
+![](images/zagon_procesa.png)
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/wait.h>
+int main(int argc, char* argv[]) {
+  int pid = fork();
+  if (pid < 0) {
+    perror("fork");
+    exit(EXIT_FAILURE);
+  } else if (pid == 0) {
+    execvp(argv[1], &argv[1]);
+    perror("exec");
+    exit(EXIT_FAILURE);
+  } else {
+    int status;
+    if (waitpid(pid, &status, 0) < 0) {
+    perror("waitpid");
+    exit(EXIT_FAILURE);
+  }
+  if (WIFEXITED(status))
+    printf("Izhodni status otroka: %i\n",
+    WEXITSTATUS(status));
+  }
+  exit(EXIT_SUCCESS);
+}
+```
+
+### Procesi v lupini
+#### Zagon programa v ospredju
+![](images/zagon_programa_v_ospredju.png)
+
+```bash
+ls
+```
+
+#### Zagon programa v ozadju
+![](images/zagon_programa_v_ozadju.png)
+
+```bash
+xeyes &
+```
+
+#### Cevovod
+![](images/cevovod.png)
+
+```bash
+cat /etc/passwd | cut -d -f7 | sort - u
+```
+
+#### Lupina in sistemski klici
+**Zagon zunanjega ukaza**
+: `fork()`, `exec()`, `waitpid()`
+
+**Zagon zunanjega ukaza v ozadju**
+: `fork()` in `exec()` → `ls`
+
+**Izvajanje v podlupini**
+: `fork()` in `waitpid()` → `xeyes &`
+
+**Izvajanje v podlupini v ozadnj**
+: `fork()` → `( read line; echo $line )`
+
+- `$$` → `getpid()` lupine
+- `$PPID` → `getppid()` lupine
+- `$BASHPID` → `getpid()`
+- `sleep 42` → `sleep(42)` - spanje za dolocen cas
+- `wait` → `wait()` - cakanje vseh otrok
+- `wait 1234` → `waitpid()` - cakanje otroka
+- `exit 42` → `exit(42)` - zakljucek programa
+
+## Socasnost: Signali in preusmeritve

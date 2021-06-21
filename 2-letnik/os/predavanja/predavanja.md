@@ -3,6 +3,7 @@ layout: note
 title: Operacijski Sistemi - Izpiski predavanj
 ---
 
+<!-- #region -->
 - [Racunalniski sistem](#racunalniski-sistem)
   - [Lupina](#lupina)
   - [Graficna lupina](#graficna-lupina)
@@ -104,6 +105,7 @@ title: Operacijski Sistemi - Izpiski predavanj
   - [Java](#java)
   - [Pthreads](#pthreads)
   - [Windows](#windows-1)
+<!-- #endregion -->
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
