@@ -338,27 +338,28 @@ title: Operacijski Sistemi - Izpiski vaj
   - `+ (vzorci)` - 1 ali vec ponovitev
   - `@ (vzorci)` - ujemanje z natanko enim od vzorcev
   - `! (vzorci)` - neujemanje z danimi vzorci   
-  ```bash
-  # osnovni
-  ls *
-  ls *.txt
-  echo b*.txt
-  echo b?.txt
-  ls ?2.txt f*
-  echo ???
-  ls ?
-  echo ?
-  echo c[[:digit:]].txt
-  echo [ac][13].*
-  echo [a-c][13].t?t
-  echo [a-c]?[02].*xt
 
-  # napredni
-  echo b1?(0|2).txt
-  echo b*(1|2).txt
-  echo [bf]+(o)
-  echo !(???|???.*)
-  ```
+```bash
+# osnovni
+ls *
+ls *.txt
+echo b*.txt
+echo b?.txt
+ls ?2.txt f*
+echo ???
+ls ?
+echo ?
+echo c[[:digit:]].txt
+echo [ac][13].*
+echo [a-c][13].t?t
+echo [a-c]?[02].*xt
+
+# napredni
+echo b1?(0|2).txt
+echo b*(1|2).txt
+echo [bf]+(o)
+echo !(???|???.*)
+```
 
 ### Zascita datotek
 - **sklopi uporabnikov**
