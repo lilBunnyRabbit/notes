@@ -28,6 +28,13 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Obdelava napak](#obdelava-napak)
   - [Sledenje programom](#sledenje-programom)
 - [Uporabniki](#uporabniki)
+  - [Uporabniski racuni](#uporabniski-racuni)
+  - [Uporabniske skupine](#uporabniske-skupine)
+  - [Administracija uporabnikov](#administracija-uporabnikov)
+  - [Administracija skupin](#administracija-skupin)
+  - [Ujemanje vzorcev](#ujemanje-vzorcev)
+  - [Zascita datotek](#zascita-datotek)
+- [Procesi](#procesi)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -284,3 +291,121 @@ title: Operacijski Sistemi - Izpiski vaj
 - `ltrace` - sledenje klicem v libc
 
 ## Uporabniki
+### Uporabniski racuni
+- `uid` - id stevilka uporabnika
+- `/home/<username>` - domac imenik uporabnika
+- `passwd` - nastavitev gesla
+- `whoami, users, who, w` - pregled prijav
+- `last, lastb` - zgodovina prijav
+- `$UID, $HOME, $HOSTNAME`
+- `su` - zamenjava uporabnika na root
+- `sudo <ukaz> ...` - izvajanje kot root
+
+### Uporabniske skupine
+- `gid` - id stevilka skupine
+- **primarne** in **sekundarne skupine**
+- `groups` - spisek skupin
+- `id` - informacije o uporabniku
+- `newgrp, sg` - zamenjava skupine
+
+### Administracija uporabnikov
+- `useradd` - ustvarjanje uporabnika
+- `userdel` - odstranjevanje uporabnika
+- `usermod` - spreminjanje uporabnika
+- `md5pass, sha1pass, ...` - kriptiranje gesla
+
+### Administracija skupin
+- `gpasswd` - nastavitev gesla
+- `groupadd` - ustvarjanje skupine
+- `groupdel` - odstranjevanje skupine
+- `groupmod` - spreminjanje skupine
+
+### Ujemanje vzorcev
+- opisovanje imen datotek in nizov
+- **vzorci**
+  - `*` - poljuben niz
+  - `?` - poljuben znak
+  - `[znaki]` = poljuben znak iz danega nabora znakov (**interval** `[g-o]` ali `[:alnum:], [:alpha:], [:digit:], ...`)
+- **napredni vzorci**
+  - `? (vzorci)` - 0 ali 1 ponovitev
+  - `* (vzorci)` - 0 ali vec ponovitev
+  - `+ (vzorci)` - 1 ali vec ponovitev
+  - `@ (vzorci)` - ujemanje z natanko enim od vzorcev
+  - `! (vzorci)` - neujemanje z danimi vzorci   
+  ```bash
+  # osnovni
+  ls *
+  ls *.txt
+  echo b*.txt
+  echo b?.txt
+  ls ?2.txt f*
+  echo ???
+  ls ?
+  echo ?
+  echo c[[:digit:]].txt
+  echo [ac][13].*
+  echo [a-c][13].t?t
+  echo [a-c]?[02].*xt
+
+  # napredni
+  echo b1?(0|2).txt
+  echo b*(1|2).txt
+  echo [bf]+(o)
+  echo !(???|???.*)
+  ```
+
+### Zascita datotek
+- **sklopi uporabnikov**
+  - **lastnik** → `u` - user
+  - **clani skupine** → `g` - group
+  - **ostali** → `o` - ostali
+  - **vsi** → `a` - all
+- `chown` - sprememba lastnika
+- `chgrp` - sprememba skupine  
+
+```bash
+# spreminjanje lastnika
+chown metka pesem.txt
+# spreminjanje skupine
+chgrp audio pesem.txt
+# oboje hkrati
+chown metka:audio pesem.txt
+```
+
+- **dovoljenja nad datotekam**
+  - **branje** → `r` - read
+  - **pisanje** → `w` - write
+  - **izvajanje** → `x` - execute
+  - **prazno** → `-`  
+
+|Znak|Datoteka|Imenik|
+|-|-|-|
+|`r`|branje|izpis imenika|
+|`w`|pisanje|spreminjanje|
+|`x`|izvajanje|vstop v imenik|
+
+```
+rwxrwxrwx
+rw-r--r--
+rwxr-x---
+-w---xr--
+```   
+
+- **spreminjanje dovoljenj**
+  - **dodajanje** → `+`
+  - **odvzemanje** → `-`
+  - **nastavljanje** → `=`
+- `chmod [augo][+-=][rwx] datoteka` - spreminjanje dovoljenj
+- `umask -S u=rwx, g=rx, o=r` - nastavitev privzetih dovoljenj
+
+```bash
+chmod u+w a.txt
+chmod go+r b.txt
+chmod a-xw c.txt
+chmod u=rwx,g=rw,o=r d.txt
+```
+
+- **omejeno brisanje** → `chmod +t temp/`  → datoteko lahko odstrani le lastnik
+- **setuid/setgid bit** → `chmod +s datoteka` → omogoca zagon izvrsljive datoteke z dovloljenji lastnika
+
+## Procesi
