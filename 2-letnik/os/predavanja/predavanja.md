@@ -83,6 +83,10 @@
     - [Izvedba virtualizacije](#izvedba-virtualizacije)
     - [Izvedba: virtualizacija procesorja](#izvedba-virtualizacija-procesorja)
     - [Izvedba: virtualizacija naprav](#izvedba-virtualizacija-naprav)
+  - [Procesi - API](#procesi---api)
+    - [Windows](#windows)
+    - [Unix - podobni sistemi](#unix---podobni-sistemi)
+  - [Medprocesna komunikacija API](#medprocesna-komunikacija-api)
 
 ## Racunalniski sistem
 - **Strojna oprema (hardware)**
@@ -1725,3 +1729,126 @@
   - **passthrough model** → ekskluzivni in neposredni dostop do naprave
   - **Hypervisor-direct model** → nadzornik prestreze vse dostope in emulira odziv naprave
   - **Split-device driver model** → dostop do naprave je razdeljen med front-end in back-end gonilniki
+
+
+
+## Procesi - API
+### Windows
+- `CreateProcess()`
+- `ExitProcess()`
+- `TerminateProcess(proces, status)`
+- `GetExitCodeProcess(proces, status)`
+- `WaitForSingleObject()`
+
+### Unix - podobni sistemi
+- **info o procesu**
+  - **PID** - `int getpid()`
+  - **PPID** - `int getppid()`
+  - **UID** - `int getuid()`
+  - **GID** - `int getgid()`
+- **ostalo**
+  - `int sleep(uint seconds)` - spanje procesa
+  - **casi procesa** - `clock_t times(struct tms * buf)`  
+    ```c
+    struct tms {
+      clock_t tms_utime; /* user time */
+      clock_t tms_stime; /* system time */
+      clock_t tms_cutime; /* user time of children */ 
+      clock_t tms_cstime; /* system time of children */
+    };
+    ```
+- **Stvaritev procesa - fork**
+  - kopira trenutni proces
+  - **otrok je kopija starsa**
+    - ima nov deskriptor
+    - vecina podatkov je istih
+    - razlicne kljucavnice
+    - enak naslovni prostor
+  - `int fork()` - sistemski klic
+    - `-1` ob neuspehu
+    - sicer pa se vrneta dva procesa  
+    ```c
+    int pid = fork();
+    if (pid > 0) {
+      // STARŠ
+    } else if (pid == 0) {
+      // OTROK
+    } else { // pid < 0
+      // NEUSPEH
+    }
+    ```
+- **Koncanje procesa - exit**
+  - `exit(int status)` - sistemski klic
+    - proces se zakljuci s podanim izhodnim statusom
+    - jedro sprosti vire procesa
+    - otroke posvoji proces **init** → **sirote**
+    - iz te funkcije se nikoli ne vrnemo
+  - **izhodni status**
+    - 8b vrednost
+    - `0` - uspesen zakljucek
+    - `1..127` koda napake za neuspesen zakljucek
+    - `128..255` zakljucek zaradi signala
+    - status se shrani v deskriptorju procesa dokler ga ne prevzame **otrokov stars**
+    - otrok je **zombi** dokler status ni prevzet
+    - prevzem koncnega statusa otroka se rocno sprogramira
+    - `SIGCHLD` → signal, ki pove starsu, da se je otrok koncal
+- **Prevzem izhodnega statusa otroka - wait**
+  - `int waitpid(pid, &status, opcije)` → cakanje dolocenega otroka
+  - `int wait(&status)` → cakanje poljubnega otroka → enako kot `int waitpid(-1, &status, 0)`
+  - izhodni status je skrit v spremenljivki status
+- **Casovni diagram procesov**  
+  ![](images/casovni_diagram_procesov.png)  
+  - **fork** → ustvari otroka → otrok dobi vse podatke od starsa
+  - **exit** → oddaja statusa starsu
+  - **wait** → prejem statusa
+- **Zagon programa - exec**
+  - program v izvrsljivi datoteki
+  - nadomestitev trenutnega procesa
+    - nov naslovni prostor
+    - poenostavi se trenutni deskriptor procesa
+  - lahko podamo tudi **argumente** in **okoljske spremenljivke**
+  - **argumenti programa** → seznam nizov, vkljucno z imenom programa `int main(int argc, char** argv)`
+  - **okoljske spremenljivke** → seznam imen spremenljivk in njihovih vrednosti `int main(int argc, char** argv, char** envp)`
+  - prenos informacij je enosmeren
+  - druzina funkcij: `exec[lv][pPe]?(...)`
+    - **l** - argumenti so podani, kot argumenti funkcije
+    - **v** - argumenti so podani posebej v tabeli
+    - **p** - uporaba `$PATH` pri iskanju izvrsljive datoteke
+    - **P** - podamno iskalno pot
+    - **e** - okoljske spremenljivke so podane v tabeli  
+    ```c
+    execl(exe, arg0, …)
+    execlp(exe, arg0, …)
+    execle(exe, arg0, …, 0, envp)
+    execv(exe, args)
+    execvp(exe, args)
+    execvP(exe, path, args) 
+    execve(exe, args, envp)
+    ```
+  - **primeri**  
+  ```c
+  execl("/bin/ls", "ls", "-alp", "/home/jure", NULL);
+
+  char* args[] = { "ls", "-alp", "/home/jure", NULL };
+  execvp("ls", args);
+
+  char* envp[] = { "FRI=cool","OS=even cooler", NULL}
+  execve("ls", args, envp)
+
+  execvp(argv[1], &argv[1]);
+
+  execlp("ls", "proggy");
+  ```
+- **Prednosti** Unix pristopa - **fork & exec**
+  - preprosto ustvarjanje procesa
+  - locitev ustvarjanja in nalaganja procesa
+  - moznost izvajanje kode po `fork()` in pred `exec()`
+- **Slabosti** Unix pristopa - **fork & exec**
+  - kopiranje procesov je neucinkovito
+  - `vfork()` - optimizacija
+    - razlicica `fork()`, kjer se pricakuje, da se bo takoj zatem izvedel se `exec()`
+  - `COW (copy-on-write)` - optimizacija 
+    - leno kopiranje
+    - pomnilniski prostor kopiramo sele ko pride do prvega pisanja
+
+## Medprocesna komunikacija API
