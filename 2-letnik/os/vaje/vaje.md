@@ -71,6 +71,19 @@ title: Operacijski Sistemi - Izpiski vaj
   - [PSJF](#psjf)
   - [Round robin](#round-robin)
 - [Cevovodi](#cevovodi)
+  - [Procesi v C](#procesi-v-c-1)
+    - [Vejitev](#vejitev-1)
+    - [Zagon procesa oz programa](#zagon-procesa-oz-programa-1)
+  - [Procesi v lupini](#procesi-v-lupini-1)
+    - [Cevovod](#cevovod-1)
+  - [Tezji primeri](#tezji-primeri)
+    - [ls |grep xyz > bla.txt](#ls-grep-xyz--blatxt)
+    - [(ls |grep xyz >> bla.txt) &](#ls-grep-xyz--blatxt-)
+    - [ls | cut -d: -f2 | wc -l](#ls--cut--d--f2--wc--l)
+    - [ls | cat >2](#ls--cat-2)
+    - [cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt](#cat-ftxt-2-ferr--wc--l--btxt-cat-btxt)
+    - [cat tocke | izracun.sh 2>log || mkdir FAIL &](#cat-tocke--izracunsh-2log--mkdir-fail-)
+- [Procesi in tvegano stanje](#procesi-in-tvegano-stanje)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -803,3 +816,265 @@ cat /etc/passwd | cut -d -f7 | sort - u
 ![](images/round_robin_2.png)
 
 ## Cevovodi
+### Procesi v C
+#### Vejitev
+```c
+#include <stdio.h>
+
+int main(int argc, char * argv[]) {
+    int pid = fork();
+    if (pid < 0)
+        perror(argv[0]);
+    else if (pid == 0)
+        printf("Sem otrok %i s staršem %i.\n", getpid(), getppid());
+    else
+        printf("Sem starš %i z otrokom %i,\n", getpid(), pid);
+}
+```
+
+![](images/procesi_c_vejitev.png)
+
+#### Zagon procesa oz programa
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/wait.h>
+
+int main(int argc, char * argv[]) {
+    int pid = fork();
+    if (pid < 0) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        execvp(argv[1], & argv[1]);
+        perror("exec");
+        exit(EXIT_FAILURE);
+    } else {
+        int status;
+        if (waitpid(pid, & status, 0) < 0) {
+            perror("waitpid");
+            exit(EXIT_FAILURE);
+        }
+        if (WIFEXITED(status))
+            printf("Izhodni status otroka: %i\n",
+                WEXITSTATUS(status));
+    }
+    exit(EXIT_SUCCESS);
+}
+```
+
+![](images/procesi_c_zagon.png)
+
+### Procesi v lupini
+#### Cevovod
+```bash
+cat /etc/passd | cut -d: -f7 | sort -u
+```
+
+![](images/procesi_lupina_cevovod.png)
+
+### Tezji primeri
+#### ls |grep xyz > bla.txt
+```c
+void main() {
+    int fd[2];
+    pipe(fd);
+    if (fork() == 0) {
+        dup2(fd[1], 1);
+        close(fd[0]);
+        close(fd[1]);
+        execlp("ls", "ls", NULL);
+        //unreachable code!
+    }
+    if (fork() == 0) {
+        int f = open("bla.txt", O_WRONLY); //O_CREAT|O_WRONLY|O_TRUNC
+        dup2(fd[0], 0);
+        dup2(f, 1);
+        close(fd[0]);
+        close(fd[1]);
+        close(f);
+        execlp("grep", "grep", "xyz", NULL);
+        //unreachable code!
+    }
+    close(fd[0]);
+    close(fd[1]); //!!!
+    wait(NULL);
+    wait(NULL);
+}
+```
+
+#### (ls |grep xyz >> bla.txt) &
+```c
+void main() {
+    if (!fork()) {
+        int fd[2];
+        pipe(fd);
+        if (fork() == 0) {
+            dup2(fd[1], 1);
+            close(fd[0]);
+            close(fd[1]);
+            execlp("ls", "ls", NULL);
+            //unreachable code!
+        }
+        if (fork() == 0) {
+            int f = open("bla.txt", O_APPEND); //O_APPEND|O_CREAT|O_WRONLY
+            dup2(fd[0], 0);
+            dup2(f, 1);
+            close(fd[0]);
+            close(fd[1]);
+            close(f);
+            execlp("grep", "grep", "xyz", NULL);
+            //unreachable code!
+        }
+        close(fd[0]);
+        close(fd[1]);
+        wait(NULL);
+        wait(NULL);
+    }
+    //(nad)lupina ne waita!
+}
+```
+
+#### ls | cut -d: -f2 | wc -l
+```c
+void main() {
+    int fd1[2];
+    pipe(fd1);
+    if (!fork()) {
+        dup2(fd1[1], 1);
+        close(fd1[0]);
+        close(fd1[1]);
+        execlp("ls", "ls", NULL);
+    }
+    int fd2[2];
+    pipe(fd2);
+    if (!fork()) {
+        dup2(0, fd1[0]);
+        dup2(1, fd2[1]);
+        close(fd1[0]);
+        close(fd1[1]);
+        close(fd2[0]);
+        close(fd2[1]);
+        execlp("cut", "cut", "-d:", "-f2", NULL);
+    }
+    // brez spodnjega closea se cevovod ne bo nikoli prenehal izvajati
+    close(fd1[0]);
+    close(fd1[1]);
+    //tretji otrok naj deduje samo drugo cev
+    if (!fork()) {
+        dup(0, fd2[0]);
+        close(fd2[0]);
+        close(fd2[1]);
+        execlp("wc", "wc", "-l", NULL);
+    }
+    close(fd2[0]);
+    close(fd2[1]);
+    wait(NULL);
+    wait(NULL);
+    wait(NULL);
+}
+```
+
+#### ls | cat >2
+```c
+void main() {
+    int fd[2];
+    pipe(fd);
+    if (!fork()) {
+        dup2(fd[1], 1);
+        close(fd[0]);
+        close(fd[1]);
+        execlp("ls", "ls", NULL);
+    }
+    if (fork() == 0) {
+        int f = open("2", O_WRONLY); //O_CREAT|O_WRONLY|O_TRUNC
+        dup2(fd[0], 0);
+        dup2(f, 1);
+        close(fd[0]);
+        close(fd[1]);
+        close(f);
+        execlp("cat", "cat", NULL); // >2 ni argument!
+    }
+    close(fd[0]);
+    close(fd[1]);
+    wait(NULL);
+    wait(NULL);
+}
+```
+
+#### cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt
+```
+void main() {
+    int fd[2];
+    pipe(fd);
+    if (!fork()) {
+        int f = open("f.err", O_CREAT | O_WRONLY | O_TRUNC)
+        dup2(f, 2); //preusmerjamo stderr
+        dup2(fd[1], 1);
+        close(fd[0]);
+        close(fd[1]);
+        close(f);
+        execlp("cat", "cat", "f.txt", NULL);
+    }
+    if (!fork()) {
+        int f2 = open("b.txt", O_APPEND | O_CREAT | O_WRONLY);
+        dup2(fd[0], 0);
+        dup2(f2, 1);
+        close(fd[0]);
+        close(fd[1]);
+        close(f2);
+        execlp("wc", "wc", "-l", NULL); // >2 ni argument!
+    }
+    close(fd[0]);
+    close(fd[1]);
+    //powaitamo cevovod!
+    wait(NULL);
+    wait(NULL);
+    //še en proces moramo ustvatiti
+    if (!fork()) {
+        execlp("cat", "cat", "b.txt", NULL);
+    }
+    wait(NULL); // in ga počakati
+}
+```
+
+#### cat tocke | izracun.sh 2>log || mkdir FAIL &
+```c
+void main() {
+    int fd[2];
+    pipe(fd);
+    if (!fork()) {
+        dup2(fd[1], 1);
+        close(fd[0]);
+        close(fd[1]);
+        execlp("cat", "cat", "tocke", NULL);
+    }
+    if (!fork()) {
+        int f = open("log", O_CREAT | O_WRONLY | O_TRUNC);
+        dup2(fd[0], 0);
+        dup2(f, 2);
+        close(fd[0]);
+        close(fd[1]);
+        close(f);
+        execlp("izracun.sh", "izracun.sh", NULL); // >2 ni argument!
+    }
+    close(fd[0]);
+    close(fd[1]);
+    //powaitamo cevovod!
+    wait(NULL);
+    int status;
+    waitpid(-1, & status, 0);
+    //potrebujemo izhodni status!
+    if (WIFEXITED(status))
+        status = WEXITSTATUS(status);
+    //še en proces moramo ustvatiti, če je exit status zadnjega procesa != 0
+    if (status != 0) {
+        if (!fork()) {
+            execlp("mkdir", "mkdir", "FAIL", NULL);
+        }
+    }
+    // in ga NE pocakamo zaradi &
+}
+```
+
+## Procesi in tvegano stanje
