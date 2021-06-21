@@ -58,6 +58,8 @@ title: Operacijski Sistemi - Izpiski vaj
     - [Cevovod](#cevovod)
     - [Lupina in sistemski klici](#lupina-in-sistemski-klici)
 - [Socasnost: Signali in preusmeritve](#socasnost-signali-in-preusmeritve)
+  - [Signali](#signali)
+- [Preusmeritve](#preusmeritve)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -666,3 +668,68 @@ cat /etc/passwd | cut -d -f7 | sort - u
 - `exit 42` → `exit(42)` - zakljucek programa
 
 ## Socasnost: Signali in preusmeritve
+### Signali
+- enosmerna komunikacija
+- kratka sporocila cljnemu procesu
+- **izvor** (posiljatelj) je jedro OS ali poljuben proces
+- **ponor** (prejemnik) je poljuben proces, izvor se neposredno ne pozna
+- vsak signal ima svoj **rokovalnik**
+- **nacini rokovanja**
+  - `SIG_DFL` - privzeti rokovalnik
+  - `SIG_IGN` - ignoriranje signala
+  - uporabniski rokovalnik
+- **privzeti odzivi na signale**
+  - koncanje procesa
+  - koncanje procesa in zapis `core` datoteke
+  - zaustavitev in nadaljevanje procesa
+- **vrste**
+  - je podan z njegovo stevilko
+  - obstajajo tudi oznake namesto stevilk
+- vrste signalov - **ukinjanje procesa**
+  - privzet odziv je koncanje procesa
+  - `SIGTERM` - genericna ukinitev procesa
+  - `SIGINT` - prekinitev procesa s `Ctrl + C`
+  - `SIGQUIT` - prekinitev procesa s `Ctrl + \`
+  - `SIGKILL` - brezpogojna ukinitev procesa
+  - `SIGHUP` - sporocilo o koncanju pripadajocega terminala
+- vrste signalov - **programske napake**
+  - privzet odziv je koncanje procesa in zapis `core` datoteke
+  - `SIGFPE` - aritmeticna napaka
+  - `SIGILL` - napacen strojni ukaz
+  - `SIGSEGV` - krsenje pomnilniske zascite
+  - `SIGBUS` - napacen pomnilniski prostor
+  - `SIGABRT` - abort
+- vrste signalov - **nadzor poslov**
+  - `SIGCHLD` - sporocilo starsu o koncanju otroka
+  - `SIGCONT` - nadaljevanje zaustavljenega procesa
+  - `SIGSTOP` - brezpogojna zaustavitev procesa
+  - `SIGSTP` - `Ctrl + Z`
+  - `SIGTTIN` - posel je bral s terminala
+- vrste signalov - **splosna komunikacija**
+  - privzet odziv je koncanje procesa
+  - `SIGUSR1` - prvi uporabniski signal
+  - `SIGUSR2` - drugi uporabniski signal
+- **posiljanje signala**
+  - `kill(pid, signum)` 
+  - `kill`
+- **lovlenje signalov**
+  - otroci dedujejo rokovalnike starsa
+  - `fork()` kopira kodo in s tem tudi rokovalnike
+- **nov program dobi privzete rokovalnike**
+  - `exec()` ustvari novo sliko procesa iz podanega ukaza, s tem se stari rokovalniki izgubijo
+- **nastavljanje uporabniskega rokovalnika**
+  - `signal(signum, sighandler)` ob prejetnju signala se sprozi rokovalnik oz sighandler
+- **posiljanje signala samemu sebi**
+  - `raise(signum)`
+- **nastavljanje rokovalnika**
+  - `signal(signum, action)`
+  - `action` je funkcija oblike `void rokovalnik(int signum) {}`
+- **blokiranje signalov**
+  - v casu med generiranjem signala in rokovanjem
+  - med rokovanjem je signal blokiran
+- `trap` - izpis obstojecih rokovalnikov
+  - nastavljanje pasti
+  - ignoriranje signala
+  - ponastavitev rokovalnika
+
+## Preusmeritve
