@@ -1088,3 +1088,9 @@ void main() {
   - `STORE A, x`
 
 ### Primeri tveganega stanja
+![](images/primer_tvegano_stanje_1.png)
+![](images/primer_tvegano_stanje_2.png)
+![](images/primer_tvegano_stanje_3.png)
+![](images/primer_tvegano_stanje_4.png)
+![](images/primer_tvegano_stanje_5.png)
+![](images/primer_tvegano_stanje_6.png)
