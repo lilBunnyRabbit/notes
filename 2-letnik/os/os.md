@@ -3,7 +3,5 @@ layout: navigation
 title: Operacijski Sistemi
 ---
 
-# Operacijski Sistemi
-
-- [Izpiski](izpiski/izpiski.md)
-- [Izpiski Vaje](izpiski-vaje/izpiski_vaje.md)
+- [Predavanja](os/predavanja/predavanja.md)
+- [Vaje](os/vaje/vaje.md)
