@@ -14,6 +14,15 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Pogojni izrazi](#pogojni-izrazi)
   - [Programski stavki](#programski-stavki)
 - [Podlupina, preusmeritve, pogojno izvajanje in funkcije](#podlupina-preusmeritve-pogojno-izvajanje-in-funkcije)
+  - [Izvajanje v podlupini](#izvajanje-v-podlupini)
+  - [Preusmerjanje](#preusmerjanje)
+  - [Pogojni izrazi](#pogojni-izrazi-1)
+  - [Skriptiranje](#skriptiranje-1)
+  - [Aritmetika](#aritmetika)
+  - [Funkcije](#funkcije)
+  - [Obnasanje funkcij in iteratorjev](#obnasanje-funkcij-in-iteratorjev)
+  - [Ostalo](#ostalo)
+- [Sistemski klici](#sistemski-klici)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -133,7 +142,18 @@ title: Operacijski Sistemi - Izpiski vaj
   - `for var in spisek; do ukazi; done`
   - `for ((init; pogoj; inkrement)); do ukazi; done`
   - `break` in `continue`
-- **if** → ` if pogoj; then ukazi; elif pogoj; then ukazi; else ukazi; fi`
+- **if**  
+  ```bash
+  if pogoj; 
+  then 
+    ukazi; 
+  elif pogoj; 
+  then 
+    ukazi; 
+  else 
+    ukazi; 
+  fi
+  ```
 - **case**  
   ```bash
   case niz in
@@ -145,3 +165,81 @@ title: Operacijski Sistemi - Izpiski vaj
   ```
 
 ## Podlupina, preusmeritve, pogojno izvajanje in funkcije
+### Izvajanje v podlupini
+- **podlupina** je podproces trenutne lupine
+- **navadno** `( ukaz )`
+- **s substitucijo** `$( ukaz )` → `dirname $(which less)`
+
+### Preusmerjanje
+- `stdin` → deskriptor `0`
+- `stdout` → deskriptor `1`
+- `stderr` → deskriptor `2`
+- **preusmerjanje standardnega vhoda** → `ukaz < datoteka`
+- **preusmerjanje standardnega izhoda** → `ukaz > datoteka` ali `ukaz >> datoteka`
+- **splosno preusmerjanje**
+  - `ukaz deskriptor < datoteka`
+  - `ukaz deskriptor > datoteka`
+  - `ukaz deskriptor >> datoteka`
+  - `ukaz deskriptor1 >& deskriptor2`
+- **tukaj dokument** → `ukaz << locilo` → `cat << 'EOF' > skripta.sh`
+- **tukaj niz** → `ukaz <<< niz` → `tr "13579" "123" <<< $(seg 0 9)`
+- **cevovod**
+  - `ukaz 1 | ukaz 2 | ... | ukaz N`
+  - primer `cat /etc/passwd | cut -d -f7 | sort`
+
+### Pogojni izrazi
+- odvisni od **izhodnega statusa**
+- `ukaz1 && ukaz2` **in**
+- `ukaz1 || ukaz2` **ali**
+
+### Skriptiranje
+- `{ ukazi; }` - statement block
+
+### Aritmetika
+- `(( aritmetika ))` ali `$(( aritmetika ))` 
+- primer `(( a = 1 + 2 * 3 ))`
+
+### Funkcije
+- `function ime { ukazi }`
+- Argumenti: `$1, $2, $3, ...`
+- `return vrednost` → se shrani v `$?`  
+  ```bash
+  function fakt {
+    if (( $1 <= 1 )); then
+      echo 1
+    else 
+      tmp=$(fakt $(( $1 - 1 )))
+      echo $(( $1 * $tmp ))
+    fi
+  }
+  ```
+
+### Obnasanje funkcij in iteratorjev
+- funkcija se obnasa kot skripta
+- **preusmeritve**
+  - iz datoteke  
+    ```bash
+    while read a; do
+      echo "$a"
+    done < mojadatoteka.txt
+    ```
+  - iz spremenljivke  
+    ```bash
+    studenti=(Joze Mirko Miha Janez)
+    for stud in "${studenti[@]}"; do
+      echo "$student"
+    done
+
+    # ali
+
+    a=$'ena\ndva\ntri\nstiri'
+    while read line; do
+      echo "$line"
+    done <<< "$a"
+    ```
+
+### Ostalo
+- bash podpira tabele `( array )`
+- `man man`
+
+## Sistemski klici
