@@ -665,8 +665,8 @@
 - **Interaktivni sistemi**  
   [](images/interaktivni_sistemi.png)
   - **cakalni cas:** celoten cas v stanju pripravljen
-  - **odzivni cas:** $T_{odzivni} = T_{zacetni} - T_{prihodni}$ (predpostavimo $T_{zacetni} = T_{v/i}$)
-  - **cas obdelave:** $T_{obdelave} = T_{koncni} - T_{prihodni}$
+  - **odzivni cas:** $$T_{odzivni} = T_{zacetni} - T_{prihodni}$$ (predpostavimo $$T_{zacetni} = T_{v/i}$$)
+  - **cas obdelave:** $$T_{obdelave} = T_{koncni} - T_{prihodni}$$
 - **Ostale mere**
   - **izkoriscenost procesorja (processor utilization):** delez zaposlenosti procesorja
   - **prepustnost sistema (system troughput):** stevilo obdelanih procesov v danem casovnem obdobju
@@ -723,7 +723,7 @@
   - **t** ... trajanje zadnjega teka procesa
   - **t'** ... ocena trajanja teka
   - **α** ... faktor pozabljanja (`α = 1` preteklost se ne uposteva, `α = 0` trajanje zadnjega teka nima vpliva)
-  - $t' := \alpha \cdot t + (1 - \alpha) \cdot t'$
+  - $$t' := \alpha \cdot t + (1 - \alpha) \cdot t'$$
 - **Vkljucevanje I/O operacij:** tekom i/o operacij je proces blokiran zato je bolje da prekrivamo izvajanja
 
 ### Prednostni algoritmi
@@ -741,11 +741,11 @@
   - z ali brez odvzemanja
 - **Lottery scheduling**
   - **dolocanje procesa z loterijo**
-  - proces $i$ ima $p_i$ prepustnic
+  - proces $$i$$ ima $$p_i$$ prepustnic
   - proces z visjo prioriteto dobi vec prepustnic
   - razvrscevalnik nakjucno izbere eno prepustnico in lastniku prepustnice dodeli procesor
   - lahko prepuscajo prepustnice drugim
-  - verjetnost izbire k-tega procesa $\frac{p_k}{\sum^{n}_{i=1}{p_i}}$
+  - verjetnost izbire k-tega procesa $$\frac{p_k}{\sum^{n}_{i=1}{p_i}}$$
 - **Stride scheduling**
   - **proces, ki je najmanj prehodil, naprej**
   - ob stvaritvi dolocimo dolzino koraka
@@ -849,7 +849,7 @@
   - **transparentnos** (proces se ne zaveda)
   - **ucinkovitost** (hitra preslikava)
 - **Preslikava naslovov**
-  - **navidezni naslov** → **fizicni naslov** ($PA = f(VA)$)
+  - **navidezni naslov** → **fizicni naslov** ($$PA = f(VA)$$)
   - **OS skrbi za konfiguracijo**
   - **MMO** izvaja preslikavo
   - **TLB** skrbi za ucinkovitost preslikovanja
@@ -874,7 +874,7 @@
     - **izvedba priviligeranih ukazov** → OS ukine proces
     - posebne strojne ukaze za manipuliranje baznega in mejnega registra uporablja le OS 
 - **Segmentacija in ostrjevanje**
-  - pomnilnik razdeljen na bloke velikosti $2^P$  
+  - pomnilnik razdeljen na bloke velikosti $$2^P$$  
     ![](images/preslikovanje.png)  
   - iz **M**b navideznega v **N**b fizicni    
 
@@ -895,7 +895,7 @@
   ![](images/ostrjevanje.png)
 - **Preslikovanje s tabelo strani**  
   ![](images/preslikovanje_s_tabelo_strani.png)
-- **velikost tabele strani** je $2^{M - P}$ deskriptorjev v tabeli
+- **velikost tabele strani** je $$2^{M - P}$$ deskriptorjev v tabeli
 - **resitvi:** vecnivojska tabela strani in invertirana tabela strani
 - **Ucinkovitost preslikovanja**
   - **ena preslikava:** `st. dostopov do pomnilnika = st. dostopov do tabel in podtabel strani + 1`
