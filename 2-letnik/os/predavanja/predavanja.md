@@ -1,3 +1,10 @@
+---
+layout: note
+title: Operacijski Sistemi - Izpiski predavanj
+toc: true
+---
+
+
 # OS Izpiski
 - [OS Izpiski](#os-izpiski)
   - [Racunalniski sistem](#racunalniski-sistem)
