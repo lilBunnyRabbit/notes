@@ -63,6 +63,9 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Signali](#signali-1)
   - [Lovlenje signalov](#lovlenje-signalov)
 - [Preusmeritve](#preusmeritve)
+  - [Kopiranje deskriptorjev](#kopiranje-deskriptorjev)
+  - [Preusmeritev v terminalu](#preusmeritev-v-terminalu)
+- [Razvrscanje](#razvrscanje)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -742,3 +745,24 @@ cat /etc/passwd | cut -d -f7 | sort - u
   - ponastavitev rokovalnika
 
 ## Preusmeritve
+### Kopiranje deskriptorjev
+- `dup2(orig, new)` je preusmeritev deskriptorja **orig** v **new**
+  - ce je deskriptor **new** v uporabi se najprej zapre nato se izved kopiranje
+  ```c
+  // odpremo datoteko
+  fd = open("vhod.txt", O_RDONLY);
+  // izvedemo preusmeritev
+  dup2(fd, 0);
+  // zaženeno program
+  execv("/bin/cat", NULL);
+  ```
+### Preusmeritev v terminalu
+- `ukaz deskriptor < datoteka`
+- `ukaz deskriptor > datoteka`
+- `ukaz deskriptor >> datoteka`
+- `ukaz deskriptor1 >& deskriptor 2`
+- `ukaz 2 > datoteka`
+- `ukaz 1 > datoteka 2 >& 1`
+- `ukaz &> datoteka`
+
+## Razvrscanje
