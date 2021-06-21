@@ -23,6 +23,11 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Obnasanje funkcij in iteratorjev](#obnasanje-funkcij-in-iteratorjev)
   - [Ostalo](#ostalo)
 - [Sistemski klici](#sistemski-klici)
+  - [Jedro](#jedro)
+  - [Standardna C knjiznica](#standardna-c-knjiznica)
+  - [Obdelava napak](#obdelava-napak)
+  - [Sledenje programom](#sledenje-programom)
+- [Uporabniki](#uporabniki)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -243,3 +248,39 @@ title: Operacijski Sistemi - Izpiski vaj
 - `man man`
 
 ## Sistemski klici
+### Jedro
+- `uname` - osnovni podatki o jedru
+- `/proc/` - datotecni sistem
+- `dmesg` - jedrna obvestila
+- `sysctl` - nastavljanje jedra
+
+### Standardna C knjiznica
+- library `glibc`
+- vsebuje tudi ovojne funkcije sistemskih klicev
+
+### Obdelava napak
+- **rezultat funkcije (izhodni status)**
+  - `0` - uspeh
+  - `-1` - neuspeh
+- `errno` - koda zadnje napake
+- `perror()` - izpis obvestila o napaki  
+  ```c
+  #include <stdlib.h>
+  #include <errno.h>
+  int main(int argc, char* argv[]) {
+    if (chdir(argv[1]) < 0) {
+      int koda = errno;
+      perror(argv[0]);
+      exit(koda);
+    }
+    write(1, "Vse je OK.\n", 11);
+    exit(0);
+  }
+  ```
+
+### Sledenje programom
+- `time` - merjenje casa
+- `strace` - sledenje sistemskih klicev
+- `ltrace` - sledenje klicem v libc
+
+## Uporabniki
