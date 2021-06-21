@@ -77,12 +77,6 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Procesi v lupini](#procesi-v-lupini-1)
     - [Cevovod](#cevovod-1)
   - [Tezji primeri](#tezji-primeri)
-    - [ls |grep xyz > bla.txt](#ls-grep-xyz--blatxt)
-    - [(ls |grep xyz >> bla.txt) &](#ls-grep-xyz--blatxt-)
-    - [ls | cut -d: -f2 | wc -l](#ls--cut--d--f2--wc--l)
-    - [ls | cat >2](#ls--cat-2)
-    - [cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt](#cat-ftxt-2-ferr--wc--l--btxt-cat-btxt)
-    - [cat tocke | izracun.sh 2>log || mkdir FAIL &](#cat-tocke--izracunsh-2log--mkdir-fail-)
 - [Procesi in tvegano stanje](#procesi-in-tvegano-stanje)
   - [Atomarne operacije](#atomarne-operacije)
   - [Primeri tveganega stanja](#primeri-tveganega-stanja)
@@ -876,7 +870,7 @@ cat /etc/passd | cut -d: -f7 | sort -u
 ![](images/procesi_lupina_cevovod.png)  
 
 ### Tezji primeri
-#### ls |grep xyz > bla.txt
+**ls |grep xyz > bla.txt**  
 ```c
 void main() {
     int fd[2];
@@ -902,10 +896,10 @@ void main() {
     close(fd[1]); //!!!
     wait(NULL);
     wait(NULL);
-}
-```
+} 
+```  
 
-#### (ls |grep xyz >> bla.txt) &
+**(ls |grep xyz >> bla.txt) &**  
 ```c
 void main() {
     if (!fork()) {
@@ -935,9 +929,9 @@ void main() {
     }
     //(nad)lupina ne waita!
 }
-```
+```  
 
-#### ls | cut -d: -f2 | wc -l
+**ls | cut -d: -f2 | wc -l**  
 ```c
 void main() {
     int fd1[2];
@@ -975,9 +969,9 @@ void main() {
     wait(NULL);
     wait(NULL);
 }
-```
+```  
 
-#### ls | cat >2
+**ls | cat >2**  
 ```c
 void main() {
     int fd[2];
@@ -1002,9 +996,9 @@ void main() {
     wait(NULL);
     wait(NULL);
 }
-```
+```  
 
-#### cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt
+**cat f.txt 2> f.err | wc -l >> b.txt; cat b.txt**  
 ```c
 void main() {
     int fd[2];
@@ -1038,9 +1032,9 @@ void main() {
     }
     wait(NULL); // in ga počakati
 }
-```
+```  
 
-#### cat tocke | izracun.sh 2>log || mkdir FAIL &
+**cat tocke | izracun.sh 2>log || mkdir FAIL &**   
 ```c
 void main() {
     int fd[2];
