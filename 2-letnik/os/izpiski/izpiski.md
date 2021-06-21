@@ -659,9 +659,9 @@
 ### Mere zmogljivosti
 - **Paketni sistemi**  
   [](images/paketni_sistemi.png)  
-  - **cakalni cas:** $T_{cakalni} = T_{zacetni} - T_{prihodni}$
-  - **odzivni cas:** $T_{odzivni} = T_{v/i} - T_{prihodni}$
-  - **cas obdelave:** $T_{obdelave} = T_{koncni} - T_{prihodni}$
+  - **cakalni cas:** $$T_{cakalni} = T_{zacetni} - T_{prihodni}$$
+  - **odzivni cas:** $$T_{odzivni} = T_{v/i} - T_{prihodni}$$
+  - **cas obdelave:** $$T_{obdelave} = T_{koncni} - T_{prihodni}$$
 - **Interaktivni sistemi**  
   [](images/interaktivni_sistemi.png)
   - **cakalni cas:** celoten cas v stanju pripravljen
