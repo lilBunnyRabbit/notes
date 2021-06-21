@@ -35,6 +35,12 @@ title: Operacijski Sistemi - Izpiski vaj
   - [Ujemanje vzorcev](#ujemanje-vzorcev)
   - [Zascita datotek](#zascita-datotek)
 - [Procesi](#procesi)
+  - [Imenik /proc/PID/](#imenik-procpid)
+  - [Info o procesih](#info-o-procesih)
+  - [Zagon ukazov v lupini](#zagon-ukazov-v-lupini)
+  - [Procesi](#procesi-1)
+  - [Posli](#posli)
+- [Vzporednost poslov](#vzporednost-poslov)
 <!-- #endregion -->
 
 ## Ukazna lupina
@@ -409,3 +415,56 @@ chmod u=rwx,g=rw,o=r d.txt
 - **setuid/setgid bit** → `chmod +s datoteka` → omogoca zagon izvrsljive datoteke z dovloljenji lastnika
 
 ## Procesi
+- **PID** - identiteta procesa
+- **PPID** - identiteta starsa procesa
+- **Okolje procesa**  
+  ```c
+  #include <stdio.h>
+  int main(int argc, char* argv[], char* environ[]) {
+    // Izpis argumentov.
+    for (int i = 0; i < argc; i++) printf("%s\n", argv[i]);
+
+    // Izpis okoljskih spremenljivk.
+    int i = 0;
+    while (environ[i]) printf("%s\n", environ[i++]);
+  }
+  ```
+
+### Imenik /proc/PID/
+
+### Info o procesih
+- `pidof` ali `pgrep` - izpis PID ov
+- `ps` - izpis procesov
+- `pstree` - hierarhija procesov
+- `top` - interaktivni pogled procesov
+- `ulimit` - omejitve procesa
+- `$$` - PID lupine
+- `$PPID` - PPID lupine
+- `$BASHPID` - PID procesa
+
+### Zagon ukazov v lupini
+- **zagon v ospredju**
+  - program se zazene, nadzor nad konzolo, vrne izhodni status lupini
+  - lupina caka program, prevzame izhodni status → `$?`
+- **zagon v ozadnju z** `&`
+  - program se zazene, nima nadzora nad tipkovnico, vrne izhodni statuts lupini
+  - lupina caka program, ob prejemu signala `SIGCHLD` prevzame izhodni status → `$!`
+
+### Procesi
+- `sleep` - spanje za dolocen cas
+- `wait` - cakanje vseh otrok na dokoncanje
+- `wait PID` - cakanje na dokoncanje
+- `exit STATUS` - koncanje procesa
+- `kill PID` - ukinjanje procesa
+
+### Posli
+- posli so procesi v ozadju
+- `JID` - stevilka posla
+- `jobs` - izpis tekocih poslov
+- `Ctrl + Z` - zaustavitev posla v ospredju
+- `fg` - nadaljevanje v ospredju
+- `bg` - nadaljevanje v ozadju
+- `disown` - locitev posla od lupine
+- `screen` - virtualna lupina
+
+## Vzporednost poslov
