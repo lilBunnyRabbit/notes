@@ -2,4 +2,5 @@
 
 ## 1. Letnik
 ## 2. Letnik
-[Operacijski Sistemi](2-letnik/os/os.md)
+- [Operacijski Sistemi](2-letnik/os/os.md)  
+- [Principi Programskih Jezikov](2-letnik/ppj)  
