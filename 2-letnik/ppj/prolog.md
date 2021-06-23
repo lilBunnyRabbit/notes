@@ -3,6 +3,18 @@ layout: note
 title: Principi Programskih Jezikov - Prolog
 ---
 
+- [Codeq](#codeq)
+  - [Family Relations](#family-relations)
+  - [The World Factbook](#the-world-factbook)
+  - [Lists](#lists)
+  - [Lists and arithmetic](#lists-and-arithmetic)
+  - [Sorting](#sorting)
+  - [Sets](#sets)
+  - [Trees](#trees)
+  - [License plates](#license-plates)
+  - [CLP(R)](#clpr)
+  - [CLP(FD)](#clpfd)
+
 # Codeq
 ## Family Relations
 > `mother(M, C)`: `M` is the mother of `C`.
