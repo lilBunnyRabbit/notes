@@ -3,6 +3,7 @@ layout: note
 title: Principi Programskih Jezikov - Prolog
 ---
 
+- [Cheat Sheet](#cheat-sheet)
 - [Codeq](#codeq)
   - [Family Relations](#family-relations)
   - [The World Factbook](#the-world-factbook)
@@ -14,6 +15,25 @@ title: Principi Programskih Jezikov - Prolog
   - [License plates](#license-plates)
   - [CLP(R)](#clpr)
   - [CLP(FD)](#clpfd)
+
+# Cheat Sheet
+```pl
+a_ali_b(X) :- X = a ; X = b.
+```
+
+> **Operatorji/predikati**
+> `;` — disjunkcija
+> ``,` — konjunkcija
+> `=` — zdruzevanje
+> `==` — enakost
+> `\==` — neenakost (pazi !)
+> `\+` — negacija  (pazi !!)
+> `>`, `<`, `=<`, `>=`, `=\=`, `=:=` — primerjava dveh izrazov, ki se evelvirata v števili
+
+> **List**
+> `[]` is the empty list.
+> `[1, 2, 3]` is the list whose head is `1` and whose tail is `[2, 3]`.
+> `[H | T]` is the list whose head is `H` and whose tail is `T`.
 
 # Codeq
 ## Family Relations
