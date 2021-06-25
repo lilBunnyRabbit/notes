@@ -1,0 +1,52 @@
+{% if page.toc %}
+<div class="note-toc" id="note-toc" onclick="hideToc()">
+  <div class="markdown-body" id="note-toc-md">
+    <h1>Table of Content</h1>
+  </div>
+</div>
+
+<script>
+  window.onload = () => {
+    const headings = document.getElementById("layout-body").querySelectorAll("h1, h2, h3, h4, h5, h6");
+    document.getElementById("note-toc-md").appendChild(parseHeadings(headings, 0, "H0")[0]);
+  }
+
+  function parseHeadings(nodes, index, parent) {
+    if (index >= nodes.length) return [null, index];
+    const root = document.createElement("ul");
+
+    let node = nodes[index];
+    while (node && node.tagName > parent) {
+      const element = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `#${node.id}`;
+      link.innerText = node.innerText;
+
+      element.appendChild(link);
+      root.appendChild(element);
+
+      index++;
+
+      if (nodes[index] && nodes[index].tagName > node.tagName) {
+        const [children, i] = parseHeadings(nodes, index, node.tagName);
+        if (children) {
+          element.appendChild(children);
+          index = i;
+        }
+      }
+
+      node = nodes[index];
+    }
+
+    return [root, index];
+  }
+
+  function showToc() {
+    document.getElementById("note-toc").style.display = "block";
+  }
+
+  function hideToc() {
+    document.getElementById("note-toc").style.display = "none";
+  }
+</script>
+{% endif %}
