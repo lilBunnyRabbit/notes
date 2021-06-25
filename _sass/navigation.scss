@@ -1,0 +1,20 @@
+.navigation-path {
+  border-bottom: 1px solid #eaecef;
+  font-size: 24px;
+  padding-bottom: 7.2px;
+}
+
+.navigation-files {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    margin-left: 2px;
+  }
+}
+
+.navigation-file {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
