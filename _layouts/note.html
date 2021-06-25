@@ -22,31 +22,75 @@
     </script>
   </head>
   <body>
-    {% include navbar.html %}
+    {% if page.toc %}
+      <div class="note-toc" id="note-toc" onclick="hideToc()">
+        <div class="markdown-body" id="note-toc-md">
+          <h1>Table of Content</h1>
+        </div>
+      </div>
+    {% endif %}
 
-    <div class="p-5 markdown-body">
-      <button id="top-button" onclick="scrollToTop()" title="Scroll to the top">Up</button>
-      <h1>{{ page.title }}</h1>
-
-      {{ content }}
+    <div class="layout">
+      {% include note_navbar.html %}
+      <div class="layout-body markdown-body" id="layout-body">
+        {{ content }}
+      </div>
     </div>
+
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
     <script>anchors.add();</script>
-    <script>
-      const topButton = document.getElementById("top-button");
-
-      window.onscroll = () => {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-          topButton.style.display = "block";
-        } else {
-          topButton.style.display = "none";
+    {% if page.toc %}
+      <script>
+        window.onload = () => {
+          const headings = document.getElementById("layout-body").querySelectorAll("h1, h2, h3, h4, h5, h6");
+          document.getElementById("note-toc-md").appendChild(parseHeadings(headings, 0, "H0")[0]);
         }
-      }
 
-      function scrollToTop() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+        function parseHeadings(nodes, index, parent) {
+          if (index >= nodes.length) return [null, index];
+          const root = document.createElement("ul");
+
+          let node = nodes[index];
+          while (node && node.tagName > parent) {
+            const element = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = `#${node.id}`;
+            link.innerText = node.innerText;
+
+            element.appendChild(link);
+            root.appendChild(element);
+
+            index++;
+
+            if(nodes[index] && nodes[index].tagName > node.tagName) {
+              const [children, i] = parseHeadings(nodes, index, node.tagName);
+              if (children) {
+                element.appendChild(children);
+                index = i;
+              }
+            }
+
+            node = nodes[index];
+          }
+
+          return [root, index];
+        }
+
+        function showToc() {
+          document.getElementById("note-toc").style.display = "block";
+        }
+
+        function hideToc() {
+          document.getElementById("note-toc").style.display = "none";
+        }
+      </script>
+    {% endif %}
+
+    <script>
+      function scrolTop(params) {
+        const layoutBody = document.getElementById("layout-body");
+        layoutBody.scrollTop = 0;
       }
     </script>
   </body>
