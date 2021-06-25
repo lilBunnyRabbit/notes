@@ -3,7 +3,7 @@ $body-height: calc(100vh - #{$nav-height});
 
 .layout-navbar {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: $nav-height;
   top: 0px;
   left: 0px;
@@ -12,7 +12,7 @@ $body-height: calc(100vh - #{$nav-height});
 
 .layout-body {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   height: $body-height;
   top: $nav-height;
   left: 0px;

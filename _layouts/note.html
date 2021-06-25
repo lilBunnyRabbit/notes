@@ -30,27 +30,5 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
     <script>anchors.add();</script>
-    <script>
-      function scrolTop() {
-        const layoutBody = document.getElementById("layout-body");
-        layoutBody.scrollTop = 0;
-      }
-
-      function preparePrint() {
-        Array.from(document.getElementsByClassName("anchorjs-link")).forEach((element) => element.remove());
-        const mdBody = document.getElementById("layout-body");
-        document.body.innerHTML = "";
-        document.body.appendChild(mdBody);
-        document.body.style.overflow = "auto";
-        mdBody.style.overflowY = "hidden";
-        mdBody.style.padding = "0px";
-        
-        window.print();
-      }
-
-      window.onafterprint = function() {
-        location.reload();
-      }
-    </script>
   </body>
 </html>

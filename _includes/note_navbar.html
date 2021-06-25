@@ -4,27 +4,68 @@
     {% assign size = parentUrl | size | minus: 1 %}
     {{ sku | slice: 0, size }}
     <a href="{{ site.baseurl }}{{ parentUrl | slice: 0, size }}">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 8 8 12 12 16"></polyline>
+        <line x1="16" y1="12" x2="8" y2="12"></line>
+      </svg>
     </a>
 
-     <h3>
+    <h3>
       {{ page.title }}
     </h3>
   </div>
 
   <div class="navbar-actions">
     {% if page.toc %}
-      <div class="navbar-action" onclick="showToc()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-      </div>
+    <div class="navbar-action" onclick="showToc()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </div>
     {% endif %}
 
-    <div class="navbar-action" onclick="preparePrint()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+    <div class="navbar-action" onclick="printBody()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
     </div>
 
     <div class="navbar-action" onclick="scrolTop()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"></polyline><polyline points="17 18 12 13 7 18"></polyline></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+      </svg>
     </div>
   </div>
 </div>
+
+<script>
+  window.onafterprint = function () {
+    location.reload();
+  }
+
+  function printBody() {
+    const mdBody = document.getElementById("layout-body");
+    document.body.innerHTML = "";
+    document.body.appendChild(mdBody);
+    document.body.style.overflow = "auto";
+    mdBody.classList.remove("layout-body");
+    mdBody.classList.add("print-content");
+    Array.from(document.getElementsByClassName("anchorjs-link")).forEach((element) => element.remove());
+    window.print();
+  }
+
+  function scrolTop() {
+    const layoutBody = document.getElementById("layout-body");
+    layoutBody.scrollTop = 0;
+  }
+</script>
