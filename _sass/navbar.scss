@@ -17,12 +17,6 @@
   }
 }
 
-@media only screen and (max-width: 600px) {
-  .navbar {
-    padding: 8px 16px;
-  }
-}
-
 .navbar-navigation {
   display: flex;
   flex-direction: row;
@@ -49,6 +43,7 @@
   cursor: pointer;
   stroke: rgba(0, 0, 0, 0.4) !important;
   margin-left: 16px;
+  display: flex;
 }
 
 .navbar-action:hover {
