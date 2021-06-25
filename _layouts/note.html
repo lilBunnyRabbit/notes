@@ -23,14 +23,11 @@
   </head>
   <body>
     {% include toc.html %}
-    <div class="layout">
-      {% include note_navbar.html %}
-      <div class="layout-body markdown-body" id="layout-body">
-        {{ content }}
-      </div>
+    {% include note_navbar.html %}
+    <div class="layout-body markdown-body" id="layout-body">
+      {{ content }}
     </div>
 
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
     <script>anchors.add();</script>
     <script>
