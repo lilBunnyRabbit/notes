@@ -1,7 +1,8 @@
 ---
 layout: navigation
-title: Letniki
+title: FRI
 files:
   - name: 2. Letnik
     path: /2-letnik
 ---
+
