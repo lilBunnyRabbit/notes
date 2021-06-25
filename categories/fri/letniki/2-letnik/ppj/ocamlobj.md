@@ -1,6 +1,7 @@
 ---
 layout: note
-title: Principi Programskih Jezikov - Ocaml
+title: Objective Ocaml
+toc: true
 ---
 
 ```ocaml

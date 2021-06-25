@@ -492,7 +492,7 @@ chmod u=rwx,g=rw,o=r d.txt
 
 ### Procesi v C
 #### Vejitev
-![](images/vejitev.png)  
+![](img_vaje/vejitev.png)  
 
 ```c
 #include <stdio.h>
@@ -508,7 +508,7 @@ int main(int argc, char* argv[]) {
 ```  
 
 #### Sirota
-![](images/sirota.png)
+![](img_vaje/sirota.png)
 
 ```c
 #include <stdio.h>
@@ -522,7 +522,7 @@ int main(int argc, char* argv[]) {
 ```
 
 #### Zombi
-![](images/zombi.png)
+![](img_vaje/zombi.png)
 
 ```c
 #include <stdio.h>
@@ -537,7 +537,7 @@ int main(int argc, char* argv[]) {
 ```
 
 #### Zagon procesa oz programa
-![](images/zagon_procesa.png)
+![](img_vaje/zagon_procesa.png)
 
 ```c
 #include <stdlib.h>
@@ -568,21 +568,21 @@ int main(int argc, char* argv[]) {
 
 ### Procesi v lupini
 #### Zagon programa v ospredju
-![](images/zagon_programa_v_ospredju.png)
+![](img_vaje/zagon_programa_v_ospredju.png)
 
 ```bash
 ls
 ```
 
 #### Zagon programa v ozadju
-![](images/zagon_programa_v_ozadju.png)
+![](img_vaje/zagon_programa_v_ozadju.png)
 
 ```bash
 xeyes &
 ```
 
 #### Cevovod
-![](images/cevovod.png)
+![](img_vaje/cevovod.png)
 
 ```bash
 cat /etc/passwd | cut -d -f7 | sort - u
@@ -707,16 +707,16 @@ cat /etc/passwd | cut -d -f7 | sort - u
 : first come, first served
 : Ce pridejo ob istem casu, optimiziramo
 
-![](images/fcfs_1.png)  
-![](images/fcfs_2.png)  
-![](images/fcfs_3.png)  
+![](img_vaje/fcfs_1.png)  
+![](img_vaje/fcfs_2.png)  
+![](img_vaje/fcfs_3.png)  
 
 ### SJF
 **SJF**
 : shortest job first
 : obdelujemo prispelega in ne prekinjamo trenutnega procesa
 
-![](images/sjf.png)  
+![](img_vaje/sjf.png)  
 
 ### PSJF
 **PSJF**
@@ -724,14 +724,14 @@ cat /etc/passwd | cut -d -f7 | sort - u
 : obdelujemo prispelega in prekinjamo
 : problem je da dolg proces lahko nikoli ne pride na vrsto
 
-![](images/psfj_1.png)  
+![](img_vaje/psfj_1.png)  
  
 ### Round robin
 **Round robin**
 : obdelujemo vse po vrsti (v krogu) → `slice = 10`
 
-![](images/round_robin_1.png)  
-![](images/round_robin_2.png)  
+![](img_vaje/round_robin_1.png)  
+![](img_vaje/round_robin_2.png)  
 
 ## Cevovodi
 ### Procesi v C
@@ -750,7 +750,7 @@ int main(int argc, char * argv[]) {
 }
 ```
 
-![](images/procesi_c_vejitev.png)  
+![](img_vaje/procesi_c_vejitev.png)  
 
 #### Zagon procesa oz programa
 ```c
@@ -781,7 +781,7 @@ int main(int argc, char * argv[]) {
 }
 ```
 
-![](images/procesi_c_zagon.png)  
+![](img_vaje/procesi_c_zagon.png)  
 
 ### Procesi v lupini
 #### Cevovod
@@ -789,7 +789,7 @@ int main(int argc, char * argv[]) {
 cat /etc/passd | cut -d: -f7 | sort -u
 ```
 
-![](images/procesi_lupina_cevovod.png)  
+![](img_vaje/procesi_lupina_cevovod.png)  
 
 ### Tezji primeri
 **ls |grep xyz > bla.txt**  
@@ -1004,9 +1004,9 @@ void main() {
   - `STORE A, x`
 
 ### Primeri tveganega stanja
-![](images/primer_tvegano_stanje_1.png)  
-![](images/primer_tvegano_stanje_2.png)  
-![](images/primer_tvegano_stanje_3.png)  
-![](images/primer_tvegano_stanje_4.png)  
-![](images/primer_tvegano_stanje_5.png)  
-![](images/primer_tvegano_stanje_6.png)  
+![](img_vaje/primer_tvegano_stanje_1.png)  
+![](img_vaje/primer_tvegano_stanje_2.png)  
+![](img_vaje/primer_tvegano_stanje_3.png)  
+![](img_vaje/primer_tvegano_stanje_4.png)  
+![](img_vaje/primer_tvegano_stanje_5.png)  
+![](img_vaje/primer_tvegano_stanje_6.png)  

@@ -465,7 +465,7 @@ toc: true
 
 ### Stanje procesa
 - glede na to ali se proces izvaja, caka na rezultat IO, ...  
-![](images/stanje_procesa.png)  
+![](img_predavanja/stanje_procesa.png)  
 - **nov:** ko se ustvari, inicializacija deskriptorja procesa, alokacija potrebnih virov
 - **koncan:** ko se ukinja, sprostitev zasedenih virov
 - **pripravljen:** pripravljen in caka na dodelitev procesorja
@@ -482,7 +482,7 @@ toc: true
   - jedrna podatkovna struktura
   - hrani nadzorne podatke procesa (id, stanje, ...)
   - omogoca preklapljanje procesov  
-  ![](images/deskriptior_procesa.png)
+  ![](img_predavanja/deskriptior_procesa.png)
 
 ## Vecopravilnost
 ### Virtualizacija procesorja
@@ -578,12 +578,12 @@ toc: true
 
 ### Mere zmogljivosti
 - **Paketni sistemi**  
-  [](images/paketni_sistemi.png)  
+  [](img_predavanja/paketni_sistemi.png)  
   - **cakalni cas:** $$T_{cakalni} = T_{zacetni} - T_{prihodni}$$
   - **odzivni cas:** $$T_{odzivni} = T_{v/i} - T_{prihodni}$$
   - **cas obdelave:** $$T_{obdelave} = T_{koncni} - T_{prihodni}$$
 - **Interaktivni sistemi**  
-  [](images/interaktivni_sistemi.png)
+  [](img_predavanja/interaktivni_sistemi.png)
   - **cakalni cas:** celoten cas v stanju pripravljen
   - **odzivni cas:** $$T_{odzivni} = T_{zacetni} - T_{prihodni}$$ (predpostavimo $$T_{zacetni} = T_{v/i}$$)
   - **cas obdelave:** $$T_{obdelave} = T_{koncni} - T_{prihodni}$$
@@ -795,7 +795,7 @@ toc: true
     - posebne strojne ukaze za manipuliranje baznega in mejnega registra uporablja le OS 
 - **Segmentacija in ostrjevanje**
   - pomnilnik razdeljen na bloke velikosti $$2^P$$  
-    ![](images/preslikovanje.png)  
+    ![](img_predavanja/preslikovanje.png)  
   - iz **M**b navideznega v **N**b fizicni    
 
     |Segmentacija|Ostrjevanje|
@@ -812,9 +812,9 @@ toc: true
 - **stran** je blok v navideznem naslovnem prostoru
 - **okvir strani** je blok v fizicnem naslovnem prostoru (hrani poljubno stran, enake velikosti kot stran)
 - **Preslikovanje:** **navidezni naslov** (`naslov strani + odmik`) → **fizicni naslov** (`naslov okvirja + odmik`)  
-  ![](images/ostrjevanje.png)
+  ![](img_predavanja/ostrjevanje.png)
 - **Preslikovanje s tabelo strani**  
-  ![](images/preslikovanje_s_tabelo_strani.png)
+  ![](img_predavanja/preslikovanje_s_tabelo_strani.png)
 - **velikost tabele strani** je $$2^{M - P}$$ deskriptorjev v tabeli
 - **resitvi:** vecnivojska tabela strani in invertirana tabela strani
 - **Ucinkovitost preslikovanja**
@@ -841,8 +841,8 @@ toc: true
 - **Odlagalni prostor (swap space)** je del zunanjega pomnilnikga
   - **swap out** - shranjevanje strani iz pomnilnika na disk
   - **swap in** - nalaganje strani iz diska v pomnilnik  
-    ![](images/swap_space.png)  
-  ![](images/zunanji_pomnilnik.png)  
+    ![](img_predavanja/swap_space.png)  
+  ![](img_predavanja/zunanji_pomnilnik.png)  
 - **Postopek naslavljanja podatka**
   1. **zadetek v TLB:** ce **VPN** obstaja potem naslovi ustrezen del fizicnega pomnilnika
   2. **zgresitev v TBL, iskanje v tabeli strani:** ce **VPN** obstaja v preslikovalni tabeli strani in ce je veljaven in stran obstaja ga naslovi na ustrezen del fizicnega pomnilnika
@@ -1050,14 +1050,14 @@ toc: true
 ### Socasno izvajanje ukazov
 - izvedba posameznih ukazov razlicnih procesov se **poljubno prepleta** (`vec procesov, en procesor`)
 - izvedba posameznih ukazov razlicnih procesov se **poljubno prekriva** (`vec procesov, vec procesorjev`)  
-  ![](images/prepletanje_izvajanja.png)
+  ![](img_predavanja/prepletanje_izvajanja.png)
 
 
 ### Souporaba vira
 - **shared data** - vir, ki ga lahko uporabljata dva ali vec procesov
 - **souporaba skupnega vira** - socasna uporaba vira s strani vec procesov
 - **TEZAVA**  
-  ![](images/souporaba_vira.png)
+  ![](img_predavanja/souporaba_vira.png)
 
 ### Tvegano stanja
 - **tvegano stanje (race condition)** je rezultat souporabe skupnega vira, odvisen od prepletanja/prekrivanja ukazov
@@ -1541,7 +1541,7 @@ toc: true
   - abstrakcija datotek
   - standardna hierarhija imenikov
 - **Struktura VFS**   
-  ![](images/struktura_vfs.png)
+  ![](img_predavanja/struktura_vfs.png)
 - **Objektna orientiranost** → npr `struct` v C
 - **VFS objekti** →  organizacija datotek v superblock, inode, dentry →  datotecni deskriptor je file
 - **Supeblock** je predstavitev prikljupljenega datotecnega sistema
@@ -1610,10 +1610,10 @@ toc: true
 - **Virtualizacija tipa 1**
   - nadzornik navideznih naprav (**VM monitor**) → **hipervizor** → tece neposredno na strojni opremi
   - servisni navidezni stroj → omogoca config in upravljanje sistema → priviligirane operacije → poganja gonilnike  
-  ![](images/virtualizacija_tipa_1.png)
+  ![](img_predavanja/virtualizacija_tipa_1.png)
 - **Virtualizacija tipa 2**
   - temelji na gostiteljskem OS   
-  ![](images/virtualizacija_tipa_2.png)
+  ![](img_predavanja/virtualizacija_tipa_2.png)
 - **Polna virtualizacija**
   - preslikava vseh pomembnih funkcij dejanskega stroja v funkcije navideznih strojev
   - OS se ne zaveda virtualizacije
@@ -1714,7 +1714,7 @@ toc: true
   - `int wait(&status)` → cakanje poljubnega otroka → enako kot `int waitpid(-1, &status, 0)`
   - izhodni status je skrit v spremenljivki status
 - **Casovni diagram procesov**  
-  ![](images/casovni_diagram_procesov.png)  
+  ![](img_predavanja/casovni_diagram_procesov.png)  
   - **fork** → ustvari otroka → otrok dobi vse podatke od starsa
   - **exit** → oddaja statusa starsu
   - **wait** → prejem statusa
@@ -1785,7 +1785,7 @@ toc: true
 - **Dedovanje cevi**
   - otroci dedujejo odprte datoteke → tudi cevi
   - kombinacija klicov `pipe() & fork()`  
-    ![](images/dedovanje_cevi.png)
+    ![](img_predavanja/dedovanje_cevi.png)
   - komunikacija je omejena samo na procese s **skupnim prednikom**
   - **starsi in potomci**
   - tipicno **starsi in otroci** in **otroci med seboj**
@@ -1821,7 +1821,7 @@ toc: true
     - `exec()` - zazene ukaze
     - `waitpid()` - pocaka da se vsi otroci koncajo
     - **Primer:** `cat /etc/passwd | cut –d: -f7 | sort -u`  
-      ![](images/primer_cevovoda.png)
+      ![](img_predavanja/primer_cevovoda.png)
 
 ### Imenovane cevi
 - **imenovane cevi (named pipe, fifo)** so podobne anonimnim cevem
@@ -1839,7 +1839,7 @@ toc: true
 ### Sporocilne vrste
 - **Sporocilna vrsta (message queue)** je hramba sporocil v vrsti
   - posredna in asinhrona   
-  ![](images/sporocilna_vrsta.png)
+  ![](img_predavanja/sporocilna_vrsta.png)
 
 ### Sporocilne vrste - System V
 - `int msgget(key, ...)` odpre/ustvari sporocilno vrsto z oznako **key** in vrne deskriptor vrste **qid**
@@ -1881,7 +1881,7 @@ toc: true
 - dvosmerna komunikacija
 - **odjemalec / streznik**
 - **Potek**  
-  ![](images/vticnice.png)
+  ![](img_predavanja/vticnice.png)
 - **Vrste**
   - **AF_LOCAL** - lokalna vticnica (preko datotek)
   - **AF_INET** - IPV4

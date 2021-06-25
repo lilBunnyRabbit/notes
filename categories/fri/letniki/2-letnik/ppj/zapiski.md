@@ -1,6 +1,7 @@
 ---
 layout: note
-title: Principi Programskih Jezikov - Zapiski
+title: Zapiski
+toc: true
 ---
 
 # Vaje

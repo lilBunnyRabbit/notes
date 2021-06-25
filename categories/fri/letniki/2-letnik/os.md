@@ -3,7 +3,7 @@ layout: navigation
 title: Operacijski Sistemi
 files:
   - name: Predavanja
-    path: /predavanja/predavanja
+    path: /predavanja
   - name: Vaje
-    path: /vaje/vaje
+    path: /vaje
 ---

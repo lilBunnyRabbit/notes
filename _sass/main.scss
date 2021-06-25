@@ -20,3 +20,80 @@ body {
     display: none !important;
   }
 }
+
+#top-button {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  outline: none;
+  background-color: transparent;
+  border: 2px solid rgba(0,0,0,0.5);
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+  padding: 4px 8px;
+  display: none;
+}
+
+#top-button:hover {
+  filter: invert(60%);
+}
+
+
+// Workin on site design
+$bg-color: #2c2f33;
+$text-color: #dcddde;
+$border-color: #dcddde;
+$link-color: #00aff4;
+
+// body {
+//   background-color: $bg-color !important;
+//   color: $text-color !important;
+// }
+
+// .markdown-body {
+// }
+
+// .markdown-body table th, .markdown-body table td {
+//   background-color: $bg-color !important;
+// }
+
+// .markdown-body h1, .markdown-body h2 {
+//   border: 1px solid $border-color !important;
+// }
+
+.container-lg {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+// .markdown-body code, .markdown-body tt {
+//   background-color: rgba(255, 255, 255, 0.1) !important;
+// }
+
+a {
+  color: $link-color !important;
+}
+
+.markdown-body ul, .markdown-body ol {
+  padding-left: 20px !important;
+}
+
+// .markdown-body table th, .markdown-body table td {
+//   border: 1px solid #dcddde !important;
+//   background-color: #23272A !important;
+// }
+
+// .markdown-body .highlight pre, .markdown-body pre {
+//   background-color: rgba(255, 255, 255, 0.08) !important;
+//   color: white !important;
+// }
+
+// .highlight {
+//   background-color: transparent !important;
+// }
+
+// .markdown-body img {
+//   border: 2px solid white;
+// }

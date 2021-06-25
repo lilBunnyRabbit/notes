@@ -1,6 +1,7 @@
 ---
 layout: note
-title: Principi Programskih Jezikov - Ocaml
+title: Ocaml
+toc: true
 ---
 
 # Cheat Sheet

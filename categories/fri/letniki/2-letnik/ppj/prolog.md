@@ -1,6 +1,7 @@
 ---
 layout: note
-title: Principi Programskih Jezikov - Prolog
+title: Prolog
+toc: true
 ---
 
 - [Cheat Sheet](#cheat-sheet)
