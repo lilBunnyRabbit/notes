@@ -22,12 +22,15 @@
     </script>
   </head>
   <body>
-    <div class="px-5 py-5 markdown-body">
+    {% include navbar.html %}
+
+    <div class="p-5 markdown-body">
       <button id="top-button" onclick="scrollToTop()" title="Scroll to the top">Up</button>
       <h1>{{ page.title }}</h1>
 
       {{ content }}
     </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
     <script>anchors.add();</script>
     <script>
