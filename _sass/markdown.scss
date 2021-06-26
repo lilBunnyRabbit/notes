@@ -1,0 +1,54 @@
+// Markdown elements
+
+// Colors
+c-r, .c-r { // Color Red
+  color: #ED4245 !important;
+}
+
+c-o, .c-o { // Color Orange
+  color: #f2ad58 !important;
+}
+
+c-y, .c-y { // Color Yellow
+  color: #FEE75C !important;
+}
+
+c-g, .c-g { // Color Green
+  color: #57F287 !important;
+}
+
+c-b, .c-b { // Color Blue
+  color: #5865F2 !important;
+}
+
+c-p, .c-p { // Color Purple
+  color: #a158f2 !important;
+}
+
+// Titles
+t-def, .t-def {
+  @extend .c-p;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  padding-bottom: 0.1em;
+  border-bottom: 1px solid #efe8e8;
+  margin-bottom: 8px;
+}
+
+t-ex, .t-ex {
+  @extend .c-o;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  padding-bottom: 0.1em;
+  border-bottom: 1px solid #efe8e8;
+  margin-bottom: 8px;
+}
+
+// Embeds
+e-yt {
+  iframe {
+    border: 2px solid black;
+  }
+}

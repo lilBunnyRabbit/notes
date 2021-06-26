@@ -1,0 +1,26 @@
+<script>
+  class Accordion extends HTMLDivElement {
+    constructor() {
+      super();
+    }
+  }
+
+  customElements.define("lil-accordion", Accordion, { extends: "div" });
+
+  class YouTubeEmbed extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: "open" });
+      const iframe = document.createElement("iframe");
+      const ytid = this.getAttribute("ytid");
+      console.log({ ytid });
+      iframe.src = `https://www.youtube.com/embed/${ytid}`;
+      console.log(
+        `https://www.youtube.com/embed/${this.getAttribute("ytid") || ""}`
+      );
+      this.shadowRoot.append(iframe);
+    }
+  }
+
+  customElements.define("e-yt", YouTubeEmbed);
+</script>

@@ -2,6 +2,8 @@ author: lilBunnyRabbit
 classes: wide
 layout: single
 markdown: kramdown 
+kramdown:
+  input: GFM
 theme: jekyll-theme-primer
 exclude: 
   # FRI 1. letnik
