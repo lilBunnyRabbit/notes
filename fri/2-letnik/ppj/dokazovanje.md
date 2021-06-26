@@ -4,7 +4,6 @@ title: Zapiski
 toc: true
 ---
 
-
 # Vaje
 ## Dokazovanje pravilnosti programov
 

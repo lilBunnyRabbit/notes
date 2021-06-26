@@ -4,19 +4,6 @@ title: Prolog
 toc: true
 ---
 
-- [Cheat Sheet](#cheat-sheet)
-- [Codeq](#codeq)
-  - [Family Relations](#family-relations)
-  - [The World Factbook](#the-world-factbook)
-  - [Lists](#lists)
-  - [Lists and arithmetic](#lists-and-arithmetic)
-  - [Sorting](#sorting)
-  - [Sets](#sets)
-  - [Trees](#trees)
-  - [License plates](#license-plates)
-  - [CLP(R)](#clpr)
-  - [CLP(FD)](#clpfd)
-
 # Cheat Sheet
 ```pl  
 a_ali_b(X) :- X = a ; X = b.
