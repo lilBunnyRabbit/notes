@@ -46,6 +46,16 @@ t-ex, .t-ex {
   margin-bottom: 8px;
 }
 
+t-conc, .t-conc {
+  @extend .c-b;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  padding-bottom: 0.1em;
+  border-bottom: 1px solid #efe8e8;
+  margin-bottom: 8px;
+}
+
 // Embeds
 e-yt {
   iframe {

@@ -4,8 +4,8 @@ title: Knjiga
 toc: true
 ---
 
-# 1. Uvod
-## 1.1. Asimptoticna notacija in osnovni pojmi
+# Uvod
+## Asimptoticna notacija in osnovni pojmi
 
 > <t-def>Definicija</t-def>
 > Naj bo dana funkcija $g : N \to N$. Potem za funkcijo $f : N \to N$ pisemo:
@@ -89,15 +89,15 @@ toc: true
 > $f(n) = \tilde{O}(g(n))$, ce $\exists k : f(n) = O(g(n) \log^k g(n))$
 > → vpliv $g(n)$ na hitrost rasti funkcije $f(n)$ je pomembnejsi od morebitnega vpliva faktorja $log^kg(n)$ ob funckiji $g(n)$
 
-# 2. Urejanje
-## 2.1. Navadno Urejanje
+# Urejanje
+## Navadno Urejanje
 - **<c-r>Problem:</c-r>** dana so stevila $a_1,\ a_2,\ ...,\ a_n,\ n \geq 1$. Pisci razporeditev $a_{i_1},\ a_{i_2},\ ...,\ a_{i_n}$,  da bo $a_{i_1} \leq a_{i_2} \leq ... \leq a_{i_n}$
 
 > <t-def>Definicja</t-def>
 > Ce je $R(i)$ casovna zahtevnost razsirjanja $U = t[1..i]$, je casovna zahtevnost urejanja cele tabele $t[1..n]$ enaka $T(n) = \sum_{i = 1}^{n - 1} R(i)$ 
 > ![](img-knjiga/navadno_urejanje.png)
 
-### 2.1.1. Algoritmi
+### Algoritmi
 > Razsiritev z **vstavljanjem**
 > - prvi elemet v $N,\ t[i + 1]$, se premesti (vrine) na ustrezno mesto v $U = t[1..i]$
 > - v najslabsem primeru je treba prestaviti $i$ elementov v $U$, zato je $R(i) = O(i)$
@@ -148,7 +148,28 @@ toc: true
 >
 > $T(n) = O(n^2)$
 
-- **<c-r>Sklep:</c-r>** navadni algoritmi urejanja stevil $a_1,\ ...,\ a_n$ imajo casovno zahtevnost $\Theta(n^2)$
+> <t-conc>Sklep</t-conc>
+> Navadni algoritmi urejanja stevil $a_1,\ ...,\ a_n$ imajo casovno zahtevnost $\Theta(n^2)$
 
-## 2.2. Spodnja meja casovne zahtevnosti urejanja
+## Spodnja meja casovne zahtevnosti urejanja
 - ker mora vsak algoritem vsako od stevil vsaj prebrati, bo za njihovo ureditev porabil vsaj $\Theta(n)$ casa → vsak algoritem za urejanje $n$ stevil ima casovno zahtevnost navzdol omejeno z $\Omega(n)$
+- Pri navadnih algoritmih urejanja se polega obicajnih ALO operacij pojavljata se **primerjanje dveh stevil** in **premestitev stevila**
+
+### Odlocitvena drevesa in urejanje
+- Algoritem, ki za razvrscanje uporablja le relacijo $\leq$ se ravna po **odlocitvenem drevesu**  
+  ![](img-knjiga/primer_odlocitveno_drevo.png)
+- stevilom $a_1,\ ...,\ a_n$ priredimo dvojisko drevo $T_n$ z lastnostmi:
+  - vsako notranje vozlisce vsebojue neko primerjanje $a_i < a_j$
+  - v listih so vse permutacije stevil
+  - permutacija je v listu ntk. izpoljuje izide vseh primerjanj na veji do tega lista
+- vsako drevo morea imeti **$n!$** listov, saj je toliko vseh permutacij $n$ stevil.
+
+> <t-def>Definicija</t-def>
+> Ce je visina $h(T)$ drevesa $T$ definirana kot stevilo notranjih vozlisc na najdaljsi veji drevesa $T$, potem je za vsako dvojisko drevo $T$ z $l$ listi $h(T) \geq \lceil \log_2 l \rceil$
+
+- v nasem primeru sta $T = T_n$ in $l = n!$ → visina vsakega drevesa $T_n$ je vsaj $\lceil \log_2 n! \rceil$ → algoritem mora izvesti vsaj $\lceil \log_2 n! \rceil$ primerjanj
+
+> <t-conc>Sklep</t-conc>
+> Vsak algoritem urejanja, ki uporablja operacijo primerjanja dveh stevil, zahteva za ureditev vsaj enega zaporedja $n$ stevil $\Omega(n \log n)$ operacij primerjanja 
+
+## Heapsort - Urejanje s kopico
