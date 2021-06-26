@@ -1,0 +1,1600 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+          "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Prikaz rezultatov testiranja</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <style>
+            .tableBase { border-collapse: collapse; }
+            .tableBase > tbody > tr > td { border: 1px solid black; padding: 7px;}
+            .tableResults { table-layout: fixed; border-spacing: 0px; border-collapse: separate; }
+            table#nasredini { margin-left:auto; margin-right:auto; }
+            table tbody td.hoverOk {background-color:#9F9; border: 1px solid #63B563; width: 15px; color: black; text-align: center; }
+            .hoverOk:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #63B563; }
+            .hoverOk:hover td { background: transparent; }
+            .hoverOk > a:link, .hoverOk > a:visited, .hoverOk > a:hover, .hoverOk > a:active { color: black; font-size: 0.9em; }
+            table tbody td.hoverErr {background-color:#FFBF00; border: 1px solid #CB9800; width: 15px; color: black; text-align: center; }
+            .hoverErr:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #CB9800; }
+            .hoverErr:hover td { background: transparent; }
+            .hoverErr > a:link, .hoverErr > a:visited, .hoverErr > a:hover, .hoverErr > a:active { color: black; font-size: 0.9em; }
+            table tbody td.hoverRuntime {background-color:#FF9; border: 1px solid #D8D87E; width: 15px; color: black; text-align: center; }
+            .hoverRuntime:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #D8D87E; }
+            .hoverRuntime:hover td { background: transparent; }
+            .hoverRuntime > a:link, .hoverRuntime > a:visited, .hoverRuntime > a:hover, .hoverRuntime > a:active { color: black; font-size: 0.9em; }
+            table tbody td.hoverCompile {background-color:#C00000; border: 1px solid #710B0B; width: 15px; color: black; text-align: center; }
+            .hoverCompile:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #710B0B; }
+            .hoverCompile:hover td { background: transparent; }
+            .hoverCompile > a:link, .hoverCompile > a:visited, .hoverCompile > a:hover, .hoverCompile > a:active { color: black; font-size: 0.9em; }
+            table tbody td.hoverMissing {background-color:#F0F0F0; border: 1px solid #ABABAB; width: 15px; color: black; text-align: center; }
+            .hoverMissing:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #ABABAB; }
+            .hoverMissing:hover td { background: transparent; }
+            .hoverMissing > a:link, .hoverMissing > a:visited, .hoverMissing > a:hover, .hoverMissing > a:active { color: black; font-size: 0.9em; }
+            table tbody td.hoverTimeout {background-color:#B9F; border: 1px solid #9070CE; width: 15px; color: black; text-align: center; }
+            .hoverTimeout:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #9070CE; }
+            .hoverTimeout:hover td { background: transparent; }
+            .hoverTimeout > a:link, .hoverTimeout > a:visited, .hoverTimeout > a:hover, .hoverTimeout > a:active { color: black; font-size: 0.9em; }
+            table tbody td.hoverImage {background-color:#D0E0F0; border: 1px solid #a6b3c0; width: 15px; color: black; text-align: center; }
+            .hoverImage:hover { background-color: #FAFAF0; !important; color: #000; border: 1px solid #a6b3c0; }
+            .hoverImage:hover td { background: transparent; }
+            .hoverImage > a:link, .hoverImage > a:visited, .hoverImage > a:hover, .hoverImage > a:active { color: black; font-size: 0.9em; }
+            .tableCommon { border-collapse: collapse; }
+            .tableOK > tbody > tr > td { border: 1px solid #63B563; padding: 7px;}
+            .tableError > tbody > tr > td { border: 1px solid #CB9800; padding: 7px;}
+            .tableRuntime > tbody > tr > td { border: 1px solid #D8D87E; padding: 7px;}
+            .tableCompiler > tbody > tr > td { border: 1px solid #710B0B; padding: 7px;}
+            .tableMissing > tbody > tr > td { border: 1px solid #ABABAB; padding: 7px;}
+            .tableTimeout > tbody > tr > td { border: 1px solid #9070CE; padding: 7px;}
+            .tableImage > tbody > tr > td { border: 1px solid #a6b3c0; padding: 7px;}
+            .tableSummary { table-layout: fixed; }
+            .texttt { font-family: DejaVu Sans Mono, monospace; font-size: 0.8em; }
+            table.diff > tbody > tr > td { border: none; font-family: DejaVu Sans Mono, monospace}
+            .diff_add { color: green; font-family: DejaVu Sans Mono, monospace; }
+            .diff_sub { color: blue; font-family: DejaVu Sans Mono, monospace; }
+            .diff_chg { color: red; font-family: DejaVu Sans Mono, monospace; }
+            a { color: blue; text-decoration: none; height: 100%; width: 100%; vertical-align: middle; }
+            a:link { color: blue; text-decoration: none; }
+            a:link { color: blue; text-decoration: none; }
+            a:hover { color: blue; text-decoration: underline; }
+            body, td { font: normal normal 100%/1.0 DejaVu Sans, sans-serif; }
+            h1 { font-weight: bold; font-size: 150%; }
+            h2 { font-weight: normal; font-size: 125%; border-top: 1px solid black; border-bottom: 1px solid black; background: #DEF; padding: 5px; margin-top: 36px; margin-bottom: 36px}
+            .container{ margin: 0px auto; width: 70%; min-width: 700px; margin-top: 1.8cm; margin-bottom: 1.8cm; }
+            .rwordb{ color: blue; font-weight: bold; }
+            .rwordv{ color:#8000ff; font-weight: bold; }
+            .vcomment{ color: green; }
+            .bcomment{ color: green; }
+            .niz{ color:#a31515; }
+            .stevilo{ color:#ff8000; }
+            tab { padding-left: 4em; }
+            #grad1 {
+                background: -webkit-linear-gradient(left, #E0E0E0 , white);
+                background: -o-linear-gradient(right, #E0E0E0, white);
+                background: -moz-linear-gradient(right, #E0E0E0, white);
+                background: linear-gradient(to right, #E0E0E0 , white);
+            }
+            #grad2 {
+                background: -webkit-linear-gradient(left, #FFBF00 , white);
+                background: -o-linear-gradient(right, #FFBF00, white);
+                background: -moz-linear-gradient(right, #FFBF00, white);
+                background: linear-gradient(to right, #FFBF00 , white);
+            }
+            .capSlika { display:block; height: 25px; margin:0 auto; font-size: 1.0em; text-align: left; }
+            .dborder { padding: 0px; border: 1px solid #CACACA; }
+            .capText { display: block; margin:0 auto; font-size: 0.9em; text-align: left; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <a name="top"></a>
+        <h1 id="grad2" style="padding: 10px; border: 0px solid black; color: #000000;">Rezultati preverjanja <span style="color: #700000;">Ploscice.java</span> (0/10)</h1>
+        <div style="height: 20px"></div>
+        <a name="summary"></a>
+        <h2>Povzetek rezultatov</h2>
+        <table id="nasredini" class="tableBase tableResults">
+            <tbody>
+                <tr>
+                <td class="hoverRuntime"><a href="#testcase1">1</a></td>
+                <td class="hoverRuntime"><a href="#testcase2">2</a></td>
+                <td class="hoverRuntime"><a href="#testcase3">3</a></td>
+                <td class="hoverRuntime"><a href="#testcase4">4</a></td>
+                <td class="hoverRuntime"><a href="#testcase5">5</a></td>
+                <td class="hoverRuntime"><a href="#testcase6">6</a></td>
+                <td class="hoverRuntime"><a href="#testcase7">7</a></td>
+                <td class="hoverRuntime"><a href="#testcase8">8</a></td>
+                <td class="hoverRuntime"><a href="#testcase9">9</a></td>
+                <td class="hoverRuntime"><a href="#testcase10">10</a></td>
+                </tr>
+                <tr></tr>
+            </tbody>
+        </table>
+        <div style="height: 20px"></div>
+        <h2>Rezultati</h2>
+        <a name="testcase1"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 1</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            5<br/>
+3<br/>
+4&nbsp;1<br/>
+4&nbsp;1<br/>
+4&nbsp;1<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase2"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 2</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            5<br/>
+3<br/>
+4&nbsp;3<br/>
+4&nbsp;3<br/>
+4&nbsp;3<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase3"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 3</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            5<br/>
+3<br/>
+1&nbsp;2<br/>
+1&nbsp;3<br/>
+1&nbsp;4<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase4"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 4</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            10<br/>
+5<br/>
+8&nbsp;3<br/>
+8&nbsp;3<br/>
+8&nbsp;4<br/>
+8&nbsp;5<br/>
+8&nbsp;5<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase5"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 5</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            10<br/>
+6<br/>
+4&nbsp;3<br/>
+4&nbsp;2<br/>
+4&nbsp;7<br/>
+4&nbsp;1<br/>
+4&nbsp;2<br/>
+4&nbsp;3<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase6"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 6</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            10<br/>
+11<br/>
+2&nbsp;2<br/>
+2&nbsp;3<br/>
+2&nbsp;6<br/>
+3&nbsp;1<br/>
+3&nbsp;4<br/>
+3&nbsp;5<br/>
+3&nbsp;5<br/>
+4&nbsp;3<br/>
+5&nbsp;1<br/>
+5&nbsp;3<br/>
+5&nbsp;4<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase7"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 7</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            6<br/>
+7<br/>
+2&nbsp;1<br/>
+2&nbsp;2<br/>
+4&nbsp;2<br/>
+4&nbsp;2<br/>
+4&nbsp;2<br/>
+6&nbsp;5<br/>
+8&nbsp;6<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase8"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 8</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            6<br/>
+7<br/>
+3&nbsp;1<br/>
+2&nbsp;3<br/>
+3&nbsp;4<br/>
+4&nbsp;2<br/>
+3&nbsp;1<br/>
+2&nbsp;3<br/>
+2&nbsp;2<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:188)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase9"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 9</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            500<br/>
+100<br/>
+3&nbsp;37<br/>
+32&nbsp;36<br/>
+25&nbsp;37<br/>
+25&nbsp;37<br/>
+3&nbsp;10<br/>
+39&nbsp;16<br/>
+3&nbsp;13<br/>
+46&nbsp;18<br/>
+6&nbsp;35<br/>
+28&nbsp;12<br/>
+38&nbsp;36<br/>
+16&nbsp;40<br/>
+12&nbsp;40<br/>
+1&nbsp;17<br/>
+17&nbsp;32<br/>
+26&nbsp;24<br/>
+4&nbsp;11<br/>
+39&nbsp;26<br/>
+43&nbsp;27<br/>
+36&nbsp;14<br/>
+45&nbsp;48<br/>
+29&nbsp;44<br/>
+32&nbsp;34<br/>
+18&nbsp;49<br/>
+23&nbsp;15<br/>
+47&nbsp;24<br/>
+50&nbsp;49<br/>
+17&nbsp;37<br/>
+9&nbsp;27<br/>
+5&nbsp;26<br/>
+28&nbsp;15<br/>
+26&nbsp;15<br/>
+40&nbsp;25<br/>
+23&nbsp;35<br/>
+31&nbsp;7<br/>
+49&nbsp;49<br/>
+9&nbsp;12<br/>
+23&nbsp;37<br/>
+3&nbsp;47<br/>
+8&nbsp;29<br/>
+2&nbsp;9<br/>
+39&nbsp;30<br/>
+50&nbsp;3<br/>
+27&nbsp;47<br/>
+16&nbsp;32<br/>
+18&nbsp;40<br/>
+50&nbsp;10<br/>
+4&nbsp;5<br/>
+15&nbsp;18<br/>
+3&nbsp;26<br/>
+25&nbsp;5<br/>
+34&nbsp;45<br/>
+25&nbsp;13<br/>
+38&nbsp;41<br/>
+28&nbsp;30<br/>
+8&nbsp;38<br/>
+22&nbsp;19<br/>
+10&nbsp;12<br/>
+34&nbsp;38<br/>
+30&nbsp;17<br/>
+24&nbsp;23<br/>
+37&nbsp;34<br/>
+17&nbsp;48<br/>
+48&nbsp;44<br/>
+7&nbsp;15<br/>
+49&nbsp;33<br/>
+23&nbsp;10<br/>
+22&nbsp;27<br/>
+30&nbsp;5<br/>
+17&nbsp;25<br/>
+25&nbsp;39<br/>
+4&nbsp;37<br/>
+3&nbsp;28<br/>
+24&nbsp;30<br/>
+26&nbsp;30<br/>
+15&nbsp;11<br/>
+9&nbsp;32<br/>
+41&nbsp;3<br/>
+22&nbsp;3<br/>
+7&nbsp;3<br/>
+21&nbsp;34<br/>
+24&nbsp;9<br/>
+21&nbsp;39<br/>
+2&nbsp;16<br/>
+3&nbsp;41<br/>
+28&nbsp;42<br/>
+6&nbsp;50<br/>
+13&nbsp;16<br/>
+18&nbsp;13<br/>
+41&nbsp;12<br/>
+24&nbsp;3<br/>
+31&nbsp;43<br/>
+42&nbsp;44<br/>
+2&nbsp;9<br/>
+15&nbsp;2<br/>
+14&nbsp;7<br/>
+43&nbsp;7<br/>
+21&nbsp;47<br/>
+48&nbsp;19<br/>
+27&nbsp;25<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:202)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+        <a name="testcase10"></a>
+        <div style="border: 1px solid #D8D87E">
+            <table class="tableRuntime tableCommon" style="width: 100%; border: 3px solid #FF9;">
+                <tbody>
+                    <tr>
+                        <td colspan="2" style="background-color: #FF9; color: black;">Testni primer 10</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Vhod</td>
+                        <td class="texttt">
+                            1000000000<br/>
+1000<br/>
+40412057&nbsp;13509780<br/>
+21747859&nbsp;17440240<br/>
+59135853&nbsp;49681843<br/>
+76668185&nbsp;78452948<br/>
+35471792&nbsp;20829611<br/>
+98756415&nbsp;14366062<br/>
+603325&nbsp;29947906<br/>
+29772200&nbsp;35769450<br/>
+61007549&nbsp;41466354<br/>
+51996398&nbsp;25300757<br/>
+34524653&nbsp;14873072<br/>
+10755156&nbsp;73362788<br/>
+39094212&nbsp;35999217<br/>
+79269562&nbsp;48149234<br/>
+76340303&nbsp;20001134<br/>
+22578024&nbsp;11862760<br/>
+42215381&nbsp;85699635<br/>
+40904672&nbsp;55889218<br/>
+9723071&nbsp;1089783<br/>
+17386852&nbsp;78210713<br/>
+12094455&nbsp;831147<br/>
+59136839&nbsp;88725958<br/>
+2473282&nbsp;2594860<br/>
+91313753&nbsp;55185667<br/>
+13685181&nbsp;96283355<br/>
+84925800&nbsp;8932695<br/>
+96668622&nbsp;51822248<br/>
+67490607&nbsp;18738640<br/>
+15065340&nbsp;23746406<br/>
+4230844&nbsp;51711629<br/>
+88890541&nbsp;29498787<br/>
+81465152&nbsp;36912785<br/>
+31217448&nbsp;28477741<br/>
+58091096&nbsp;85224521<br/>
+89990938&nbsp;47333806<br/>
+38850998&nbsp;46299384<br/>
+63488611&nbsp;35533681<br/>
+79078830&nbsp;71515299<br/>
+18330976&nbsp;4665714<br/>
+5567514&nbsp;31639349<br/>
+44653660&nbsp;3426634<br/>
+12200393&nbsp;27830370<br/>
+46595818&nbsp;69010066<br/>
+41471208&nbsp;29941647<br/>
+9574477&nbsp;71800597<br/>
+71383598&nbsp;71968839<br/>
+88101167&nbsp;32798751<br/>
+36645209&nbsp;61859760<br/>
+92469339&nbsp;72746097<br/>
+12313664&nbsp;84056069<br/>
+32404536&nbsp;82144136<br/>
+17904489&nbsp;25086911<br/>
+33919580&nbsp;50953893<br/>
+84787381&nbsp;22640682<br/>
+51398198&nbsp;69206330<br/>
+58916819&nbsp;14170196<br/>
+51324675&nbsp;49283363<br/>
+90500583&nbsp;57963778<br/>
+4399543&nbsp;94109142<br/>
+3367541&nbsp;45190557<br/>
+41958415&nbsp;53498375<br/>
+57606442&nbsp;85453222<br/>
+6064282&nbsp;34376139<br/>
+26051387&nbsp;74836912<br/>
+64884712&nbsp;70912479<br/>
+15105531&nbsp;21626013<br/>
+73333665&nbsp;5451198<br/>
+37765823&nbsp;87607432<br/>
+92355968&nbsp;1061491<br/>
+22748143&nbsp;38509359<br/>
+52253380&nbsp;35663918<br/>
+52406678&nbsp;69206068<br/>
+96394470&nbsp;2771555<br/>
+55418706&nbsp;22367562<br/>
+6590291&nbsp;81755083<br/>
+52055402&nbsp;24608800<br/>
+86136155&nbsp;79726550<br/>
+24953792&nbsp;29363141<br/>
+91875086&nbsp;93781325<br/>
+4910000&nbsp;27242445<br/>
+24530552&nbsp;46664515<br/>
+37556096&nbsp;34410494<br/>
+94620366&nbsp;63064407<br/>
+28103158&nbsp;84959902<br/>
+15821049&nbsp;82643154<br/>
+2303649&nbsp;59308101<br/>
+64809925&nbsp;57213744<br/>
+68860695&nbsp;80594316<br/>
+62550951&nbsp;61907687<br/>
+51824864&nbsp;66803279<br/>
+53191403&nbsp;25407783<br/>
+61383848&nbsp;74882809<br/>
+81625386&nbsp;86714542<br/>
+91730622&nbsp;24589188<br/>
+71857109&nbsp;97688188<br/>
+90508485&nbsp;13897683<br/>
+89617287&nbsp;42662841<br/>
+55405010&nbsp;46891323<br/>
+96600712&nbsp;71428930<br/>
+57036803&nbsp;61583294<br/>
+14040104&nbsp;51643831<br/>
+12453546&nbsp;82411087<br/>
+67463488&nbsp;8811507<br/>
+89612335&nbsp;27849003<br/>
+16825510&nbsp;74790752<br/>
+30023041&nbsp;39364687<br/>
+59338023&nbsp;28892389<br/>
+21548982&nbsp;61089803<br/>
+7896046&nbsp;29886105<br/>
+70983031&nbsp;2561467<br/>
+75472688&nbsp;79415669<br/>
+36684276&nbsp;89187983<br/>
+10390688&nbsp;7828122<br/>
+45389069&nbsp;58751984<br/>
+60401243&nbsp;56023033<br/>
+44977750&nbsp;57146805<br/>
+89962248&nbsp;93718952<br/>
+22817396&nbsp;28073969<br/>
+94765115&nbsp;49043162<br/>
+8810699&nbsp;96481353<br/>
+76525764&nbsp;36045582<br/>
+96899579&nbsp;3081699<br/>
+65767569&nbsp;95460673<br/>
+55314660&nbsp;78378031<br/>
+55999530&nbsp;65936831<br/>
+75229983&nbsp;41443390<br/>
+56828548&nbsp;90907525<br/>
+72543573&nbsp;48718143<br/>
+15845542&nbsp;37756214<br/>
+76089071&nbsp;11372142<br/>
+3660374&nbsp;23155227<br/>
+6475643&nbsp;64884368<br/>
+1724891&nbsp;6408040<br/>
+79365409&nbsp;38777963<br/>
+5873193&nbsp;524530<br/>
+34964561&nbsp;98704424<br/>
+6578422&nbsp;88791697<br/>
+53690124&nbsp;59918950<br/>
+48194908&nbsp;23326631<br/>
+28744779&nbsp;8996500<br/>
+51226761&nbsp;9296653<br/>
+29878161&nbsp;91927721<br/>
+93857443&nbsp;79840917<br/>
+71262506&nbsp;32337719<br/>
+92561973&nbsp;33849484<br/>
+64885048&nbsp;75664512<br/>
+28126600&nbsp;45423517<br/>
+37645711&nbsp;88236456<br/>
+48815663&nbsp;94541134<br/>
+15462921&nbsp;6650789<br/>
+28222667&nbsp;10862920<br/>
+22951219&nbsp;47398316<br/>
+87794549&nbsp;23090647<br/>
+98504370&nbsp;32250649<br/>
+67218977&nbsp;52132184<br/>
+51608720&nbsp;83453822<br/>
+41014845&nbsp;59077651<br/>
+64056991&nbsp;36555269<br/>
+54473029&nbsp;95058503<br/>
+80860919&nbsp;43018464<br/>
+73967612&nbsp;75712904<br/>
+14126150&nbsp;97297754<br/>
+91218309&nbsp;27955881<br/>
+6356760&nbsp;12259466<br/>
+39289043&nbsp;60005387<br/>
+53323308&nbsp;79519179<br/>
+97308528&nbsp;62035645<br/>
+62125818&nbsp;73626197<br/>
+83869028&nbsp;21365450<br/>
+12832705&nbsp;76374427<br/>
+11790594&nbsp;64050281<br/>
+19081780&nbsp;82529351<br/>
+91623475&nbsp;56986508<br/>
+32203053&nbsp;7638212<br/>
+60283120&nbsp;33834628<br/>
+34304164&nbsp;54827839<br/>
+32237205&nbsp;27416247<br/>
+2294952&nbsp;51082231<br/>
+371419&nbsp;14962320<br/>
+65266336&nbsp;44076584<br/>
+44214911&nbsp;6556893<br/>
+19624493&nbsp;4296176<br/>
+9986115&nbsp;77826240<br/>
+86995620&nbsp;9572894<br/>
+10099786&nbsp;86066489<br/>
+62190294&nbsp;13380099<br/>
+56773078&nbsp;72346249<br/>
+90971185&nbsp;63747018<br/>
+30431926&nbsp;44497376<br/>
+38342486&nbsp;93425154<br/>
+7732231&nbsp;16816876<br/>
+28420169&nbsp;7191171<br/>
+93646978&nbsp;75954555<br/>
+21008136&nbsp;90089962<br/>
+55181638&nbsp;97020748<br/>
+96675526&nbsp;41684236<br/>
+76677766&nbsp;84579088<br/>
+58708885&nbsp;98220942<br/>
+74629378&nbsp;33191400<br/>
+36781523&nbsp;71994271<br/>
+44729429&nbsp;75459039<br/>
+1080448&nbsp;15089328<br/>
+6173015&nbsp;38555554<br/>
+1631981&nbsp;50237561<br/>
+85640328&nbsp;496583<br/>
+72459488&nbsp;50930513<br/>
+99842457&nbsp;16426805<br/>
+38066418&nbsp;51487367<br/>
+87314552&nbsp;40202239<br/>
+67375906&nbsp;85067375<br/>
+44314163&nbsp;77285852<br/>
+36274540&nbsp;43984171<br/>
+24976053&nbsp;96520257<br/>
+42643867&nbsp;68574607<br/>
+74117198&nbsp;7176348<br/>
+8337327&nbsp;43953276<br/>
+54713859&nbsp;10340807<br/>
+87914758&nbsp;13744383<br/>
+56214411&nbsp;11828776<br/>
+75135887&nbsp;43588718<br/>
+70782914&nbsp;50259841<br/>
+37575418&nbsp;46862983<br/>
+12433609&nbsp;25433366<br/>
+2693500&nbsp;87487489<br/>
+46908660&nbsp;95286836<br/>
+52994514&nbsp;2720381<br/>
+44531809&nbsp;61291452<br/>
+46756276&nbsp;64130168<br/>
+84059677&nbsp;36653314<br/>
+57568852&nbsp;37038566<br/>
+25745464&nbsp;9263888<br/>
+46155073&nbsp;78833861<br/>
+19981663&nbsp;49008178<br/>
+33530424&nbsp;48525578<br/>
+70582077&nbsp;39945196<br/>
+61985923&nbsp;36536074<br/>
+38909015&nbsp;59952516<br/>
+85275453&nbsp;51269452<br/>
+17351700&nbsp;60694132<br/>
+11637344&nbsp;3671454<br/>
+37857855&nbsp;97948398<br/>
+65913401&nbsp;7742918<br/>
+48590644&nbsp;90115211<br/>
+5590975&nbsp;47768729<br/>
+43253174&nbsp;60311928<br/>
+71065344&nbsp;93987491<br/>
+724368&nbsp;50847225<br/>
+31479768&nbsp;78702825<br/>
+3664127&nbsp;22838435<br/>
+33172834&nbsp;59806715<br/>
+46729231&nbsp;89966579<br/>
+4872874&nbsp;42360755<br/>
+55345410&nbsp;71080055<br/>
+23905411&nbsp;68730245<br/>
+86216300&nbsp;17920522<br/>
+39423712&nbsp;64335686<br/>
+65391463&nbsp;74749121<br/>
+9105574&nbsp;22781861<br/>
+85808776&nbsp;32899161<br/>
+88347550&nbsp;41237354<br/>
+54423354&nbsp;58173907<br/>
+72349994&nbsp;58606211<br/>
+54689095&nbsp;1761045<br/>
+62072307&nbsp;97962070<br/>
+6240194&nbsp;42715848<br/>
+63305205&nbsp;83906530<br/>
+36137685&nbsp;14768429<br/>
+87606994&nbsp;30670104<br/>
+74109119&nbsp;7350618<br/>
+55357703&nbsp;72275752<br/>
+21637389&nbsp;71205633<br/>
+80412098&nbsp;480462<br/>
+49493680&nbsp;98348308<br/>
+46348292&nbsp;76268652<br/>
+63246419&nbsp;15281324<br/>
+73102119&nbsp;9837867<br/>
+2196921&nbsp;56530817<br/>
+74804491&nbsp;89758559<br/>
+71481303&nbsp;2815696<br/>
+98397170&nbsp;9701360<br/>
+28700827&nbsp;26227421<br/>
+96333945&nbsp;85391145<br/>
+20471164&nbsp;84252528<br/>
+50153593&nbsp;98632977<br/>
+1295568&nbsp;16611492<br/>
+66367915&nbsp;44190308<br/>
+15080460&nbsp;19937944<br/>
+30885561&nbsp;2781101<br/>
+36515876&nbsp;5609844<br/>
+75377182&nbsp;70871986<br/>
+750334&nbsp;71634918<br/>
+43453425&nbsp;17810066<br/>
+78737084&nbsp;31640438<br/>
+24915394&nbsp;91285967<br/>
+98314746&nbsp;8714677<br/>
+61660917&nbsp;49525445<br/>
+15197916&nbsp;28206524<br/>
+99699094&nbsp;64893981<br/>
+25542345&nbsp;68218342<br/>
+22845710&nbsp;10969725<br/>
+31035422&nbsp;77585464<br/>
+11240663&nbsp;7665467<br/>
+66246192&nbsp;43956917<br/>
+81581747&nbsp;92320256<br/>
+22835616&nbsp;36374283<br/>
+48279752&nbsp;99367400<br/>
+47461600&nbsp;65414655<br/>
+48754226&nbsp;37119513<br/>
+83409862&nbsp;92293263<br/>
+28588743&nbsp;66492299<br/>
+7237745&nbsp;49299714<br/>
+99979747&nbsp;97283544<br/>
+93958319&nbsp;44907799<br/>
+31400765&nbsp;13022549<br/>
+53366993&nbsp;66972409<br/>
+35468580&nbsp;77145170<br/>
+27681225&nbsp;18586655<br/>
+41735339&nbsp;24904231<br/>
+48812547&nbsp;55462660<br/>
+83325080&nbsp;28093929<br/>
+35091323&nbsp;94326358<br/>
+5401693&nbsp;80323195<br/>
+60193991&nbsp;63168268<br/>
+3685637&nbsp;53924138<br/>
+44200505&nbsp;13900288<br/>
+55405125&nbsp;62440861<br/>
+71216540&nbsp;81517773<br/>
+89681953&nbsp;48374509<br/>
+41463616&nbsp;68359122<br/>
+88496766&nbsp;2105002<br/>
+6499476&nbsp;26427570<br/>
+9008579&nbsp;79696588<br/>
+64495666&nbsp;88032416<br/>
+26919326&nbsp;20518332<br/>
+71423124&nbsp;86750118<br/>
+70402778&nbsp;61236135<br/>
+61899510&nbsp;44075549<br/>
+27256281&nbsp;56351302<br/>
+70818096&nbsp;91806892<br/>
+22217366&nbsp;81971855<br/>
+97764339&nbsp;89425897<br/>
+95672669&nbsp;12150903<br/>
+70325357&nbsp;15903544<br/>
+7391572&nbsp;60531332<br/>
+23561186&nbsp;16449926<br/>
+68935075&nbsp;23288469<br/>
+81286244&nbsp;40086274<br/>
+24228660&nbsp;80655889<br/>
+20498192&nbsp;75625380<br/>
+65933276&nbsp;37560851<br/>
+7070846&nbsp;86392195<br/>
+23259517&nbsp;98142655<br/>
+91066825&nbsp;11885896<br/>
+67492442&nbsp;32532011<br/>
+91741672&nbsp;23264230<br/>
+87216055&nbsp;40053269<br/>
+27269591&nbsp;94027443<br/>
+50216582&nbsp;56467168<br/>
+33565036&nbsp;56735882<br/>
+39731643&nbsp;82195155<br/>
+95010191&nbsp;83324648<br/>
+73376154&nbsp;58784598<br/>
+89329739&nbsp;19045480<br/>
+14335136&nbsp;19850546<br/>
+45633909&nbsp;98539493<br/>
+27044297&nbsp;89128900<br/>
+43415602&nbsp;75244160<br/>
+67308405&nbsp;21234161<br/>
+12403198&nbsp;24429200<br/>
+60324051&nbsp;94420260<br/>
+66575442&nbsp;3777174<br/>
+20451101&nbsp;1758376<br/>
+12200062&nbsp;92768793<br/>
+99176167&nbsp;52833427<br/>
+89833365&nbsp;37828781<br/>
+11068842&nbsp;27398285<br/>
+69431209&nbsp;31499311<br/>
+93228262&nbsp;46460271<br/>
+41776167&nbsp;12428706<br/>
+38402150&nbsp;38101906<br/>
+13142996&nbsp;87989828<br/>
+73272086&nbsp;93056846<br/>
+83285000&nbsp;56604374<br/>
+75952802&nbsp;82612172<br/>
+11646659&nbsp;39603819<br/>
+82903619&nbsp;82619459<br/>
+75229421&nbsp;80915788<br/>
+75879862&nbsp;88440698<br/>
+36179450&nbsp;39166618<br/>
+57675236&nbsp;47574680<br/>
+5584204&nbsp;11659992<br/>
+56382228&nbsp;91206666<br/>
+17885000&nbsp;78896863<br/>
+54381998&nbsp;27097866<br/>
+98072413&nbsp;27770893<br/>
+58371514&nbsp;29254605<br/>
+37042267&nbsp;88192145<br/>
+81280375&nbsp;99292433<br/>
+40262944&nbsp;10915155<br/>
+17007032&nbsp;44492024<br/>
+12027093&nbsp;97809182<br/>
+71407829&nbsp;43229810<br/>
+99114947&nbsp;29142329<br/>
+14548016&nbsp;8553296<br/>
+938888&nbsp;10435581<br/>
+55885942&nbsp;71632134<br/>
+655813&nbsp;87967536<br/>
+59415353&nbsp;65631665<br/>
+19448334&nbsp;17228794<br/>
+74490160&nbsp;25349310<br/>
+67687872&nbsp;48944855<br/>
+21913609&nbsp;42915002<br/>
+42585409&nbsp;94262132<br/>
+79223775&nbsp;29548777<br/>
+58201388&nbsp;2201142<br/>
+84040628&nbsp;85707558<br/>
+84519662&nbsp;69899452<br/>
+82740739&nbsp;46755641<br/>
+95557927&nbsp;20839024<br/>
+39713596&nbsp;43938798<br/>
+69609443&nbsp;37027190<br/>
+7482476&nbsp;66012606<br/>
+63300951&nbsp;5344512<br/>
+77142550&nbsp;33491450<br/>
+79468215&nbsp;65194517<br/>
+57539769&nbsp;3238111<br/>
+73807300&nbsp;87077043<br/>
+53764486&nbsp;21228743<br/>
+64910614&nbsp;69036104<br/>
+38278006&nbsp;52833118<br/>
+3463433&nbsp;95514782<br/>
+95305444&nbsp;21140133<br/>
+45852679&nbsp;76175322<br/>
+79221275&nbsp;91983106<br/>
+76145704&nbsp;45772687<br/>
+28262720&nbsp;17817023<br/>
+80525760&nbsp;32024043<br/>
+7489906&nbsp;10747171<br/>
+25261575&nbsp;91594254<br/>
+514070&nbsp;78255809<br/>
+1230199&nbsp;15255888<br/>
+77700506&nbsp;22897977<br/>
+31815942&nbsp;63026000<br/>
+90793570&nbsp;38247560<br/>
+18052186&nbsp;52706416<br/>
+52637405&nbsp;76925391<br/>
+19299892&nbsp;2542148<br/>
+7527056&nbsp;89790696<br/>
+26923040&nbsp;18154604<br/>
+80279363&nbsp;94881729<br/>
+58308919&nbsp;82072924<br/>
+89488771&nbsp;20924740<br/>
+82264343&nbsp;2037211<br/>
+8097938&nbsp;90656174<br/>
+52623687&nbsp;15025997<br/>
+73537882&nbsp;39504802<br/>
+26978442&nbsp;1835471<br/>
+14798336&nbsp;37990163<br/>
+56230175&nbsp;19566667<br/>
+6216261&nbsp;61539546<br/>
+35193102&nbsp;69047299<br/>
+61476516&nbsp;20897970<br/>
+22287448&nbsp;979316<br/>
+14422345&nbsp;70381780<br/>
+32664812&nbsp;2207593<br/>
+66223521&nbsp;53416844<br/>
+55876324&nbsp;28893167<br/>
+64926137&nbsp;84482236<br/>
+63399915&nbsp;97937097<br/>
+94294889&nbsp;22383264<br/>
+90719312&nbsp;44346908<br/>
+80186276&nbsp;25419924<br/>
+33318843&nbsp;30861113<br/>
+28776731&nbsp;17277911<br/>
+78989153&nbsp;96769181<br/>
+41732421&nbsp;9081452<br/>
+6901037&nbsp;14314580<br/>
+63790236&nbsp;8972572<br/>
+87364338&nbsp;35423410<br/>
+13642849&nbsp;42672115<br/>
+85356098&nbsp;67203214<br/>
+95565901&nbsp;24124239<br/>
+86716494&nbsp;4274684<br/>
+43920364&nbsp;67635411<br/>
+3788496&nbsp;65614486<br/>
+81585822&nbsp;93297138<br/>
+29181693&nbsp;61045445<br/>
+95375213&nbsp;63574489<br/>
+16470347&nbsp;96262221<br/>
+51409787&nbsp;68299460<br/>
+54438117&nbsp;6339535<br/>
+72072846&nbsp;83652762<br/>
+59073046&nbsp;78590443<br/>
+40695681&nbsp;64079422<br/>
+70255135&nbsp;62303438<br/>
+21066323&nbsp;4419924<br/>
+22838607&nbsp;42409351<br/>
+1057230&nbsp;8738451<br/>
+79127443&nbsp;61836090<br/>
+53375294&nbsp;65494504<br/>
+93197354&nbsp;67734130<br/>
+71464592&nbsp;79635629<br/>
+15019001&nbsp;234468<br/>
+87210962&nbsp;38873501<br/>
+91805086&nbsp;72822168<br/>
+44188492&nbsp;50492242<br/>
+10708851&nbsp;9922021<br/>
+33981379&nbsp;71004970<br/>
+9353509&nbsp;96062316<br/>
+28042746&nbsp;52410958<br/>
+9256660&nbsp;65943058<br/>
+22680150&nbsp;41949752<br/>
+93909939&nbsp;67231464<br/>
+99056114&nbsp;18267964<br/>
+16821890&nbsp;14784405<br/>
+83966369&nbsp;42790807<br/>
+56241478&nbsp;83283051<br/>
+49070912&nbsp;49790874<br/>
+26899105&nbsp;38548277<br/>
+67093177&nbsp;78890968<br/>
+24941658&nbsp;27030233<br/>
+88920600&nbsp;27958613<br/>
+54404938&nbsp;27053460<br/>
+85256062&nbsp;24359116<br/>
+96652563&nbsp;78100534<br/>
+56526370&nbsp;63007717<br/>
+98624869&nbsp;76318383<br/>
+3541411&nbsp;92603382<br/>
+44447875&nbsp;96467545<br/>
+39551326&nbsp;23207764<br/>
+21969497&nbsp;79357367<br/>
+67818250&nbsp;41264896<br/>
+9513135&nbsp;9755495<br/>
+15630988&nbsp;56214394<br/>
+8589907&nbsp;43517163<br/>
+31618258&nbsp;50040963<br/>
+58452517&nbsp;76615403<br/>
+13949591&nbsp;48327216<br/>
+23969945&nbsp;54394951<br/>
+63588728&nbsp;13784525<br/>
+75938078&nbsp;90473202<br/>
+55288512&nbsp;27249144<br/>
+32874977&nbsp;74509501<br/>
+94396809&nbsp;80265379<br/>
+48389764&nbsp;62625490<br/>
+36427518&nbsp;83797033<br/>
+44276842&nbsp;850821<br/>
+3550747&nbsp;35566210<br/>
+19242567&nbsp;11928172<br/>
+59640019&nbsp;77060233<br/>
+46863241&nbsp;43477541<br/>
+17169042&nbsp;37648754<br/>
+77820064&nbsp;42071248<br/>
+90580036&nbsp;6416856<br/>
+285944&nbsp;82722658<br/>
+39598608&nbsp;37149323<br/>
+97912131&nbsp;34414412<br/>
+95269563&nbsp;99781524<br/>
+3668471&nbsp;48158346<br/>
+1989926&nbsp;52302296<br/>
+17984731&nbsp;2760516<br/>
+87318528&nbsp;29683066<br/>
+30437798&nbsp;82928435<br/>
+22678997&nbsp;83758903<br/>
+95188691&nbsp;73998540<br/>
+61443890&nbsp;61907844<br/>
+95007706&nbsp;21999573<br/>
+7562892&nbsp;20104994<br/>
+67924458&nbsp;29065479<br/>
+89099242&nbsp;2566583<br/>
+9487491&nbsp;49101447<br/>
+88639595&nbsp;73597700<br/>
+8645&nbsp;59212334<br/>
+38414683&nbsp;30135245<br/>
+92593265&nbsp;94198635<br/>
+77657632&nbsp;88550656<br/>
+28078266&nbsp;41323170<br/>
+92354329&nbsp;64459113<br/>
+21694545&nbsp;12251789<br/>
+94992412&nbsp;72019512<br/>
+22265817&nbsp;9707330<br/>
+96838834&nbsp;31652111<br/>
+49565876&nbsp;64772973<br/>
+46312188&nbsp;70268161<br/>
+45357421&nbsp;28716342<br/>
+24167127&nbsp;76848312<br/>
+72813688&nbsp;37166677<br/>
+74907174&nbsp;52284273<br/>
+82084334&nbsp;93669498<br/>
+92248260&nbsp;62533659<br/>
+84731324&nbsp;99665552<br/>
+80087477&nbsp;89998258<br/>
+37726588&nbsp;78616677<br/>
+97989413&nbsp;4146188<br/>
+56804969&nbsp;56896520<br/>
+75424984&nbsp;50152309<br/>
+55893088&nbsp;30931320<br/>
+89812975&nbsp;79396502<br/>
+75262837&nbsp;7137571<br/>
+62287490&nbsp;92071120<br/>
+45251100&nbsp;93205971<br/>
+96121546&nbsp;285176<br/>
+48599223&nbsp;10795486<br/>
+38438763&nbsp;12332058<br/>
+70323581&nbsp;77495164<br/>
+70639983&nbsp;49543633<br/>
+19679058&nbsp;83742112<br/>
+24164224&nbsp;30844638<br/>
+46259909&nbsp;25222346<br/>
+35295747&nbsp;54267522<br/>
+31621198&nbsp;9687431<br/>
+90240098&nbsp;83293845<br/>
+29821661&nbsp;96847887<br/>
+59822091&nbsp;51096052<br/>
+77330233&nbsp;6760513<br/>
+79039513&nbsp;15866377<br/>
+42836913&nbsp;13254719<br/>
+46101021&nbsp;56684801<br/>
+53910968&nbsp;95487939<br/>
+10196495&nbsp;29660730<br/>
+63895419&nbsp;18210033<br/>
+56815826&nbsp;73673485<br/>
+36364509&nbsp;97408229<br/>
+28944270&nbsp;60366085<br/>
+52705255&nbsp;4089412<br/>
+41895147&nbsp;86513367<br/>
+12048093&nbsp;66450550<br/>
+47098026&nbsp;75092613<br/>
+69551387&nbsp;42794775<br/>
+74975788&nbsp;58373918<br/>
+10961987&nbsp;91018037<br/>
+34637996&nbsp;82966260<br/>
+4825590&nbsp;3037685<br/>
+26967364&nbsp;71867099<br/>
+71007423&nbsp;9475498<br/>
+85005345&nbsp;32524215<br/>
+9422815&nbsp;82292954<br/>
+19871236&nbsp;57925658<br/>
+33653585&nbsp;4717662<br/>
+93163130&nbsp;37655356<br/>
+97279792&nbsp;71541810<br/>
+9888893&nbsp;97244551<br/>
+21492306&nbsp;46274257<br/>
+18525416&nbsp;11148213<br/>
+96011997&nbsp;63097521<br/>
+13052722&nbsp;4454794<br/>
+59104492&nbsp;93338612<br/>
+62671985&nbsp;44518695<br/>
+87416858&nbsp;62514435<br/>
+40609423&nbsp;54679061<br/>
+22289789&nbsp;8060618<br/>
+98732170&nbsp;54727849<br/>
+8459500&nbsp;2740930<br/>
+44522641&nbsp;33708680<br/>
+13979542&nbsp;79463582<br/>
+9287680&nbsp;28381708<br/>
+44581244&nbsp;95739398<br/>
+50939270&nbsp;37926756<br/>
+9882216&nbsp;60571940<br/>
+33196724&nbsp;84082389<br/>
+26042007&nbsp;92273996<br/>
+65794984&nbsp;70920392<br/>
+86640145&nbsp;41365140<br/>
+16125721&nbsp;87459398<br/>
+27885807&nbsp;44776734<br/>
+54889634&nbsp;85385050<br/>
+39504349&nbsp;31600425<br/>
+51429958&nbsp;16657528<br/>
+44431361&nbsp;77614721<br/>
+5213219&nbsp;11561212<br/>
+82559656&nbsp;28814590<br/>
+94611625&nbsp;76461084<br/>
+80963112&nbsp;49434454<br/>
+36309503&nbsp;78088750<br/>
+86204856&nbsp;89358769<br/>
+97122423&nbsp;64312458<br/>
+63652463&nbsp;41005997<br/>
+43380588&nbsp;58505075<br/>
+9502374&nbsp;14622666<br/>
+38620666&nbsp;38495829<br/>
+45843300&nbsp;9619755<br/>
+93125915&nbsp;62991722<br/>
+19096021&nbsp;69740960<br/>
+77821223&nbsp;50014602<br/>
+22422463&nbsp;41403692<br/>
+88053931&nbsp;34307997<br/>
+11706379&nbsp;8501122<br/>
+2198708&nbsp;20349170<br/>
+19130753&nbsp;24881307<br/>
+21734005&nbsp;73779503<br/>
+97937718&nbsp;29645868<br/>
+20432310&nbsp;94158773<br/>
+44151457&nbsp;38983029<br/>
+14581890&nbsp;4542581<br/>
+84905651&nbsp;80574357<br/>
+74834325&nbsp;34413690<br/>
+19012112&nbsp;88609649<br/>
+85858333&nbsp;79452608<br/>
+55064468&nbsp;72916961<br/>
+52575336&nbsp;68564410<br/>
+54557378&nbsp;41003575<br/>
+95357176&nbsp;42713331<br/>
+79981354&nbsp;76516507<br/>
+6369569&nbsp;62353679<br/>
+52015509&nbsp;80008312<br/>
+28931473&nbsp;34851561<br/>
+20678723&nbsp;95554157<br/>
+61011392&nbsp;72639293<br/>
+24269276&nbsp;8569808<br/>
+8483950&nbsp;31386547<br/>
+88347616&nbsp;90788401<br/>
+51335098&nbsp;12699457<br/>
+10955163&nbsp;29653367<br/>
+84626286&nbsp;1775307<br/>
+59277700&nbsp;94857641<br/>
+18514967&nbsp;41299965<br/>
+12567768&nbsp;50850955<br/>
+56145462&nbsp;65344144<br/>
+89867944&nbsp;27261296<br/>
+54914562&nbsp;72246058<br/>
+4910120&nbsp;83025340<br/>
+18837205&nbsp;86872863<br/>
+33457303&nbsp;77960970<br/>
+80627154&nbsp;36984960<br/>
+31396451&nbsp;56793679<br/>
+1538666&nbsp;7099417<br/>
+64032914&nbsp;43573354<br/>
+81512643&nbsp;18875606<br/>
+48104358&nbsp;93618569<br/>
+11351193&nbsp;49412145<br/>
+15489381&nbsp;5567201<br/>
+60359603&nbsp;16346781<br/>
+4274627&nbsp;99073533<br/>
+58507313&nbsp;65858153<br/>
+82519065&nbsp;21688843<br/>
+9734839&nbsp;7170634<br/>
+49940979&nbsp;7092006<br/>
+33747457&nbsp;70874120<br/>
+94138327&nbsp;57786945<br/>
+61683168&nbsp;40848423<br/>
+72209988&nbsp;32873792<br/>
+84703227&nbsp;47819293<br/>
+6751561&nbsp;56807804<br/>
+64014289&nbsp;92944139<br/>
+5191873&nbsp;52606066<br/>
+49572594&nbsp;38781385<br/>
+85766285&nbsp;25138907<br/>
+61824085&nbsp;40155654<br/>
+28100613&nbsp;73640400<br/>
+87592914&nbsp;76204434<br/>
+36577732&nbsp;99803210<br/>
+17136990&nbsp;16408643<br/>
+50900673&nbsp;61774866<br/>
+85534178&nbsp;88586877<br/>
+32413910&nbsp;48613214<br/>
+47420920&nbsp;96207063<br/>
+92807394&nbsp;73251732<br/>
+3006798&nbsp;24594887<br/>
+74941741&nbsp;23534314<br/>
+69842504&nbsp;87176764<br/>
+91793879&nbsp;21279769<br/>
+41955795&nbsp;8608981<br/>
+13618834&nbsp;31760831<br/>
+90095062&nbsp;27759811<br/>
+5803757&nbsp;91758112<br/>
+70411650&nbsp;24870341<br/>
+99303311&nbsp;8370504<br/>
+42534926&nbsp;77592257<br/>
+47887705&nbsp;50999563<br/>
+12720165&nbsp;54926658<br/>
+79960068&nbsp;80269144<br/>
+5676369&nbsp;19610311<br/>
+73208623&nbsp;23329305<br/>
+98663396&nbsp;49458332<br/>
+8059506&nbsp;96886976<br/>
+14270099&nbsp;78772892<br/>
+9336147&nbsp;2653731<br/>
+59373716&nbsp;28909049<br/>
+16535862&nbsp;53209622<br/>
+60744818&nbsp;67846796<br/>
+49360815&nbsp;34902030<br/>
+49936984&nbsp;88380811<br/>
+85948865&nbsp;25522689<br/>
+8887558&nbsp;64681743<br/>
+24620386&nbsp;41480186<br/>
+55988680&nbsp;32307606<br/>
+79839371&nbsp;86219617<br/>
+61980569&nbsp;19005331<br/>
+63072996&nbsp;60120394<br/>
+55074528&nbsp;93011022<br/>
+63641085&nbsp;43466257<br/>
+18062101&nbsp;11082386<br/>
+33322658&nbsp;22238259<br/>
+86445575&nbsp;87708037<br/>
+10702056&nbsp;92648256<br/>
+3577553&nbsp;54170892<br/>
+38473704&nbsp;9632486<br/>
+64804139&nbsp;56673709<br/>
+47433890&nbsp;66457316<br/>
+26891693&nbsp;88846963<br/>
+74727269&nbsp;15384967<br/>
+64816500&nbsp;66397010<br/>
+85145078&nbsp;14487335<br/>
+69021089&nbsp;3361551<br/>
+87798808&nbsp;87274124<br/>
+90299551&nbsp;65656048<br/>
+63549281&nbsp;34081767<br/>
+43592172&nbsp;84949236<br/>
+59508623&nbsp;79017197<br/>
+39633111&nbsp;76170596<br/>
+34702222&nbsp;53142230<br/>
+74783403&nbsp;61956482<br/>
+46646343&nbsp;66642888<br/>
+21774993&nbsp;31964964<br/>
+91916340&nbsp;39628766<br/>
+64206649&nbsp;69937942<br/>
+23803416&nbsp;29287820<br/>
+88234556&nbsp;79481334<br/>
+521469&nbsp;14145723<br/>
+89661878&nbsp;26187984<br/>
+83838659&nbsp;57109690<br/>
+23383421&nbsp;43302129<br/>
+61255034&nbsp;94749278<br/>
+31080197&nbsp;11800685<br/>
+36375703&nbsp;806121<br/>
+38913547&nbsp;93152024<br/>
+55026120&nbsp;57984229<br/>
+59179735&nbsp;90218863<br/>
+9786388&nbsp;44820987<br/>
+98458476&nbsp;69126397<br/>
+84442719&nbsp;43425521<br/>
+11018778&nbsp;201554<br/>
+17066978&nbsp;5423807<br/>
+54050461&nbsp;82001495<br/>
+96690637&nbsp;22356085<br/>
+76571120&nbsp;29532663<br/>
+98826104&nbsp;1079976<br/>
+29019088&nbsp;78582784<br/>
+12411411&nbsp;46741778<br/>
+58603244&nbsp;48105134<br/>
+14456711&nbsp;39968317<br/>
+72895842&nbsp;98371724<br/>
+92828294&nbsp;1085470<br/>
+3045981&nbsp;62207742<br/>
+16889802&nbsp;24287480<br/>
+5651289&nbsp;55556788<br/>
+32018380&nbsp;62272441<br/>
+8702666&nbsp;56537969<br/>
+63864124&nbsp;50712217<br/>
+27148383&nbsp;92713438<br/>
+45714261&nbsp;21140556<br/>
+59549362&nbsp;28665976<br/>
+18702391&nbsp;79078690<br/>
+16360011&nbsp;8312777<br/>
+27951871&nbsp;33501842<br/>
+84169499&nbsp;53974058<br/>
+84991524&nbsp;49560283<br/>
+3074417&nbsp;61412624<br/>
+78875723&nbsp;55312118<br/>
+97458535&nbsp;98028998<br/>
+34265478&nbsp;702737<br/>
+56381429&nbsp;75161937<br/>
+32766877&nbsp;71326780<br/>
+20843939&nbsp;48551716<br/>
+61733582&nbsp;7059603<br/>
+81528262&nbsp;96377373<br/>
+62243797&nbsp;88204559<br/>
+62801424&nbsp;55017804<br/>
+49981314&nbsp;76151882<br/>
+21164993&nbsp;59244605<br/>
+59101833&nbsp;41008874<br/>
+82163641&nbsp;6255612<br/>
+79638587&nbsp;50543549<br/>
+90653432&nbsp;97674277<br/>
+6070491&nbsp;73837252<br/>
+38141057&nbsp;4961719<br/>
+25451690&nbsp;96058291<br/>
+94560781&nbsp;61757497<br/>
+64210788&nbsp;71501439<br/>
+24201225&nbsp;17641637<br/>
+83205859&nbsp;21838133<br/>
+53410378&nbsp;76686484<br/>
+86868882&nbsp;60515925<br/>
+6037045&nbsp;99333359<br/>
+75895511&nbsp;69027768<br/>
+18942899&nbsp;79448669<br/>
+69940402&nbsp;28601182<br/>
+56966899&nbsp;87235424<br/>
+94002850&nbsp;6294869<br/>
+6209591&nbsp;72275747<br/>
+48993036&nbsp;98581517<br/>
+57187499&nbsp;699713<br/>
+61945373&nbsp;80265972<br/>
+91154820&nbsp;55253338<br/>
+64918419&nbsp;40073069<br/>
+64825819&nbsp;29523058<br/>
+86004306&nbsp;71654417<br/>
+13549001&nbsp;62014813<br/>
+72466645&nbsp;24035697<br/>
+66314413&nbsp;83566484<br/>
+1943143&nbsp;43265134<br/>
+9707371&nbsp;42504387<br/>
+75731620&nbsp;6772544<br/>
+82856864&nbsp;28299694<br/>
+9410470&nbsp;44772666<br/>
+67427816&nbsp;98063265<br/>
+50595119&nbsp;91226610<br/>
+70471648&nbsp;21680400<br/>
+64136088&nbsp;66343866<br/>
+30705164&nbsp;34001712<br/>
+77765774&nbsp;34208091<br/>
+73680664&nbsp;41454473<br/>
+31687706&nbsp;30762501<br/>
+45284052&nbsp;74101038<br/>
+70901658&nbsp;1390367<br/>
+87182743&nbsp;30474732<br/>
+68962995&nbsp;15174546<br/>
+34112293&nbsp;58625580<br/>
+62943808&nbsp;76159897<br/>
+60471580&nbsp;97194972<br/>
+5672276&nbsp;99899980<br/>
+61505860&nbsp;54095277<br/>
+93752724&nbsp;60474105<br/>
+24206799&nbsp;64394657<br/>
+42866645&nbsp;36377507<br/>
+80952322&nbsp;46460733<br/>
+64488227&nbsp;61947431<br/>
+79337665&nbsp;36207842<br/>
+25100828&nbsp;50344415<br/>
+23946620&nbsp;60294376<br/>
+60482336&nbsp;32773516<br/>
+86994044&nbsp;2126379<br/>
+33622772&nbsp;5577090<br/>
+54000600&nbsp;97461735<br/>
+82493677&nbsp;69885238<br/>
+47730360&nbsp;78952799<br/>
+74450764&nbsp;70949889<br/>
+76091958&nbsp;29391188<br/>
+82530138&nbsp;37183929<br/>
+65131431&nbsp;66907561<br/>
+9966559&nbsp;15292457<br/>
+98748213&nbsp;13811682<br/>
+85649612&nbsp;20242471<br/>
+33237709&nbsp;14723948<br/>
+52242452&nbsp;2654163<br/>
+38554882&nbsp;20376072<br/>
+35955039&nbsp;92091573<br/>
+92399920&nbsp;51678451<br/>
+40392663&nbsp;83604918<br/>
+62055691&nbsp;53293116<br/>
+43553393&nbsp;25247558<br/>
+80169254&nbsp;56091176<br/>
+67161355&nbsp;87330181<br/>
+44494852&nbsp;53460644<br/>
+78655746&nbsp;39921130<br/>
+2799545&nbsp;80904141<br/>
+90057373&nbsp;27339375<br/>
+36009159&nbsp;2193213<br/>
+75405452&nbsp;49704164<br/>
+80088353&nbsp;12224184<br/>
+56438105&nbsp;68734497<br/>
+87151100&nbsp;6960409<br/>
+23785078&nbsp;88601373<br/>
+68383357&nbsp;75181910<br/>
+11339089&nbsp;84939444<br/>
+53940238&nbsp;74302105<br/>
+63347966&nbsp;28522634<br/>
+20598194&nbsp;3858539<br/>
+35678350&nbsp;21128136<br/>
+16589372&nbsp;51046149<br/>
+5650937&nbsp;45973051<br/>
+5457236&nbsp;97477025<br/>
+77942696&nbsp;8989200<br/>
+54166765&nbsp;73760810<br/>
+87154177&nbsp;47718146<br/>
+4912469&nbsp;14575938<br/>
+73071141&nbsp;24557869<br/>
+60349902&nbsp;46225221<br/>
+34556863&nbsp;79985587<br/>
+49834036&nbsp;91425980<br/>
+50343434&nbsp;90525269<br/>
+59487015&nbsp;51545969<br/>
+25240196&nbsp;40794602<br/>
+62777516&nbsp;61214319<br/>
+72811096&nbsp;3947985<br/>
+31870504&nbsp;98118866<br/>
+96074985&nbsp;2589103<br/>
+26957513&nbsp;6455894<br/>
+79573110&nbsp;61915006<br/>
+62096232&nbsp;94550351<br/>
+78741788&nbsp;93347809<br/>
+58080811&nbsp;1897804<br/>
+59574642&nbsp;9228942<br/>
+77218513&nbsp;40157433<br/>
+91658267&nbsp;87567149<br/>
+17858041&nbsp;57858463<br/>
+24924279&nbsp;72544828<br/>
+5997748&nbsp;52091644<br/>
+31378818&nbsp;71603808<br/>
+93767786&nbsp;1748674<br/>
+&nbsp;<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Izhod programa</td>
+                        <td class="texttt">
+                            Exception&nbsp;in&nbsp;thread&nbsp;"main"&nbsp;java.lang.ClassCastException:&nbsp;[I&nbsp;cannot&nbsp;be&nbsp;cast&nbsp;to&nbsp;java.lang.Comparable<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.ComparableTimSort.sort(ComparableTimSort.java:202)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;java.util.Arrays.sort(Arrays.java:1246)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;Ploscice.main(Ploscice.java:25)<br/><br/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="height: 15px"></div>
+<div style="font-size: 0.8em;">[ <a href="#top">&uparrow;</a> | <a href="#bottom">&downarrow;</a> | 
+<a href="#summary">Povzetek</a> | 
+<a href="#testcase1">Rezultati</a> ]</div><div style="height: 30px"></div>
+
+        <div style="height: 30px"></div>
+
+        <table id="grad1" class="tableLegend tableSummary"
+          <tbody>
+            <tr>
+              <td style="color: black;">
+              <table class="tableLegend">
+                <tr>
+	              <td style="background-color: #9F9; color: black; width: 10px; text-align: center; border: 1px solid black; padding: 2px;"></td>
+	              <td style="font-size: 0.7em; padding: 3px;">ok</td>
+                </tr>
+              </table>
+              </td>
+              <td style="color: black;">
+              <table class="tableLegend">
+                <tr>
+	              <td style="background-color: #FFBF00; color: black; width: 10px; text-align: center; border: 1px solid black; padding: 2px;"></td>
+	              <td style="font-size: 0.7em; padding: 3px;">napaka</td>
+                </tr>
+              </table>
+              </td>
+              <td style="color: black;">
+              <table class="tableLegend">
+                <tr>
+	              <td style="background-color: #FF9; color: black; width: 10px; text-align: center; border: 1px solid black; padding: 2px;"></td>
+	              <td style="font-size: 0.7em; padding: 3px;">napaka med izvajanjem</td>
+                </tr>
+              </table>
+              </td>
+              <td style="color: black;">
+              <table class="tableLegend">
+                <tr>
+	              <td style="background-color: #C00000; color: black; width: 10px; text-align: center; border: 1px solid black; padding: 2px;"></td>
+	              <td style="font-size: 0.7em; padding: 3px;">se ne prevede</td>
+                </tr>
+              </table>
+              </td>
+              <td style="color: black;">
+              <table class="tableLegend">
+                <tr>
+	              <td style="background-color: #B9F; color: black; width: 10px; text-align: center; border: 1px solid black; padding: 2px;"></td>
+	              <td style="font-size: 0.7em; padding: 3px;">timeout (1000 ms)</td>
+                </tr>
+              </table>
+              </td>
+              <td style="color: black;">
+              <table class="tableLegend">
+                <tr>
+	              <td style="background-color: #D0E0F0; color: black; width: 10px; text-align: center; border: 1px solid black; padding: 2px;"></td>
+	              <td style="font-size: 0.7em; padding: 3px;">rezultat izrisa</td>
+                </tr>
+              </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a name="bottom"></a>
+        </div>
+    </body>
+    <!-- java class tester version "1.39.7" -->
+    <!-- 31.1.2019 14:39.56 -->
+    <!-- DESKTOP-ST9GCDH, fe80::618d:a450:fe53:ecd8%13 -->
+</html>

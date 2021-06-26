@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  opb-exist:
+    image: szitnik/opb-exist
+    ports:
+      - 8881:8080
+
+# http://localhost:8881/

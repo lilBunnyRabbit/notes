@@ -10,6 +10,10 @@ files:
     path: /irz
   - name: Operacijski Sistemi
     path: /os
+  - name: Osnove Podatkovnih Baz
+    path: /opb
+  - name: Osnove Racunalniskih Sistemov
+    path: /ors
   - name: Principi Programskih Jezikov
     path: /ppj
   - name: Verjetnost in Statistika

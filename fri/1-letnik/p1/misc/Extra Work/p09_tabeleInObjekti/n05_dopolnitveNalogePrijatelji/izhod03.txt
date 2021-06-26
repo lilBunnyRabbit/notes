@@ -1,0 +1,6 @@
+Število prijateljev prijateljev:
+A (20), Ulica, 0 Mesto --> 1
+B (20), Ulica, 0 Mesto --> 1
+C (20), Ulica, 0 Mesto --> 2
+D (20), Ulica, 0 Mesto --> 1
+E (20), Ulica, 0 Mesto --> 1
