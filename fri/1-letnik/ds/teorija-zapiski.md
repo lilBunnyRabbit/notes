@@ -19,53 +19,68 @@ toc: true
 - **Izjavni vezniki** $$\Rightarrow$$ nacin, kako enostavne izjave zlepimo v bolj zapletene. Logicna vrednost izjave je s tem odvisna od izjav in logicnih veznikov. Tipi:
   - **Negacijo** oznacimo z $$\neg A$$:
     $$A$$ | $$\neg A$$
+
     :-:|:-:
     0 | 1
     1 | 0
+
   - **Konjunkcijo** oznacimo z $$A \land B$$:  
     $$A$$ | $$B$$ | $$A \land B$$
+
     :-: | :-: | :-:
     0 | 0 | 0
     0 | 1 | 0
     1 | 0 | 0
     1 | 1 | 1
+
   - **Disjunkcijo** oznacimo z $$A \lor B$$:  
     $$A$$ | $$B$$ | $$A \lor B$$
+
     :-: | :-: | :-:
     0 | 0 | 0
     0 | 1 | 1
     1 | 0 | 1
     1 | 1 | 1
+
   - **Implikacijo** oznacimo z $$A \Rightarrow B$$ - $$A$$ imenujemo **antecedens** in $$B$$ imenujemo **konsekvens**. "Iz A sledi B":  
     $$A$$ | $$B$$ | $$A \Rightarrow B$$
+
     :-: | :-: | :-:
     0 | 0 | 1
     0 | 1 | 1
     1 | 0 | 0
     1 | 1 | 1
+
   - **Ekvivalenco** oznacimo z $$A \Leftrightarrow B$$. "A natanko tedaj, ko B":
     $$A$$ | $$B$$ | $$A \Leftrightarrow B$$
+
     :-: | :-: | :-:
     0 | 0 | 1
     0 | 1 | 0
     1 | 0 | 0
     1 | 1 | 1
+
   - **Ekskluzivno disjunkcijo** oznacimo z $$A \veebar B$$ - "A ekskluzivni ali B":
     $$A$$ | $$B$$ | $$A \veebar B$$
+
     :-: | :-: | :-:
     0 | 0 | 0
     0 | 1 | 1
     1 | 0 | 1
     1 | 1 | 0
+
   - **Shefferjev veznik** oznacimo z $$A \uparrow B$$ (**NAND**):
     $$A$$ | $$B$$ | $$A \uparrow B$$
+
     :-: | :-: | :-:
     0 | 0 | 1
     0 | 1 | 1
     1 | 0 | 1
     1 | 1 | 0
+
   - **Peirce- Lukasiewiczevega veznik** oznacimo z $$A \downarrow B$$ (**NOR**):
     $$A$$ | $$B$$ | $$A \downarrow B$$
+    
     :-: | :-: | :-:
     0 | 0 | 1
     0 | 1 | 0
