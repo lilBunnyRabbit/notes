@@ -3,7 +3,7 @@ layout: navigation
 title: 1. Letnik
 files:
   - name: Diskretne Strukture
-    path: ds
+    path: /ds
   - name: Fizika
     path: /fizika
   - name: Osnove Digitalnih Vezji
