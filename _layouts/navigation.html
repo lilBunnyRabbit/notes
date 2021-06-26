@@ -1,24 +1,41 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    {% seo %}
-    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    {% include default_head.html %}
   </head>
   <body>
     {% include navbar.html %}
     <div class="p-5 markdown-body">
-      <div class="navigation-files">
-        {% for file in page.files %}
-          <div class="navigation-file">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            <a href="{{ site.baseurl }}{{ page.url | remove:'.html' }}{{ file.path }}">{{ file.name }}</a>
-          </div>
-        {% endfor %}
-      </div>
+      {% if page.files %}
+        <div class="navigation-files">
+          {% for file in page.files %}
+            <div class="navigation-file">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <a href="{{ site.baseurl }}{{ page.url | remove:'.html' }}{{ file.path }}">{{ file.name }}</a>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if page.navigation %}
+        <div class="nav-tree">
+          {%- include navigation_tree.html children=page.navigation.children  path=page.navigation.path root=true -%}
+        </div>
+
+        <script>
+          var toggler = document.getElementsByClassName("caret");
+          var i;
+
+          for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function() {
+              this.parentElement.querySelector(".nested").classList.toggle("active");
+              this.classList.toggle("caret-down");
+            });
+          }
+        </script>
+      {% endif%}
+
+      {{ content }}
     </div>
   </body>
 </html>

@@ -1,0 +1,16 @@
+<ul class="{% if include.root %} active {% else %} nested {% endif %}">
+  {%- for item in include.children -%}
+    <li>
+      {% if item.page %}
+        <a href="{{ site.baseurl }}{{ include.path }}{{ item.page }}">{{ item.title }}</a>
+      {% else %}
+        <span class="caret">{{ item.title }} ({{ item.children.size || 0 }})</span>
+      {% endif %}
+
+      {% if item.path && item.children %}
+        {% assign newPath = include.path | append: item.path %}
+        {% include navigation_tree.html children=item.children path=newPath %}
+      {% endif %}
+    </li>
+  {%- endfor -%}
+</ul>
