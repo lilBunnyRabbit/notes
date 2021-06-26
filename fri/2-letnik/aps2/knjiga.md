@@ -4,8 +4,8 @@ title: Knjiga
 toc: true
 ---
 
-# Uvod
-## 1. Asimptoticna notacija in osnovni pojmi
+# 1. Uvod
+## 1.1. Asimptoticna notacija in osnovni pojmi
 
 > <t-def>Definicija</t-def>
 > Naj bo dana funkcija $g : N \to N$. Potem za funkcijo $f : N \to N$ pisemo:
@@ -88,3 +88,67 @@ toc: true
 > <t-def>Definicija</t-def> 
 > $f(n) = \tilde{O}(g(n))$, ce $\exists k : f(n) = O(g(n) \log^k g(n))$
 > → vpliv $g(n)$ na hitrost rasti funkcije $f(n)$ je pomembnejsi od morebitnega vpliva faktorja $log^kg(n)$ ob funckiji $g(n)$
+
+# 2. Urejanje
+## 2.1. Navadno Urejanje
+- **<c-r>Problem:</c-r>** dana so stevila $a_1,\ a_2,\ ...,\ a_n,\ n \geq 1$. Pisci razporeditev $a_{i_1},\ a_{i_2},\ ...,\ a_{i_n}$,  da bo $a_{i_1} \leq a_{i_2} \leq ... \leq a_{i_n}$
+
+> <t-def>Definicja</t-def>
+> Ce je $R(i)$ casovna zahtevnost razsirjanja $U = t[1..i]$, je casovna zahtevnost urejanja cele tabele $t[1..n]$ enaka $T(n) = \sum_{i = 1}^{n - 1} R(i)$ 
+> ![](img-knjiga/navadno_urejanje.png)
+
+### 2.1.1. Algoritmi
+> Razsiritev z **vstavljanjem**
+> - prvi elemet v $N,\ t[i + 1]$, se premesti (vrine) na ustrezno mesto v $U = t[1..i]$
+> - v najslabsem primeru je treba prestaviti $i$ elementov v $U$, zato je $R(i) = O(i)$
+
+> Razsiritev z **izbiranjem**
+> - prvi element v $N, t[i+1]$, se zamenja z najmanjsim elementom v $N$
+> - da najdemo najmanjsega v $N$ je treba pogledati cel $N$, zato je $R(i) = \Theta(n - 1)$
+
+> Razsiritev z **menjavanjem**
+> - med sprehodom po $N$ od $t[n]$ do $t[i+1]$ se vsak $t[j] (i+1 \leq j \leq n)$ zamenja s $t[j-1]$, ce je $t[j-1] > t[j]$
+> - med sprehodom po $N$ se opravi $n-1$ primerjanj, zato je $R(i) = \Theta(n-i)$
+
+- Ti trije nacini sirjenja vodijo do naslednjih treh algoritmov urejanja
+
+> **Navadno vstavlanje (InsertionSort)**
+> ```
+> procedure NavadnoVstavljanje(t)
+> begin
+>   for i := 1 to n-1 do
+>     Vstavi&Razsiri(t[1..i])
+>   endfor
+> end
+> ```
+> 
+> $T(n) = O(n^2)$
+
+> **Navadno izbiranje (SelectionSort)**
+> ```
+> procedure NavadnoVstavljanje(t)
+> begin
+>   for i := 1 to n-1 do
+>     Izberi&Razsiri(t[1..i])
+>   endfor
+> end
+> ```
+>
+> $T(n) = O(n^2)$
+
+> **Navadno menjavanje (BubbleSort)**
+> ```
+> procedure NavadnoVstavljanje(t)
+> begin
+>   for i := 1 to n-1 do
+>     Menjaj&Razsiri(t[1..i])
+>   endfor
+> end
+> ```
+>
+> $T(n) = O(n^2)$
+
+- **<c-r>Sklep:</c-r>** navadni algoritmi urejanja stevil $a_1,\ ...,\ a_n$ imajo casovno zahtevnost $\Theta(n^2)$
+
+## 2.2. Spodnja meja casovne zahtevnosti urejanja
+- ker mora vsak algoritem vsako od stevil vsaj prebrati, bo za njihovo ureditev porabil vsaj $\Theta(n)$ casa → vsak algoritem za urejanje $n$ stevil ima casovno zahtevnost navzdol omejeno z $\Omega(n)$
