@@ -3,3 +3,14 @@ classes: wide
 layout: single
 markdown: kramdown 
 theme: jekyll-theme-primer
+exclude: 
+  # FRI 1. letnik
+  - fri/1-letnik/odv/misc/
+  - fri/1-letnik/p1/misc/
+  - fri/1-letnik/p2/misc/
+  - fri/1-letnik/rk/misc/
+  # FRI 2. letnik
+  - fri/2-letnik/aps1/misc/
+  - fri/2-letnik/opb/misc/
+  - fri/2-letnik/ors/misc/
+  - fri/2-letnik/os/misc/

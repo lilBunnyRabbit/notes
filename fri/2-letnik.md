@@ -5,7 +5,7 @@ files:
   - name: Algoritni in Podatkovne Strukture 1
     path: /aps1
   - name: Algoritni in Podatkovne Strukture 2
-    path: /aps1
+    path: /aps2
   - name: Izracunljivost in Racunska Zahtevnost
     path: /irz
   - name: Operacijski Sistemi
