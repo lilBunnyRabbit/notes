@@ -27,7 +27,7 @@
 
   <div class="navbar-actions">
     {% if page.toc %}
-    <div class="navbar-action" onclick="showToc()">
+    <div class="navbar-action" onclick="showToc()" title="Table of Content">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -46,7 +46,7 @@
       </svg>
     </div>
     {% endif %} {% if page.quotes %}
-    <div class="navbar-action" onclick="reduceToQuotes()">
+    <div class="navbar-action" onclick="reduceToQuotes()" title="Reducte to quotes">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -68,7 +68,7 @@
     </div>
     {% endif %}
 
-    <div class="navbar-action" onclick="printBody()">
+    <div class="navbar-action" onclick="printBody()" title="Print page">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -89,7 +89,7 @@
       </svg>
     </div>
 
-    <div class="navbar-action" onclick="scrolTop()">
+    <div class="navbar-action" onclick="scrolTop()" title="Scroll to the top">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
