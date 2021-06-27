@@ -1,0 +1,14 @@
+<div class="navbar-action" onclick="onlyQuoutes()" title="Only quotes">
+  {% include icons/page_minus.svg %}
+</div>
+
+<script>
+  function onlyQuoutes() {
+    const layoutBody = document.getElementById("layout-body");
+    const quotes = Array.from(
+      layoutBody.querySelectorAll("t-def, t-ex, t-conc")
+    ).map((quote) => quote.parentElement).filter(element => element.tagName == "BLOCKQUOTE");
+    layoutBody.innerHTML = "";
+    quotes.forEach((quote) => layoutBody.appendChild(quote));
+  }
+</script>

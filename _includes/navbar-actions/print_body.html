@@ -1,0 +1,22 @@
+<div class="navbar-action" onclick="printBody()" title="Print page">
+  {% include icons/printer.svg %}
+</div>
+
+<script>
+  window.onafterprint = function () {
+    location.reload();
+  };
+
+  function printBody() {
+    const mdBody = document.getElementById("layout-body");
+    document.body.innerHTML = "";
+    document.body.appendChild(mdBody);
+    document.body.style.overflow = "auto";
+    mdBody.classList.remove("layout-body");
+    mdBody.classList.add("print-content");
+    Array.from(document.getElementsByClassName("anchorjs-link")).forEach(
+      (element) => element.remove()
+    );
+    window.print();
+  }
+</script>

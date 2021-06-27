@@ -1,0 +1,5 @@
+{% assign parentUrl = page.url | replace: '.html', '.md' | remove: page.name %} 
+{% assign size = parentUrl | size | minus: 1 %}
+<a href="{{ site.baseurl }}{{ parentUrl | slice: 0, size }}">
+  {% include icons/arrow_left_circle.svg %}
+</a>

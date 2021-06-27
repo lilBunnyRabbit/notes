@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
-    {% include default_head.html %}
-    {% include math_jax.html %}
-    {% include google_analytics.html %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% seo %}
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+
+    {% include cdn/math_jax.html %}
+    {% include cdn/google_analytics.html %}
   </head>
   <body>
     {% include toc.html %}
@@ -13,7 +19,7 @@
       {{ content }}
     </div>
 
-    {% include anchor_js.html %}
+    {% include cdn/anchor_js.html %}
     {% include custom_elements.html %}
   </body>
 </html>

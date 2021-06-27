@@ -1,0 +1,10 @@
+<div class="navbar-action" onclick="scrolTop()" title="Scroll to the top">
+  {% include icons/chevrons_up.svg %}
+</div>
+
+<script>
+  function scrolTop() {
+    const layoutBody = document.getElementById("layout-body");
+    layoutBody.scrollTop = 0;
+  }
+</script>
