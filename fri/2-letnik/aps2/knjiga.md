@@ -2,6 +2,7 @@
 layout: note
 title: Knjiga
 toc: true
+quotes: true
 ---
 
 # 1. Uvod
