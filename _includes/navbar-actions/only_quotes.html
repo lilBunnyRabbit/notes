@@ -6,7 +6,7 @@
   function onlyQuoutes() {
     const layoutBody = document.getElementById("layout-body");
     const quotes = Array.from(
-      layoutBody.querySelectorAll("t-def, t-ex, t-conc")
+      layoutBody.querySelectorAll("t-def, t-ex, t-conc, t-theo")
     ).map((quote) => quote.parentElement).filter(element => element.tagName == "BLOCKQUOTE");
     layoutBody.innerHTML = "";
     quotes.forEach((quote) => layoutBody.appendChild(quote));

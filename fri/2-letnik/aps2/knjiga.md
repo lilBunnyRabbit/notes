@@ -506,3 +506,86 @@ $$
 > Algoritem **Quicksort(t, 1, n)** ima pricakovano casovno zahtevnost $\Theta(n \log n)$
 
 ## 4.2. Metoda deli in vladaj
+
+> <t-def>Deli in vladaj</t-def> 
+> Nalogo $N$ problema $P$ razdeli na manjse podnaloge, te resi in iz njihovih resitev sestavi resitev naloge $N$
+
+> **Posplosen postopek**  
+> - dana sta problem $P$ in naloga $N \in P$ velikosti $n$
+> - $N$ razdelimo na $p \geq 2$ podnaloge
+> - ker so vse podnaloge primerki problema $P$, lahko za resevanje uporabimo isti algoritem $A$
+> 
+> ```
+> procedure A(N);       | Algoritem A, razvit po metodi Deli in Vladaj
+> begin
+>   if n <= 1 then      | Ce N trivialna naloga, vrni trivalno resitev
+>     VrniResitev(N);
+>   else                | Ce N ni trivialna naloga
+>     Razdeli(N);       | razdeli N na podnaloge N_1, ..., N_p
+>     A(N_i_1);         | resi N_i_1
+>     ...               | ...
+>     A(N_i_a);         | resi N_i_a
+>     Sestavi(N);       | sestavi resitve a podnalog v resitve naloge N
+>   endif
+> end
+> ```
+
+### 4.2.1. Casovna zahtevnost algoritma A
+
+$$
+  T(n) = T(n_{i_1}) + ... + T(n_{i_a} + R(n) + S(n)
+$$
+
+- ce nam uspe razdeliti $N$ na $c$ podnalog je $n_i = \frac{n}{c}$ za nek $c \geq 2$  
+
+$$
+  T(n) = aT(\frac{n}{c}) + R(n) + S(n)
+$$
+
+- pri $n = 1$ je naloga trivialna in resljiva v konstantnem casu $b > 0$
+
+### 4.2.2. Analiza casovne zahtevnosti algoritma A
+- $f(n) = R(n) + S(n)$ je skupen cas, potreben za razdelitev naloge $N$ na $p$ podnalog in sestavljanje resitev $a$ podnalog v resitev naloge $N$
+- $f(n)$ narasca kvecjem polinomsko hitro
+
+### 4.2.3. Racunanje $T(n)$ za splosno $f(n)$
+- **predpostavimo**, da je $n - c^m$ za nek $m \geq 0$ → olajsa Racunanje
+
+> **Trditev**  
+> $T(n) = n^{\log_ca} \left[ b + \sum_{k=1}^{log_cn} \frac{f(c^k)}{a^k} \right]$, kjer je $n > 1$ in $T(1) = b$
+
+### 4.2.4. Racunanje $T(n)$ za polinomsko $f(n)$
+- v prejsno enacbo vstavimo polinomsko funkcijo $f(n)$, npr. $f(n) = bn^d, d \geq 0$ in izrazimo $T(n)$
+
+> **Trditev**  
+> $T(n) = bn^{\log_ca} = \left[ 1 + \frac{c^d}{a} + \left( \frac{c^d}{a} \right)^2 + ... + \left( \frac{c^d}{a} \right)^m \right]$, kjer $n > 1,\ m = \log_cn$
+
+- resitev enacbe je polinomska funkcija
+- v izrazu v oklepajih je geometrijska vrsta in jo analiziramo:
+  - ce je $\frac{c^d}{a} > 1$, potem $T(n) = \Theta(n^d)$
+  - ce je $\frac{c^d}{a} = 1$, potem $T(n) = \Theta(n^d \log n)$
+  - ce je $\frac{c^d}{a} < 1$, potem $T(n) = \Theta(n^{\log_ca})$
+
+> <t-theo>Glavni izrek metode Deli in vladaj</t-theo>  
+> za resitev $T(n)$ enacbe  
+> 
+> $$
+>   T(n) = 
+>   \begin{cases}
+>     b & ce\ n = 1,\\
+>     aT(\frac{n}{c}) + bn^d & ce\ n > 1
+>   \end{cases}
+> $$  
+> 
+> kjer so $a \geq 1$, $b > 0$, $c \geq 2$ in $d \geq 0$, velja naslednje:  
+> 
+> $$
+>   T(n) = 
+>   \begin{cases}
+>     \Theta(n^d) & ce \frac{c^d}{a} > 1, \\
+>     \Theta(n^d \log n) & ce \frac{c^d}{a} = 1, \\
+>     \Theta(n^{\log_ca}) & ce \frac{c^d}{a} < 1 
+>   \end{cases}
+> $$
+
+## 4.3. Mnozenje stevil
