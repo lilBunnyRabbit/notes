@@ -27,23 +27,33 @@ c-p, .c-p { // Color Purple
 
 // Titles
 t-def, .t-def {
-  @extend .c-p;
   font-size: 18px;
   font-weight: bold;
   display: flex;
   padding-bottom: 0.1em;
   border-bottom: 1px solid #efe8e8;
   margin-bottom: 8px;
+
+  &::before {
+    @extend .c-p;
+    content: "Definicija - ";
+    white-space: pre;
+  }
 }
 
 t-ex, .t-ex {
-  @extend .c-o;
   font-size: 18px;
   font-weight: bold;
   display: flex;
   padding-bottom: 0.1em;
   border-bottom: 1px solid #efe8e8;
   margin-bottom: 8px;
+
+  &::before {
+    @extend .c-o;
+    content: "Primer - ";
+    white-space: pre;
+  }
 }
 
 t-conc, .t-conc {

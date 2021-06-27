@@ -7,7 +7,7 @@ toc: true
 # 1. Uvod
 ## 1.1. Asimptoticna notacija in osnovni pojmi
 
-> <t-def>Definicija</t-def>
+> <t-def>Asimptoticna notacija</t-def>
 > Naj bo dana funkcija $g : N \to N$. Potem za funkcijo $f : N \to N$ pisemo:
 > - $f(n) = O(g(n))$, ce $\exists c > 0$, da je $\lim_{n \to \infty} \frac{f(n)}{g(n)} \leq c$  
 >   → <c-r><b>f</b> narasca kvecjem tako hitro kot <b>g</b></c-r> 
@@ -51,7 +51,7 @@ toc: true
 > |$O(f(n)) \cdot O(g(n))$|⇝|$O(f(n) \cdot g(n))$|
 > |$O(f(n)) + O(g(n))$|⇝|$O(g(n))$, ce $f(n) = O(g(n))$|
 
-> <t-ex>Primer</t-ex>   
+> <t-ex>Asimptoticna notacija</t-ex>   
 > $T(n) = 2 \log_{3} n + 4n + 5n \log_{6} n^7$  
 > $\Rightarrow T(n) = O(\log n) + O(n) + O(n \log n) = O(n \log n)$
 
@@ -61,7 +61,7 @@ toc: true
 - **Primerek** (ali **nalogo**) $\pi$ problema $\Pi$ dobimo, ko v definiciji problema nadomestimo vse formalne paramtetre z **dejanskimi parametri**
 - **Velikost primerka** $\pi \in \Pi$ je dolzina besede $\omega(\pi)$ v kateri so kodirani dejanski parametri primerka
 
-> <t-def>Definicija</t-def>  
+> <t-def>Algoritem</t-def>  
 > Imamo **algoritem** $A$, ki zna izracunati resitev poljubnega primerka $\pi \in \Pi$
 > - **casovna zahtevnost** je $T_A(n)$ ($n$ - velikost primerka → opravi $n$ korakov)
 > - casovna zahtevnost **kvecjem** $O(g(n))$ → $T_A(n) = O(g(n))$
@@ -78,22 +78,22 @@ toc: true
 > - **prostorska zahtevnost** je $S_A(n)$, ce bo med resevanjem primerka velikosti $n$ v vsaj enem trenutku rabil $S_A(n)$ pomnilniskih besede
 
 
-> <t-def>Definicija</t-def> 
+> <t-def>Casovna zahtevnost</t-def> 
 > - Funkcija $T_{\Pi}(n)$ bo **casovna zahtevnost problema** $\Pi$, ce bo za $\Pi$ obstajal algoritem $A$ s casovno zahtevnostjo $T_A(n) = T_{\Pi}(n)$
 > - Asimptoticno gledano bo imel $\Pi$ casovno zahtevnost reda $O(g(n))$, $\Omega(h(n))$ ali $\Theta(k(n))$, ce bo za $\Pi$ obstajal $A$ s casovno zahtevnostjo $T_A(n)$, ki je reda $O(g(n))$, $\Omega(h(n))$ ali $\Theta(k(n))$
 > - Podobno definiramo **prostorsko zahtevnost** $S_{\Pi}(n)$ **problema** $\pi$
 
 - $\tilde{O}$ je okrajsava za nekatere posebne skupine zahtevnosti
   
-> <t-def>Definicija</t-def> 
-> $f(n) = \tilde{O}(g(n))$, ce $\exists k : f(n) = O(g(n) \log^k g(n))$
+> <t-def>Posebna skupina zahtevnosti</t-def> 
+> $f(n) = \tilde{O}(g(n))$, ce $\exists k : f(n) = O(g(n) \log^k g(n))$  
 > → vpliv $g(n)$ na hitrost rasti funkcije $f(n)$ je pomembnejsi od morebitnega vpliva faktorja $log^kg(n)$ ob funckiji $g(n)$
 
 # 2. Urejanje
 ## 2.1. Navadno Urejanje
 - **<c-r>Problem:</c-r>** dana so stevila $a_1,\ a_2,\ ...,\ a_n,\ n \geq 1$. Pisci razporeditev $a_{i_1},\ a_{i_2},\ ...,\ a_{i_n}$,  da bo $a_{i_1} \leq a_{i_2} \leq ... \leq a_{i_n}$
 
-> <t-def>Definicja</t-def>
+> <t-def>Casovna zahtevnost razsirjanja</t-def>
 > Ce je $R(i)$ casovna zahtevnost razsirjanja $U = t[1..i]$, je casovna zahtevnost urejanja cele tabele $t[1..n]$ enaka $T(n) = \sum_{i = 1}^{n - 1} R(i)$ 
 > ![](img-knjiga/navadno_urejanje.png)
 
@@ -157,14 +157,17 @@ toc: true
 
 ### 2.2.1. Odlocitvena drevesa in urejanje
 - Algoritem, ki za razvrscanje uporablja le relacijo $\leq$ se ravna po **odlocitvenem drevesu**  
-  ![](img-knjiga/primer_odlocitveno_drevo.png)
 - stevilom $a_1,\ ...,\ a_n$ priredimo dvojisko drevo $T_n$ z lastnostmi:
   - vsako notranje vozlisce vsebojue neko primerjanje $a_i < a_j$
   - v listih so vse permutacije stevil
   - permutacija je v listu ntk. izpoljuje izide vseh primerjanj na veji do tega lista
+
+> <t-ex>Odlocitveno drevo</t-ex>
+> ![](img-knjiga/primer_odlocitveno_drevo.png)
+
 - vsako drevo morea imeti **$n!$** listov, saj je toliko vseh permutacij $n$ stevil.
 
-> <t-def>Definicija</t-def>
+> <t-def>Visina drevesa</t-def>
 > Ce je visina $h(T)$ drevesa $T$ definirana kot stevilo notranjih vozlisc na najdaljsi veji drevesa $T$, potem je za vsako dvojisko drevo $T$ z $l$ listi $h(T) \geq \lceil \log_2 l \rceil$
 
 - v nasem primeru sta $T = T_n$ in $l = n!$ → visina vsakega drevesa $T_n$ je vsaj $\lceil \log_2 n! \rceil$ → algoritem mora izvesti vsaj $\lceil \log_2 n! \rceil$ primerjanj
@@ -175,7 +178,7 @@ toc: true
 ## 2.3. Heapsort - Urejanje s kopico
 - algoritem, ki uporablja podatkovno strukturo, imenovano **kopica**
 
-> <t-def>Definicija</t-def> 
+> <t-def>Kopica</t-def> 
 > Kopica stevil $s_1,\ ...,\ s_n$ je dvojisko drevo $T(V,\ E)$ z lastnostmi:
 > - $V = {s_1,\ ...,\ s_n}$ je mnozica vozlisc
 > - ce ima vozlisce $s_i$ sina $s_j$, je $s_i \geq s_j$ (vsak oce je vecji ali enak svojim sinom)
@@ -183,7 +186,7 @@ toc: true
 > - daljse veje so levo od krajsih (drevo je levo poravnano)
 > - *v splosnem lahko stevilom $s_1,\ ...,\ s_n$ priredimo vec razlicnih kopic*
 
-> **Primer**
+> <t-ex>Kopica</t-ex> 
 > 
 > ![](img-knjiga/primer_kopica.png)
 
@@ -198,8 +201,6 @@ toc: true
 > **B)** Vemo, da je koren najvecje stevilo v kopici, zato naj algoritem **izloci koren iz kopice in ga shrani, na njegovo mesto pa prestavi enega od listv kopice** (npr. skrajno desni na najnizjem nivoju)  
 > **C)** Rezultat predstavitve je dvojisko drevo, zato naj algoritem popravi drevo v kopico → **Prestavljani list naj pogrezne vzdolz neke veje na prvo mesto, kjer bo vecji ali enak tamkajsnjih sinov**  
 > **D)** Zdaj algoritem ponovi koraka *B)* in *C)* nad to kopico
-> 
-> ![](img-knjiga/primer_kopica_postopek.png)
 
 > **A) Sestavljanje zacetne kopice**
 > 
@@ -208,7 +209,7 @@ toc: true
 >   - vozlisca drevesa $T(t)$ so stevila $t[1],\ ...,\ t[n]$
 >   - koren drevesa $T(t)$ je stevilo $t[1]$
 >   - ce je $t[i]$ oce v $T(t)$, sta $t[2i]$ oz. $t[2i+1]$ (ce obstaja) njegov levi oz. desni sin  
->   ![](img-knjiga/primer_sestavljanje_zacetne_kopice.png) 
+> 
 > - Drevo $T(t)$ ni kopica, potrebno ga je preurediti
 > - predpostavimo, da imamo na voljo proceduro **PopraviVKopico(t, i, n)**, ki bi v dvojiskem drevesu $T(t)$ popravla drevo, katerega koren ima indeks $i$, v kopici
 > - procedura od spodaj navzgor, po nivojih popravi vsa drevesa s koreni na tekocem nivoju  
@@ -219,6 +220,9 @@ toc: true
 >>     PopraviVKopico(t, i, n)
 >>   endfor;
 >>   ```
+
+> <t-ex>Sestavljanje zacetne kopice</t-ex> 
+> ![](img-knjiga/primer_sestavljanje_zacetne_kopice.png)
 
 > **B) Izlocanje korena in prestavljanje lista**
 > 
@@ -272,6 +276,9 @@ toc: true
 >>   endwhile
 >> end.
 >> ```
+
+> <t-ex>Postopek kopice</t-ex>
+> ![](img-knjiga/primer_kopica_postopek.png)
 
 ### 2.3.2. Casovna zahtevnost algoritma Heapsort
 - ce klicemo proceduro **PopraviVKopico(t, n, i)** pri vsakem $i = n, n-1,\ ...,\ 1$ in ce bi pri vsakem $i$ izvedla $d = \lceil \log_2(n+1) - 1 \rceil$ pogrezanj, bi sestavljanje zacetne kopice zahtevalo $nd = n \lceil \log_2(n+1) -1 \rceil = O(n \log n)$ pogrezanj → $A$ zahteva $O(n \log n)$ casa
