@@ -276,6 +276,9 @@ toc: true
 ### 2.3.2. Casovna zahtevnost algoritma Heapsort
 - ce klicemo proceduro **PopraviVKopico(t, n, i)** pri vsakem $i = n, n-1,\ ...,\ 1$ in ce bi pri vsakem $i$ izvedla $d = \lceil \log_2(n+1) - 1 \rceil$ pogrezanj, bi sestavljanje zacetne kopice zahtevalo $nd = n \lceil \log_2(n+1) -1 \rceil = O(n \log n)$ pogrezanj → $A$ zahteva $O(n \log n)$ casa
 
+- koraka *B)* in *C)* se ponovita $n$-krat 
+- ocenimo, da je zahtevnost enega para *B, C* najvec $1 + d$ operacij (primerjanj in zamenjav) → izvedba $n$ parov je $n(d + 1)$, kar je zaradi $d \leq \log_2 n + 1$ reda $O(n \log n)$
+
 > <t-conc>Sklep</t-conc>
 > Algoritem **Heapsort** ima casovno zahtevnost $\Theta(n \log n)$ 
 
