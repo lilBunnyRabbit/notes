@@ -4,4 +4,6 @@ title: Verjetnost in Statistika
 files:
   - name: Izpiski Vaje
     path: /izpiski
+  - name: Teroija vprasanja
+    path: /vprasanja
 ---

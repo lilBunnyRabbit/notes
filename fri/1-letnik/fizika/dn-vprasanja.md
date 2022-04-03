@@ -4,6 +4,7 @@ title: DN - Vprasanja
 toc: true
 quotes: true
 ---
+<<<<<<< Updated upstream
 
 ## 1. DN
 - Pri enakomerno pospesenem gibanju ima pospesek telesa ves cas enako smeri
@@ -68,3 +69,5 @@ quotes: true
 - *Magnetna sila med dvema dolgima ravnima vodnikoma, po katerih teče električni tok, je* **lahko privlacna ali odbojna**
 - *Kaj se zgodi z gostoto magnetnega polja v notranjosti tuljave, po kateri teče stalen električni tok, če tuljavo, ki je bila najprej v zraku, potopimo v vodo?* **Gostota magnetnega polja ostane priblizno enaka**
 - *Kaj je remanentna gostota magnetnega polja?* **To je gostota magnetnega polja v notranjosti feromagnetne snovi, po tem ko izkljucimo mocno zunanje magnetno polje**
+=======
+>>>>>>> Stashed changes

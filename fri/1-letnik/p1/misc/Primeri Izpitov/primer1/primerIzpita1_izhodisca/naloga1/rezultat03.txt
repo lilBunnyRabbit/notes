@@ -1,5 +1,0 @@
-Exception in thread "main" java.lang.ClassCastException: [I cannot be cast to java.lang.Comparable
-	at java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)
-	at java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
-	at java.util.Arrays.sort(Arrays.java:1246)
-	at Ploscice.main(Ploscice.java:25)
